@@ -1,0 +1,10 @@
+{
+  "name": "gratitudenu",
+  "version": "1.0.0",
+  "description": "Sandbox project for client studying impact of emotions on actions.",
+  "main": "index.js",
+  "repository": "https://github.com/sandboxnu/gratitudenu.git",
+  "author": "Zefeng (Daniel) Wang <wang.zef@husky.neu.edu>",
+  "license": "MIT",
+  "private": true
+}
