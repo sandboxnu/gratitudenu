@@ -6,5 +6,23 @@
   "repository": "https://github.com/sandboxnu/gratitudenu.git",
   "author": "Zefeng (Daniel) Wang <wang.zef@husky.neu.edu>",
   "license": "MIT",
-  "private": true
+  "private": true,
+  "scripts": {
+    "lint": "eslint '*/**/*.{js,ts,tsx}' --quiet --fix"
+  },
+  "dependencies": {
+    "@typescript-eslint/eslint-plugin": "^4.14.1",
+    "@typescript-eslint/parser": "^4.14.1",
+    "eslint": "^7.18.0",
+    "eslint-config-prettier": "^7.2.0",
+    "eslint-plugin-import": "^2.22.1",
+    "husky": "^4.3.8",
+    "prettier": "^2.2.1",
+    "pretty-quick": "^3.1.0"
+  },
+  "husky": {
+    "hooks": {
+      "pre-commit": "pretty-quick --staged"
+    }
+  }
 }
