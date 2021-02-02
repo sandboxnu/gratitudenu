@@ -1,5 +1,6 @@
 # compiled output
 /dist
+/src/backend/dist
 /node_modules
 /src/backend/node_modules
 
