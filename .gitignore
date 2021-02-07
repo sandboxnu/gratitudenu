@@ -1,8 +1,7 @@
 # compiled output
 /dist
 /src/backend/dist
-/node_modules
-/src/backend/node_modules
+node_modules/
 
 # testing
 src/frontend/coverage
@@ -12,7 +11,6 @@ src/frontend/.next
 src/frontend/out/
 src/frontend/build
 src/frontend/.vercel
-src/frontend/node_modules
 
 # Logs
 logs
