@@ -2,6 +2,11 @@ import { Module } from '@nestjs/common';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { TypeOrmModule } from '@nestjs/typeorm';
+import { Connection } from 'typeorm';
+import { User } from './entities/user.entity';
+import { UsersController } from './users/users.controller';
+import { UsersService } from './users/users.service';
+import { UsersModule } from './users/users.module';
 
 @Module({
   imports: [
@@ -12,11 +17,14 @@ import { TypeOrmModule } from '@nestjs/typeorm';
       username: 'postgres',
       password: 'mysecretpassword',
       database: 'my_database',
-      entities: [],
-      synchronize: true,
+      entities: [User],
+      synchronize: true, // TODO: synchronize true should not be used in a production environment
     }),
+    UsersModule,
   ],
-  controllers: [AppController],
-  providers: [AppService],
+  controllers: [AppController, UsersController],
+  providers: [AppService, UsersService],
 })
-export class AppModule {}
+export class AppModule {
+  constructor(private connection: Connection) {}
+}
