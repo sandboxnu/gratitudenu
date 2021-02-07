@@ -4,6 +4,16 @@
 /node_modules
 /src/backend/node_modules
 
+# testing
+src/frontend/coverage
+
+# next.js
+src/frontend/.next
+src/frontend/out/
+src/frontend/build
+src/frontend/.vercel
+src/frontend/node_modules
+
 # Logs
 logs
 *.log
