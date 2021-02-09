@@ -10,7 +10,8 @@
   "scripts": {
     "dev": "nodemon --config nodemon.json src/index.ts",
     "dev:debug": "nodemon --config nodemon.json --inspect-brk src/index.ts",
-    "lint": "eslint '*/**/*.{js,ts,tsx}' --quiet --fix"
+    "lint": "eslint '*/**/*.{js,ts,tsx}' --quiet --fix",
+    "start:dev:db": "./src/scripts/create-database.sh"
   },
   "dependencies": {
     "@typescript-eslint/eslint-plugin": "^4.14.1",
