@@ -4,61 +4,57 @@ import Slider from 'react-input-slider';
 import React, { useState } from 'react';
 
 export default function Home() {
-  const [sliderVal, setSliderVal] = useState(10);
+  const [takeVal, setTakeVal] = useState(10);
 
-  function inputPress(event) {
-    console.log(sliderVal);
-    //
-    if (
-      !(event.charCode <= 57 || (event.charCode >= 96 && event.charCode <= 105))
-    ) {
-      alert('Inputs Must Be Between 0-9!');
-    }
+  const inputOnChange = (eventVal) => {
+    const intVal = parseInt(eventVal);
 
-    if (sliderVal * 10 + event.target.value > 10) {
-      alert('Take Value Must Be Between 0 and 10!');
-      //! note this if statement still allows the keypress to go through after we alert
+    // TODO: You actually can't type a '-', not sure we need this first condition
+    if (intVal < 0) {
+      alert('Input cannot be negative');
+      setTakeVal(0);
+    } else if (intVal > 10) {
+      alert('Input cannot be greater than 10');
+      setTakeVal(10);
+    } else {
+      setTakeVal(intVal);
     }
-  }
+  };
 
   return (
     <div className={styles.container}>
       <Head>
-        <title>RDG NU</title>
+        <title>RDG NU | Game Page</title>
         <link rel="icon" href="/favicon.ico" />
       </Head>
 
       <main className={styles.main}>
-        {/* <h1 className={styles.title}>Game Page</h1> */}
-        <div className={styles.infosection}>Info Section Here</div>
-        <div className={styles.gametable}>Game Table Image will be here</div>
-        <div className={styles.actionbar}>
-          <div className={styles.actionbarleft}>
+        <div className={styles.infoSection}>Info Section Here</div>
+        <div className={styles.gameTable}>Game Table Image will be here</div>
+        <div className={styles.actionBar}>
+          <div className={styles.actionBarLeft}>
             {/* TODO: both of these values will be given by an API/socket */}
             <h4>You Are: </h4>
             <h4>Current Coins: </h4>
           </div>
-          <div className={styles.actionbarmiddle}>
+          <div className={styles.actionBarMiddle}>
             <button> Take </button>
             {/* TODO: add socket send here */}
           </div>
-          <div className={styles.actionbarright}>
+          <div className={styles.actionBarRight}>
             <input
               type="number"
-              value={sliderVal}
+              value={takeVal}
               onChange={(event) => {
-                setSliderVal(event.target.value);
-              }}
-              onKeyPress={(event) => {
-                inputPress(event);
+                inputOnChange(event.target.value);
               }}
               min="0"
               max="10"
-            ></input>
+            />
             <Slider
               axis="x"
-              x={sliderVal}
-              onChange={({ x }) => setSliderVal(x)}
+              x={takeVal}
+              onChange={({ x }) => setTakeVal(x)}
               styles={{}}
               className={styles.slider}
               xmax={10}
