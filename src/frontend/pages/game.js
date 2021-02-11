@@ -15,7 +15,7 @@ export default function Home() {
       setTakeVal(0);
     } else if (intVal > 10) {
       alert('Input cannot be greater than 10');
-      setTakeVal(10);
+      setTakeVal(takeVal);
     } else {
       setTakeVal(intVal);
     }
