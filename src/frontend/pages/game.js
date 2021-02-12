@@ -1,7 +1,10 @@
 import Head from 'next/head';
 import styles from '../styles/Game.module.css';
 import Slider from 'react-input-slider';
-import { CircularProgressbar } from 'react-circular-progressbar';
+import {
+  buildStyles,
+  CircularProgressbarWithChildren,
+} from 'react-circular-progressbar';
 import 'react-circular-progressbar/dist/styles.css';
 import React, { useState } from 'react';
 import Image from 'next/image';
@@ -85,6 +88,8 @@ export default function Home() {
 }
 
 const GameTable = () => {
+  const [totalPointsLeft, setTotalPointsLeft] = useState(200);
+
   return (
     <div className={styles.gameTable}>
       <div className={styles.gameTableColumn}>
@@ -106,12 +111,18 @@ const GameTable = () => {
         </div>
       </div>
       <div className={styles.gameTableMiddle}>
-        <CircularProgressbar
+        <CircularProgressbarWithChildren
           maxValue={200}
-          value={40}
-          text={'40\nPoints left'}
+          value={totalPointsLeft}
           counterClockwise={true}
-        />
+          styles={buildStyles({
+            pathColor: '#002A52',
+            trailColor: 'white',
+          })}
+        >
+          <div className={styles.progressBarTextTop}>{totalPointsLeft}</div>
+          <div className={styles.progressBarTextBottom}>Points Left</div>
+        </CircularProgressbarWithChildren>
       </div>
       <div className={styles.gameTableColumn}>
         <div className={styles.topPlayer}>
