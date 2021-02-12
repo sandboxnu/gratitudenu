@@ -82,6 +82,18 @@
   margin-bottom: 40px;
 }
 
+.progressBarTextTop {
+  font-size: 50px;
+  color: #002a52;
+  font-weight: 700;
+}
+
+.progressBarTextBottom {
+  font-size: 35px;
+  color: #002a52;
+  font-weight: 500;
+}
+
 .infoSection {
   margin-top: 1%;
   border: 2px solid #0070f3;
