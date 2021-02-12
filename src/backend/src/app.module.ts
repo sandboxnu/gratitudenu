@@ -7,6 +7,10 @@ import { User } from './entities/user.entity';
 import { UsersController } from './users/users.controller';
 import { UsersService } from './users/users.service';
 import { UsersModule } from './users/users.module';
+import { Grab } from './entities/grab.entity';
+import { Player } from './entities/player.entity';
+import { Round } from './entities/round.entity';
+import { Game } from './entities/game.entity';
 
 @Module({
   imports: [
@@ -17,7 +21,7 @@ import { UsersModule } from './users/users.module';
       username: 'postgres',
       password: 'mysecretpassword',
       database: 'my_database',
-      entities: [User],
+      entities: [User, Grab, Player, Round, Game],
       synchronize: true, // TODO: synchronize true should not be used in a production environment
     }),
     UsersModule,

@@ -11,6 +11,9 @@ export class User {
   @Column()
   lastName: string;
 
-  @Column({ default: true })
-  isActive: boolean;
+  @Column()
+  age: number; //Note: Figure out what user information we need to capture here
+
+  @Column()
+  consentForm: string; // TODO: figure out how we're storing the consent form since we aren't using qualitrics
 }
