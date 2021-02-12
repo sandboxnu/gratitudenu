@@ -1,7 +1,10 @@
 import Head from 'next/head';
 import styles from '../styles/Game.module.css';
 import Slider from 'react-input-slider';
+import { CircularProgressbar } from 'react-circular-progressbar';
+import 'react-circular-progressbar/dist/styles.css';
 import React, { useState } from 'react';
+import Image from 'next/image';
 
 export default function Home() {
   const [takeVal, setTakeVal] = useState(10);
@@ -30,7 +33,12 @@ export default function Home() {
 
       <main className={styles.main}>
         <div className={styles.infoSection}>Info Section Here</div>
-        <div className={styles.gameTable}>Game Table Image will be here</div>
+
+        <div className={styles.gameDisplay}>
+          <GameTable />
+          <div>Timer</div>
+        </div>
+
         <div className={styles.actionBar}>
           <div className={styles.actionBarLeft}>
             {/* TODO: both of these values will be given by an API/socket */}
@@ -38,7 +46,7 @@ export default function Home() {
             <h4>Current Coins: </h4>
           </div>
           <div className={styles.actionBarMiddle}>
-            <button> Take </button>
+            <button> Take</button>
             {/* TODO: add socket send here */}
           </div>
           <div className={styles.actionBarRight}>
@@ -75,3 +83,54 @@ export default function Home() {
     </div>
   );
 }
+
+const GameTable = () => {
+  return (
+    <div className={styles.gameTable}>
+      <div className={styles.gameTableColumn}>
+        <div className={styles.topPlayer}>
+          <Image
+            src="/player-icon-green.svg"
+            alt="green"
+            width={110}
+            height={140}
+          />
+        </div>
+        <div>
+          <Image
+            src="/player-icon-yellow.svg"
+            alt="yellow"
+            width={80}
+            height={110}
+          />
+        </div>
+      </div>
+      <div className={styles.gameTableMiddle}>
+        <CircularProgressbar
+          maxValue={200}
+          value={40}
+          text={'40\nPoints left'}
+          counterClockwise={true}
+        />
+      </div>
+      <div className={styles.gameTableColumn}>
+        <div className={styles.topPlayer}>
+          <Image
+            src="/player-icon-red.svg"
+            alt="green"
+            width={80}
+            height={110}
+          />
+        </div>
+        <div>
+          <Image
+            src="/player-icon-blue.svg"
+            alt="yellow"
+            width={80}
+            height={110}
+          />
+        </div>
+      </div>
+    </div>
+  );
+};

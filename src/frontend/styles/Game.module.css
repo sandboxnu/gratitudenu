@@ -60,14 +60,26 @@
   margin-left: 15px;
 }
 
-.gameTable {
+.gameDisplay {
   margin-top: 1%;
-  border: 2px solid #0070f3;
+}
+
+.gameTable {
   min-height: 20vh;
   min-width: 70vw;
   display: flex;
   justify-content: space-around;
   align-items: center;
+}
+
+.gameTableColumn {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.topPlayer {
+  margin-bottom: 40px;
 }
 
 .infoSection {
