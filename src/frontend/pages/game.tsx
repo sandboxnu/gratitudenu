@@ -55,6 +55,7 @@ export default function Home() {
           </div>
           <div className={styles.actionBarRight}>
             <input
+              className={styles.inputBox}
               type="number"
               value={takeVal}
               onChange={(event) => {
@@ -68,7 +69,6 @@ export default function Home() {
               x={takeVal}
               onChange={({ x }) => setTakeVal(x)}
               styles={{}}
-              className={styles.slider}
               xmax={10}
             />
           </div>
