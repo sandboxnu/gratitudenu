@@ -62,7 +62,8 @@
 }
 
 .gameDisplay {
-  margin-top: 1%;
+  margin: 5% 0 10%;
+  position: relative;
 }
 
 .gameTable {
@@ -81,6 +82,23 @@
 
 .topPlayer {
   margin-bottom: 40px;
+}
+
+.timer {
+  position: absolute;
+  bottom: -55px;
+  right: 0;
+  height: 50px;
+  width: 105px;
+  background: #f6f6f6;
+  box-shadow: 0 4px 4px rgba(0, 0, 0, 0.25);
+  border-radius: 6px;
+  text-align: center;
+  line-height: 50px;
+  font-size: 35px;
+  font-family: Roboto, sans-serif;
+  font-weight: 500;
+  color: #002a52;
 }
 
 .progressBarTextTop {

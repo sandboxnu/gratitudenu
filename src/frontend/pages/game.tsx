@@ -40,7 +40,7 @@ export default function Home() {
 
         <div className={styles.gameDisplay}>
           <GameTable />
-          <div>Timer</div>
+          <div className={styles.timer}>Timer</div>
         </div>
 
         <div className={styles.actionBar}>
