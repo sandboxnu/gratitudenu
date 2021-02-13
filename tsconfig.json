@@ -5,7 +5,9 @@
     "strict": true,
     "noEmit": true,
     "emitDecoratorMetadata": true,
-    "experimentalDecorators": true
+    "experimentalDecorators": true,
+    "jsx": "react",
+    "esModuleInterop": true
   },
   "exclude": ["**/node_modules", "dist"]
 }
