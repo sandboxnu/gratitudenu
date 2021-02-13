@@ -1,4 +1,5 @@
-import { Entity, Column, PrimaryGeneratedColumn } from 'typeorm';
+import { Entity, Column, PrimaryGeneratedColumn, OneToMany } from 'typeorm';
+import { FormResponse } from './formResponse.entity';
 
 @Entity()
 export class User {
@@ -16,4 +17,7 @@ export class User {
 
   @Column()
   consentForm: string; // TODO: figure out how we're storing the consent form since we aren't using qualitrics
+
+  @OneToMany((type) => FormResponse, (formResponse) => formResponse.user)
+  formResponses: FormResponse[];
 }

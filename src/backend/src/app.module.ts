@@ -11,6 +11,8 @@ import { Grab } from './entities/grab.entity';
 import { Player } from './entities/player.entity';
 import { Round } from './entities/round.entity';
 import { Game } from './entities/game.entity';
+import { FormResponse } from './entities/formResponse.entity';
+import { Question } from './entities/question.entity';
 
 @Module({
   imports: [
@@ -21,7 +23,7 @@ import { Game } from './entities/game.entity';
       username: 'postgres',
       password: 'mysecretpassword',
       database: 'my_database',
-      entities: [User, Grab, Player, Round, Game],
+      entities: [User, Grab, Player, Round, Game, FormResponse, Question],
       synchronize: true, // TODO: synchronize true should not be used in a production environment
     }),
     UsersModule,
