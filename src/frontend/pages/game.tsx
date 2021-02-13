@@ -1,4 +1,5 @@
 import Head from 'next/head';
+// @ts-ignore
 import styles from '../styles/Game.module.css';
 import Slider from 'react-input-slider';
 import {
@@ -12,10 +13,10 @@ import Image from 'next/image';
 export default function Home() {
   const [takeVal, setTakeVal] = useState(10);
 
-  const inputOnChange = (eventVal) => {
+  const inputOnChange = (eventVal: string) => {
     const intVal = parseInt(eventVal);
 
-    // TODO: You actually can't type a '-', not sure we need this first condition
+    // TODO: You can't type a '-', not sure we need this first condition
     if (intVal < 0) {
       alert('Input cannot be negative');
       setTakeVal(0);
