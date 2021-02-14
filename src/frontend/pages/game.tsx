@@ -6,21 +6,30 @@ import {
   CircularProgressbarWithChildren,
 } from 'react-circular-progressbar';
 import 'react-circular-progressbar/dist/styles.css';
-import React, { useEffect, useState } from 'react';
+import React, {
+  ReactElement,
+  useEffect,
+  useReducer,
+  useRef,
+  useState,
+} from 'react';
 import Image from 'next/image';
 
-export default function Home() {
-  const [takeVal, setTakeVal] = useState(10);
-  const [timeLeft, setTimeLeft] = useState(10);
+const MAX_TAKE_VAL: number = 10;
+const INIT_TIME_LEFT: number = 10;
+
+export default function Home(): ReactElement {
+  const [takeVal, setTakeVal] = useState(MAX_TAKE_VAL);
+  const [timeLeft, setTimeLeft] = useState(INIT_TIME_LEFT);
 
   useEffect(() => {
-    let unsubscribe: number | undefined = undefined;
+    console.log('use effect');
+    const interval = setInterval(
+      () => setTimeLeft((timeLeft) => timeLeft - 1),
+      1000,
+    );
 
-    if (timeLeft > 0) {
-      unsubscribe = window.setTimeout(() => setTimeLeft(timeLeft - 1), 1000);
-    }
-
-    return () => window.clearTimeout(unsubscribe);
+    return () => clearInterval(interval);
   }, [timeLeft]);
 
   if (timeLeft === 0) {
@@ -77,14 +86,13 @@ export default function Home() {
                 inputOnChange(event.target.value);
               }}
               min="0"
-              max="10"
+              max={MAX_TAKE_VAL}
             />
             <Slider
               axis="x"
               x={takeVal}
               onChange={({ x }) => setTakeVal(x)}
-              styles={{}}
-              xmax={10}
+              xmax={MAX_TAKE_VAL}
             />
           </div>
         </div>
@@ -107,11 +115,16 @@ interface GameTableProps {
   takeVal: number;
 }
 
-const GameTable = ({ takeVal }: GameTableProps) => {
+const GameTable = ({ takeVal }: GameTableProps): ReactElement => {
   const [totalPointsLeft, setTotalPointsLeft] = useState(200);
+  const didMountRef = useRef(false); // Don't take points on first render
 
   useEffect(() => {
-    setTotalPointsLeft(totalPointsLeft - takeVal);
+    if (didMountRef.current) {
+      setTotalPointsLeft(totalPointsLeft - takeVal);
+    } else {
+      didMountRef.current = true;
+    }
   }, [takeVal]);
 
   return (
