@@ -1,5 +1,4 @@
 import Head from 'next/head';
-// @ts-ignore
 import styles from '../styles/Game.module.css';
 import Slider from 'react-input-slider';
 import {
@@ -15,25 +14,19 @@ export default function Home() {
   const [timeLeft, setTimeLeft] = useState(10);
 
   useEffect(() => {
-    if (!timeLeft) {
-      return;
+    let unsubscribe: number | undefined = undefined;
+
+    if (timeLeft > 0) {
+      unsubscribe = window.setTimeout(() => setTimeLeft(timeLeft - 1), 1000);
     }
 
-    const intervalId = setInterval(() => {
-      setTimeLeft(timeLeft - 1);
-    }, 1000);
-
-    if (timeLeft === 1) {
-      return () => onTimerEnd(intervalId);
-    }
-    return () => clearInterval(intervalId);
+    return () => window.clearTimeout(unsubscribe);
   }, [timeLeft]);
 
-  const onTimerEnd = (intervalId) => {
-    clearInterval(intervalId);
-    alert('timer ran out'); // Would actually do something else here
+  if (timeLeft === 0) {
+    setTakeVal(Math.floor(Math.random() * 11));
     setTimeLeft(10);
-  };
+  }
 
   const inputOnChange = (eventVal: string) => {
     const intVal = parseInt(eventVal);
@@ -61,7 +54,7 @@ export default function Home() {
         <div className={styles.infoSection}>Info Section Here</div>
 
         <div className={styles.gameDisplay}>
-          <GameTable />
+          <GameTable takeVal={takeVal} />
           <div className={styles.timer}>{timeLeft}</div>
         </div>
 
@@ -110,8 +103,16 @@ export default function Home() {
   );
 }
 
-const GameTable = () => {
+interface GameTableProps {
+  takeVal: number;
+}
+
+const GameTable = ({ takeVal }: GameTableProps) => {
   const [totalPointsLeft, setTotalPointsLeft] = useState(200);
+
+  useEffect(() => {
+    setTotalPointsLeft(totalPointsLeft - takeVal);
+  }, [takeVal]);
 
   return (
     <div className={styles.gameTable}>
