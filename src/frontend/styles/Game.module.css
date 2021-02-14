@@ -87,7 +87,7 @@
 .timer {
   position: absolute;
   bottom: -55px;
-  right: 0;
+  right: -30px;
   height: 50px;
   width: 105px;
   background: #f6f6f6;

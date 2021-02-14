@@ -7,11 +7,33 @@ import {
   CircularProgressbarWithChildren,
 } from 'react-circular-progressbar';
 import 'react-circular-progressbar/dist/styles.css';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import Image from 'next/image';
 
 export default function Home() {
   const [takeVal, setTakeVal] = useState(10);
+  const [timeLeft, setTimeLeft] = useState(10);
+
+  useEffect(() => {
+    if (!timeLeft) {
+      return;
+    }
+
+    const intervalId = setInterval(() => {
+      setTimeLeft(timeLeft - 1);
+    }, 1000);
+
+    if (timeLeft === 1) {
+      return () => onTimerEnd(intervalId);
+    }
+    return () => clearInterval(intervalId);
+  }, [timeLeft]);
+
+  const onTimerEnd = (intervalId) => {
+    clearInterval(intervalId);
+    alert('timer ran out'); // Would actually do something else here
+    setTimeLeft(10);
+  };
 
   const inputOnChange = (eventVal: string) => {
     const intVal = parseInt(eventVal);
@@ -40,7 +62,7 @@ export default function Home() {
 
         <div className={styles.gameDisplay}>
           <GameTable />
-          <div className={styles.timer}>Timer</div>
+          <div className={styles.timer}>{timeLeft}</div>
         </div>
 
         <div className={styles.actionBar}>
