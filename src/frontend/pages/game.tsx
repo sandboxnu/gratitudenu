@@ -17,6 +17,10 @@ export default function Home(): ReactElement {
   const [takeVal, setTakeVal] = useState(MAX_TAKE_VAL);
   const [timeLeft, setTimeLeft] = useState(INIT_TIME_LEFT);
   const [modalIsOpen, setModalIsOpen] = useState(false);
+  // state variable to track which color this user is once we hook this up to back end this will be dynamic
+  const [playerColor, setPlayerColor] = useState('Green');
+  // state variable to track how many coins this user has, once we hook this up to back end this will be dynamic
+  const [playerCoins, setPlayerCoins] = useState(0);
 
   useEffect(() => {
     const interval = setInterval(
@@ -31,6 +35,12 @@ export default function Home(): ReactElement {
     setTakeVal(Math.floor(Math.random() * 11));
     setTimeLeft(10);
   }
+
+  const handleTake = (event) => {
+    event.preventDefault();
+    alert('you took ' + takeVal + ' coins!');
+  };
+
 
   const inputOnChange = (eventVal: string) => {
     const intVal = parseInt(eventVal);
@@ -91,30 +101,51 @@ export default function Home(): ReactElement {
         <div className={styles.actionBar}>
           <div className={styles.actionBarLeft}>
             {/* TODO: both of these values will be given by an API/socket */}
-            <h4>You Are: </h4>
-            <h4>Current Coins: </h4>
+            {/* TODO: add some JS to change styling of the color based on what color it is  */}
+            <h4 className={styles.actionBarText}>
+              You Are: <span style={{ color: 'green' }}>{playerColor} </span>
+            </h4>
+            <h4 className={styles.actionBarText}>
+              Current Coins:{' '}
+              <span style={{ color: '#546ec9' }}>{playerCoins} </span>
+            </h4>
           </div>
           <div className={styles.actionBarMiddle}>
-            <button> Take</button>
-            {/* TODO: add socket send here */}
-          </div>
-          <div className={styles.actionBarRight}>
             <input
-              className={styles.inputBox}
               type="number"
               value={takeVal}
               onChange={(event) => {
                 inputOnChange(event.target.value);
               }}
               min="0"
-              max={MAX_TAKE_VAL}
+              max="10"
+              className={styles.actionBarInput}
+              disabled
             />
-            <Slider
+
+            <span className={styles.slider}>
+              <Slider
               axis="x"
               x={takeVal}
               onChange={({ x }) => setTakeVal(x)}
-              xmax={MAX_TAKE_VAL}
+              styles={{
+                active: {
+                  backgroundColor: '#002a52',
+                },
+                thumb: {
+                  backgroundColor: '#546ec9',
+                },
+              }}
+              xmax={10}
             />
+            </span>
+            
+          </div>
+          <div className={styles.actionBarRight}>
+            <button className={styles.actionBarTake} onClick={handleTake}>
+              Take
+            </button>
+            {/* TODO: add socket send here */}
           </div>
         </div>
       </main>
