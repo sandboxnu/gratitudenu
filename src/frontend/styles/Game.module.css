@@ -37,20 +37,43 @@
 
 .actionBar {
   margin-top: 1%;
-  border: 2px solid #0070f3;
+  /* border: 6px solid #0070f3; */
   min-height: 20vh;
   min-width: 70vw;
   display: flex;
   justify-content: space-around;
   align-items: center;
+  /* position: absolute; */
+  /* width: 1240px;
+height: 200.68px;
+left: 100px;
+top: 580.41px; */
+
+  background: #f7f7f7;
+  box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+  border-radius: 10px;
 }
 
 .actionBarLeft {
   justify-content: left;
 }
 
+.actionBarText {
+  font-size: 22px;
+  color: #002a52;
+}
+
 .actionBarMiddle {
   justify-content: center;
+}
+.actionBarInput {
+  border: 1px solid #002a52;
+  box-sizing: border-box;
+  border-radius: 4px;
+  width: 60px;
+  height: 44px;
+  color: #002a52;
+  font-size: 26px;
 }
 
 .actionBarRight {
@@ -64,6 +87,27 @@
 .gameDisplay {
   margin: 5% 0 10%;
   position: relative;
+}
+
+.actionBarTake {
+  background: #546ec9;
+  box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+  border-radius: 10px;
+  color: white;
+  width: 140px;
+  height: 60px;
+  /* left: 1099.85px;
+  top: 652.27px; */
+  font-size: 30px;
+  /* line-height: 35px; */
+}
+
+.actionBarTake:hover {
+  opacity: 0.8;
+  cursor: pointer;
+}
+.slider {
+  margin-left: 15px;
 }
 
 .gameTable {
