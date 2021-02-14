@@ -8,7 +8,7 @@
 }
 
 .main {
-  padding: 5rem 0;
+  padding: 10px 0;
   flex: 1;
   display: flex;
   flex-direction: column;
@@ -86,7 +86,7 @@
 
 .timer {
   position: absolute;
-  bottom: -55px;
+  bottom: -45px;
   right: -30px;
   height: 50px;
   width: 105px;
@@ -114,12 +114,14 @@
 }
 
 .infoSection {
-  margin-top: 1%;
-  border: 2px solid #0070f3;
-  min-height: 10vh;
-  min-width: 80vw;
   display: flex;
   justify-content: space-around;
   align-items: center;
-  margin-bottom: 5%;
+}
+
+.infoSectionTitle {
+  font-size: 48px;
+  font-weight: 700;
+  color: #002a52;
+  padding-right: 20px;
 }
