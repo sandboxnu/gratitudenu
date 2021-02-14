@@ -1,29 +1,24 @@
 import Head from 'next/head';
 import styles from '../styles/Game.module.css';
 import Slider from 'react-input-slider';
+import Modal from 'react-modal';
 import {
   buildStyles,
   CircularProgressbarWithChildren,
 } from 'react-circular-progressbar';
 import 'react-circular-progressbar/dist/styles.css';
-import React, {
-  ReactElement,
-  useEffect,
-  useReducer,
-  useRef,
-  useState,
-} from 'react';
+import React, { ReactElement, useEffect, useRef, useState } from 'react';
 import Image from 'next/image';
 
-const MAX_TAKE_VAL: number = 10;
-const INIT_TIME_LEFT: number = 10;
+const MAX_TAKE_VAL = 10;
+const INIT_TIME_LEFT = 10;
 
 export default function Home(): ReactElement {
   const [takeVal, setTakeVal] = useState(MAX_TAKE_VAL);
   const [timeLeft, setTimeLeft] = useState(INIT_TIME_LEFT);
+  const [modalIsOpen, setModalIsOpen] = useState(false);
 
   useEffect(() => {
-    console.log('use effect');
     const interval = setInterval(
       () => setTimeLeft((timeLeft) => timeLeft - 1),
       1000,
@@ -60,7 +55,33 @@ export default function Home(): ReactElement {
       </Head>
 
       <main className={styles.main}>
-        <div className={styles.infoSection}>Info Section Here</div>
+        <div className={styles.infoSection}>
+          <p className={styles.infoSectionTitle}>Game</p>
+          <Image
+            src={'/help-icon.svg'}
+            alt={'Help icon'}
+            width={35}
+            height={35}
+            onClick={() => setModalIsOpen(true)}
+          />
+          <Modal
+            isOpen={modalIsOpen}
+            onRequestClose={() => setModalIsOpen(false)}
+            style={{
+              content: {
+                top: '20%',
+                left: '60%',
+                right: 'auto',
+                bottom: 'auto',
+                marginRight: '-50%',
+                transform: 'translate(-50%, -50%)',
+              },
+            }}
+            contentLabel="Instructions Modal"
+          >
+            Game instruction summary
+          </Modal>
+        </div>
 
         <div className={styles.gameDisplay}>
           <GameTable takeVal={takeVal} />
