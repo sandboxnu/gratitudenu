@@ -5,6 +5,10 @@ import React, { useState } from 'react';
 
 export default function Home() {
   const [takeVal, setTakeVal] = useState(10);
+  // state variable to track which color this user is once we hook this up to back end this will be dynamic
+  const [thisColor, setThisColor] = useState('Green');
+  // state variable to track how many coins this user has, once we hook this up to back end this will be dynamic
+  const [theseCoins, setTheseCoins] = useState(0);
 
   const inputOnChange = (eventVal) => {
     const intVal = parseInt(eventVal);
@@ -21,6 +25,11 @@ export default function Home() {
     }
   };
 
+  const handleTake = (event) => {
+    event.preventDefault();
+    alert('you took ' + theseCoins + ' coins!');
+  };
+
   return (
     <div className={styles.container}>
       <Head>
@@ -34,14 +43,16 @@ export default function Home() {
         <div className={styles.actionBar}>
           <div className={styles.actionBarLeft}>
             {/* TODO: both of these values will be given by an API/socket */}
-            <h4>You Are: </h4>
-            <h4>Current Coins: </h4>
+            {/* TODO: add some JS to change styling of the color based on what color it is  */}
+            <h4 className={styles.actionBarText}>
+              You Are: <span style={{ color: 'green' }}>{thisColor} </span>
+            </h4>
+            <h4 className={styles.actionBarText}>
+              Current Coins:{' '}
+              <span style={{ color: '#546ec9' }}>{theseCoins} </span>
+            </h4>
           </div>
           <div className={styles.actionBarMiddle}>
-            <button> Take </button>
-            {/* TODO: add socket send here */}
-          </div>
-          <div className={styles.actionBarRight}>
             <input
               type="number"
               value={takeVal}
@@ -50,15 +61,29 @@ export default function Home() {
               }}
               min="0"
               max="10"
+              className={styles.actionBarInput}
             />
             <Slider
               axis="x"
               x={takeVal}
               onChange={({ x }) => setTakeVal(x)}
-              styles={{}}
+              styles={{
+                active: {
+                  backgroundColor: '#002a52',
+                },
+                thumb: {
+                  backgroundColor: '#546ec9',
+                },
+              }}
               className={styles.slider}
               xmax={10}
             />
+          </div>
+          <div className={styles.actionBarRight}>
+            <button className={styles.actionBarTake} onClick={handleTake}>
+              Take
+            </button>
+            {/* TODO: add socket send here */}
           </div>
         </div>
       </main>
