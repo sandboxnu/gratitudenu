@@ -1,3 +1,5 @@
+@import 'constants';
+
 .container {
   min-height: 100vh;
   padding: 0 0.5rem;
@@ -59,19 +61,19 @@ top: 580.41px; */
 
 .actionBarText {
   font-size: 22px;
-  color: #002a52;
+  color: $dark-blue;
 }
 
 .actionBarMiddle {
   justify-content: center;
 }
 .actionBarInput {
-  border: 1px solid #002a52;
+  border: 1px solid $dark-blue;
   box-sizing: border-box;
   border-radius: 4px;
   width: 60px;
   height: 44px;
-  color: #002a52;
+  color: $dark-blue;
   font-size: 26px;
   text-align: center;
 }
@@ -90,22 +92,20 @@ top: 580.41px; */
 }
 
 .actionBarTake {
-  background: #546ec9;
-  box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+  background: $dark-purple;
+  box-shadow: 0 4px 4px rgba(0, 0, 0, 0.25);
   border-radius: 10px;
   color: white;
   width: 140px;
   height: 60px;
-  /* left: 1099.85px;
-  top: 652.27px; */
   font-size: 30px;
-  /* line-height: 35px; */
+
+  &:hover {
+    opacity: 0.8;
+    cursor: pointer;
+  }
 }
 
-.actionBarTake:hover {
-  opacity: 0.8;
-  cursor: pointer;
-}
 .slider {
   margin-left: 15px;
 }
@@ -142,18 +142,18 @@ top: 580.41px; */
   font-size: 35px;
   font-family: Roboto, sans-serif;
   font-weight: 500;
-  color: #002a52;
+  color: $dark-blue;
 }
 
 .progressBarTextTop {
   font-size: 50px;
-  color: #002a52;
+  color: $dark-blue;
   font-weight: 700;
 }
 
 .progressBarTextBottom {
   font-size: 35px;
-  color: #002a52;
+  color: $dark-blue;
   font-weight: 500;
 }
 
@@ -166,6 +166,6 @@ top: 580.41px; */
 .infoSectionTitle {
   font-size: 48px;
   font-weight: 700;
-  color: #002a52;
+  color: $dark-blue;
   padding-right: 20px;
 }

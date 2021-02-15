@@ -1,5 +1,5 @@
 import Head from 'next/head';
-import styles from '../styles/Game.module.css';
+import styles from '../styles/Game.module.scss';
 import Slider from 'react-input-slider';
 import Modal from 'react-modal';
 import {
@@ -9,18 +9,21 @@ import {
 import 'react-circular-progressbar/dist/styles.css';
 import React, { ReactElement, useEffect, useRef, useState } from 'react';
 import Image from 'next/image';
-
-const MAX_TAKE_VAL = 10;
-const INIT_TIME_LEFT = 10;
+import gameConstants from '../constants/gameConstants';
+import Colors from '../constants/colorConstants';
 
 export default function Home(): ReactElement {
-  const [takeVal, setTakeVal] = useState(MAX_TAKE_VAL);
-  const [timeLeft, setTimeLeft] = useState(INIT_TIME_LEFT);
-  const [modalIsOpen, setModalIsOpen] = useState(false);
-  // state variable to track which color this user is once we hook this up to back end this will be dynamic
-  const [playerColor, setPlayerColor] = useState('Green');
-  // state variable to track how many coins this user has, once we hook this up to back end this will be dynamic
-  const [playerCoins, setPlayerCoins] = useState(0);
+  const [takeVal, setTakeVal] = useState<number>(gameConstants.MAX_TAKE_VAL);
+  const [timeLeft, setTimeLeft] = useState<number>(
+    gameConstants.INIT_TIME_LEFT,
+  );
+  const [modalIsOpen, setModalIsOpen] = useState<boolean>(false);
+  const [playerColor, setPlayerColor] = useState<string>(
+    gameConstants.DEFAULT_COLOR,
+  );
+  const [playerCoins, setPlayerCoins] = useState<number>(
+    gameConstants.INIT_PLAYER_COINS,
+  );
 
   useEffect(() => {
     const interval = setInterval(
@@ -38,7 +41,7 @@ export default function Home(): ReactElement {
 
   const handleTake = (event) => {
     event.preventDefault();
-    alert('you took ' + takeVal + ' coins!');
+    alert(`you took ${takeVal} coins!`);
   };
 
 
@@ -107,7 +110,7 @@ export default function Home(): ReactElement {
             </h4>
             <h4 className={styles.actionBarText}>
               Current Coins:{' '}
-              <span style={{ color: '#546ec9' }}>{playerCoins} </span>
+              <span style={{ color: Colors.darkPurple }}>{playerCoins} </span>
             </h4>
           </div>
           <div className={styles.actionBarMiddle}>
@@ -117,29 +120,29 @@ export default function Home(): ReactElement {
               onChange={(event) => {
                 inputOnChange(event.target.value);
               }}
-              min="0"
-              max="10"
+              min={gameConstants.MIN_TAKE_VAL}
+              max={gameConstants.MAX_TAKE_VAL}
               className={styles.actionBarInput}
               disabled
             />
 
             <span className={styles.slider}>
               <Slider
-              axis="x"
-              x={takeVal}
-              onChange={({ x }) => setTakeVal(x)}
-              styles={{
-                active: {
-                  backgroundColor: '#002a52',
-                },
-                thumb: {
-                  backgroundColor: '#546ec9',
-                },
-              }}
-              xmax={10}
-            />
+                axis="x"
+                x={takeVal}
+                onChange={({ x }) => setTakeVal(x)}
+                styles={{
+                  active: {
+                    backgroundColor: Colors.darkBlue,
+                  },
+                  thumb: {
+                    backgroundColor: Colors.darkPurple,
+                  },
+                }}
+                xmax={gameConstants.MAX_TAKE_VAL}
+              />
             </span>
-            
+
           </div>
           <div className={styles.actionBarRight}>
             <button className={styles.actionBarTake} onClick={handleTake}>
@@ -205,7 +208,7 @@ const GameTable = ({ takeVal }: GameTableProps): ReactElement => {
           value={totalPointsLeft}
           counterClockwise={true}
           styles={buildStyles({
-            pathColor: '#002A52',
+            pathColor: Colors.darkBlue,
             trailColor: 'white',
           })}
         >
