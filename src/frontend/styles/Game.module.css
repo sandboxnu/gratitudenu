@@ -8,7 +8,7 @@
 }
 
 .main {
-  padding: 5rem 0;
+  padding: 10px 0;
   flex: 1;
   display: flex;
   flex-direction: column;
@@ -37,20 +37,13 @@
 
 .actionBar {
   margin-top: 1%;
-  /* border: 6px solid #0070f3; */
   min-height: 20vh;
   min-width: 70vw;
   display: flex;
   justify-content: space-around;
   align-items: center;
-  /* position: absolute; */
-  /* width: 1240px;
-height: 200.68px;
-left: 100px;
-top: 580.41px; */
-
   background: #f7f7f7;
-  box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+  box-shadow: 0 4px 4px rgba(0, 0, 0, 0.25);
   border-radius: 10px;
 }
 
@@ -66,6 +59,7 @@ top: 580.41px; */
 .actionBarMiddle {
   justify-content: center;
 }
+
 .actionBarInput {
   border: 1px solid #002a52;
   box-sizing: border-box;
@@ -74,22 +68,30 @@ top: 580.41px; */
   height: 44px;
   color: #002a52;
   font-size: 26px;
+  text-align: center;
 }
 
 .actionBarRight {
   justify-content: right;
 }
+
+.inputBox {
+  margin-right: 15px;
+}
+
+.gameDisplay {
+  margin: 5% 0 10%;
+  position: relative;
+}
+
 .actionBarTake {
   background: #546ec9;
-  box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+  box-shadow: 0 4px 4px rgba(0, 0, 0, 0.25);
   border-radius: 10px;
   color: white;
   width: 140px;
   height: 60px;
-  /* left: 1099.85px;
-  top: 652.27px; */
   font-size: 30px;
-  /* line-height: 35px; */
 }
 
 .actionBarTake:hover {
@@ -101,8 +103,6 @@ top: 580.41px; */
 }
 
 .gameTable {
-  margin-top: 1%;
-  border: 2px solid #0070f3;
   min-height: 20vh;
   min-width: 70vw;
   display: flex;
@@ -110,13 +110,54 @@ top: 580.41px; */
   align-items: center;
 }
 
+.gameTableColumn {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.topPlayer {
+  margin-bottom: 40px;
+}
+
+.timer {
+  position: absolute;
+  bottom: -45px;
+  right: -30px;
+  height: 50px;
+  width: 105px;
+  background: #f6f6f6;
+  box-shadow: 0 4px 4px rgba(0, 0, 0, 0.25);
+  border-radius: 6px;
+  text-align: center;
+  line-height: 50px;
+  font-size: 35px;
+  font-family: Roboto, sans-serif;
+  font-weight: 500;
+  color: #002a52;
+}
+
+.progressBarTextTop {
+  font-size: 50px;
+  color: #002a52;
+  font-weight: 700;
+}
+
+.progressBarTextBottom {
+  font-size: 35px;
+  color: #002a52;
+  font-weight: 500;
+}
+
 .infoSection {
-  margin-top: 1%;
-  border: 2px solid #0070f3;
-  min-height: 10vh;
-  min-width: 80vw;
   display: flex;
   justify-content: space-around;
   align-items: center;
-  margin-bottom: 5%;
+}
+
+.infoSectionTitle {
+  font-size: 48px;
+  font-weight: 700;
+  color: #002a52;
+  padding-right: 20px;
 }
