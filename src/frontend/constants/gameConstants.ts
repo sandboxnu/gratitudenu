@@ -1,0 +1,7 @@
+export default {
+  MIN_TAKE_VAL: 0,
+  MAX_TAKE_VAL: 10,
+  INIT_TIME_LEFT: 10,
+  DEFAULT_COLOR: 'Green',
+  INIT_PLAYER_COINS: 0,
+};
