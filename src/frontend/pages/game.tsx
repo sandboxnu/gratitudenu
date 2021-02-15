@@ -12,8 +12,23 @@ import Image from 'next/image';
 import gameConstants from '../constants/gameConstants';
 import Colors from '../constants/colorConstants';
 
+/**
+ * TODO HIGH LEVEL
+ * add documentation for Home react element function
+ * make all the alerts into clean notifications
+ */
+
 export default function Home(): ReactElement {
-  const [takeVal, setTakeVal] = useState<number>(gameConstants.MAX_TAKE_VAL);
+  /**
+   * *STATE VARIABLES*
+   * -takeVal: currently selected coins from slider that they are taking that turn
+   * timeLeft: time left on the timer (starts at 10 seconds)
+   * modalIsOpen: for modal open close
+   * playerColor: value brought in from endpoint for this userID, will be one of ('Green', 'Yellow', 'Red', 'Blue)
+   * playerCoins: total # of coins that this user has in this game
+   *
+   */
+  const [takeVal, setTakeVal] = useState<number>(gameConstants.MIN_TAKE_VAL);
   const [timeLeft, setTimeLeft] = useState<number>(
     gameConstants.INIT_TIME_LEFT,
   );
@@ -25,6 +40,8 @@ export default function Home(): ReactElement {
     gameConstants.INIT_PLAYER_COINS,
   );
 
+  // FUNCTIONS HERE
+  // TODO: add documentation for these functions
   useEffect(() => {
     const interval = setInterval(
       () => setTimeLeft((timeLeft) => timeLeft - 1),
@@ -60,6 +77,7 @@ export default function Home(): ReactElement {
     }
   };
 
+  // RETURN HERE
   return (
     <div className={styles.container}>
       <Head>
@@ -104,12 +122,14 @@ export default function Home(): ReactElement {
         <div className={styles.actionBar}>
           <div className={styles.actionBarLeft}>
             {/* TODO: both of these values will be given by an API/socket */}
-            {/* TODO: add some JS to change styling of the color based on what color it is  */}
             <h4 className={styles.actionBarText}>
-              You Are: <span style={{ color: 'green' }}>{playerColor} </span>
+              You Are:{' '}
+              <span style={{ color: playerColor.toLowerCase() }}>
+                {playerColor}{' '}
+              </span>
             </h4>
             <h4 className={styles.actionBarText}>
-              Current Coins:{' '}
+              Your Total Coins:{' '}
               <span style={{ color: Colors.darkPurple }}>{playerCoins} </span>
             </h4>
           </div>
@@ -117,9 +137,9 @@ export default function Home(): ReactElement {
             <input
               type="number"
               value={takeVal}
-              onChange={(event) => {
-                inputOnChange(event.target.value);
-              }}
+              // onChange={(event) => {
+              //   inputOnChange(event.target.value);
+              // }}
               min={gameConstants.MIN_TAKE_VAL}
               max={gameConstants.MAX_TAKE_VAL}
               className={styles.actionBarInput}
@@ -166,6 +186,7 @@ export default function Home(): ReactElement {
   );
 }
 
+// GAME TABLE HERE
 interface GameTableProps {
   takeVal: number;
 }
