@@ -1,10 +1,16 @@
-import { Entity, Column, PrimaryGeneratedColumn, OneToMany } from 'typeorm';
+import {
+  Entity,
+  Column,
+  PrimaryGeneratedColumn,
+  OneToMany,
+  BaseEntity,
+} from 'typeorm';
 import { Grab } from './grab.entity';
 import { Player } from './player.entity';
 import { Round } from './round.entity';
 
 @Entity()
-export class Game {
+export class Game extends BaseEntity {
   @PrimaryGeneratedColumn()
   id: number;
 
