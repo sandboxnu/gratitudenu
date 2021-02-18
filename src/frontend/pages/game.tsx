@@ -61,7 +61,6 @@ export default function Home(): ReactElement {
     alert(`you took ${takeVal} coins!`);
   };
 
-
   const inputOnChange = (eventVal: string) => {
     const intVal = parseInt(eventVal);
 
@@ -137,9 +136,6 @@ export default function Home(): ReactElement {
             <input
               type="number"
               value={takeVal}
-              // onChange={(event) => {
-              //   inputOnChange(event.target.value);
-              // }}
               min={gameConstants.MIN_TAKE_VAL}
               max={gameConstants.MAX_TAKE_VAL}
               className={styles.actionBarInput}
@@ -162,7 +158,6 @@ export default function Home(): ReactElement {
                 xmax={gameConstants.MAX_TAKE_VAL}
               />
             </span>
-
           </div>
           <div className={styles.actionBarRight}>
             <button className={styles.actionBarTake} onClick={handleTake}>
