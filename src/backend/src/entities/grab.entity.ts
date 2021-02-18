@@ -6,12 +6,13 @@ import {
   JoinColumn,
   PrimaryColumn,
   ManyToOne,
+  BaseEntity,
 } from 'typeorm';
 import { Round } from './round.entity';
 import { User } from './user.entity';
 
 @Entity()
-export class Grab {
+export class Grab extends BaseEntity {
   @PrimaryGeneratedColumn()
   id: number;
 

@@ -5,12 +5,13 @@ import {
   OneToOne,
   JoinColumn,
   ManyToOne,
+  BaseEntity,
 } from 'typeorm';
 import { Game } from './game.entity';
 import { User } from './user.entity';
 
 @Entity()
-export class Player {
+export class Player extends BaseEntity {
   @PrimaryGeneratedColumn()
   id: number;
 

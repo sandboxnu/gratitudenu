@@ -4,11 +4,12 @@ import {
   PrimaryGeneratedColumn,
   OneToOne,
   JoinColumn,
+  BaseEntity,
 } from 'typeorm';
 import { FormResponse } from './formResponse.entity';
 
 @Entity()
-export class Question {
+export class Question extends BaseEntity {
   @PrimaryGeneratedColumn()
   id: number;
 

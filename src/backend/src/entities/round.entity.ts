@@ -5,12 +5,13 @@ import {
   OneToMany,
   ManyToOne,
   PrimaryColumn,
+  BaseEntity,
 } from 'typeorm';
 import { Game } from './game.entity';
 import { Grab } from './grab.entity';
 
 @Entity()
-export class Round {
+export class Round extends BaseEntity {
   @PrimaryGeneratedColumn()
   id: number;
 

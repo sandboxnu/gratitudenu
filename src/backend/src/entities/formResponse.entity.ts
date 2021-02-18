@@ -5,12 +5,13 @@ import {
   OneToOne,
   JoinColumn,
   ManyToOne,
+  BaseEntity,
 } from 'typeorm';
 import { Question } from './question.entity';
 import { User } from './user.entity';
 
 @Entity()
-export class FormResponse {
+export class FormResponse extends BaseEntity {
   @PrimaryGeneratedColumn()
   id: number;
 
