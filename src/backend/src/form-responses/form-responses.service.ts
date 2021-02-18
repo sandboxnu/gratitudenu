@@ -4,6 +4,7 @@ import { Repository } from 'typeorm';
 import { FormResponse } from '../entities/formResponse.entity';
 import { User } from '../entities/user.entity';
 import { Question } from '../entities/question.entity';
+import { CreateFormResponseDto } from './dto';
 
 @Injectable()
 export class FormResponsesService {
@@ -42,9 +43,13 @@ export class FormResponsesService {
     return updatedFormResponse;
   }
 
-  async create(userId: number, questionId: number, answer: string) {
+  async create(
+    userId: number,
+    questionId: number,
+    formResponseData: CreateFormResponseDto,
+  ) {
     let formResponse = new FormResponse();
-    formResponse.answer = answer;
+    formResponse.answer = formResponseData.answer;
 
     const question = await this.questionsRepository.findOne(questionId);
     formResponse.question = question;

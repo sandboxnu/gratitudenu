@@ -1,8 +1,7 @@
-import { BadRequestException, Body, Controller, Post } from '@nestjs/common';
-import { Question } from 'src/entities/question.entity';
-import { User } from 'src/entities/user.entity';
+import { Body, Controller, Post } from '@nestjs/common';
 import { FormResponse } from 'src/entities/formResponse.entity';
 import { FormResponsesService } from './form-responses.service';
+import { CreateFormResponseDto } from './dto';
 
 @Controller('form-responses')
 export class FormResponsesController {
@@ -12,8 +11,12 @@ export class FormResponsesController {
   async create(
     @Body('userId') userId: number,
     @Body('questionId') questionId: number,
-    @Body('answer') answer: string,
+    @Body('formResponse') formResponseData: CreateFormResponseDto,
   ): Promise<FormResponse> {
-    return this.formResponsesService.create(userId, questionId, answer);
+    return this.formResponsesService.create(
+      userId,
+      questionId,
+      formResponseData,
+    );
   }
 }
