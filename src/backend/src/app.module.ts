@@ -13,6 +13,8 @@ import { Round } from './entities/round.entity';
 import { Game } from './entities/game.entity';
 import { FormResponse } from './entities/formResponse.entity';
 import { Question } from './entities/question.entity';
+import { FormResponsesController } from './form-responses/form-responses.controller';
+import { FormResponsesService } from './form-responses/form-responses.service';
 
 @Module({
   imports: [
@@ -28,8 +30,8 @@ import { Question } from './entities/question.entity';
     }),
     UsersModule,
   ],
-  controllers: [AppController, UsersController],
-  providers: [AppService, UsersService],
+  controllers: [AppController, UsersController, FormResponsesController],
+  providers: [AppService, UsersService, FormResponsesService],
 })
 export class AppModule {
   constructor(private connection: Connection) {}
