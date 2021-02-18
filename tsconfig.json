@@ -11,6 +11,8 @@
     "outDir": "./dist",
     "baseUrl": "./",
     "incremental": true
+    "jsx": "react",
+    "esModuleInterop": true
   },
 
   "exclude": ["**/node_modules", "dist"]

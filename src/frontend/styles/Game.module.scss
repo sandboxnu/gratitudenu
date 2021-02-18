@@ -1,0 +1,172 @@
+@import 'constants';
+
+.container {
+  min-height: 100vh;
+  padding: 0 0.5rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.main {
+  padding: 10px 0;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.footer {
+  width: 100%;
+  height: 100px;
+  border-top: 1px solid #eaeaea;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.footer img {
+  margin-left: 0.5rem;
+}
+
+.footer a {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.actionBar {
+  margin-top: 1%;
+  min-height: 20vh;
+  min-width: 70vw;
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  /* position: absolute; */
+  /* width: 1240px;
+height: 200.68px;
+left: 100px;
+top: 580.41px; */
+
+  background: #f7f7f7;
+  box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+  border-radius: 10px;
+}
+
+.actionBarLeft {
+  justify-content: left;
+}
+
+.actionBarText {
+  font-size: 22px;
+  color: $dark-blue;
+}
+
+.actionBarMiddle {
+  justify-content: center;
+}
+.actionBarInput {
+  border: 1px solid $dark-blue;
+  box-sizing: border-box;
+  border-radius: 4px;
+  width: 60px;
+  height: 44px;
+  color: $dark-blue;
+  font-size: 26px;
+  text-align: center;
+}
+
+.actionBarRight {
+  justify-content: right;
+}
+
+.inputBox {
+  margin-right: 15px;
+}
+
+.gameDisplay {
+  margin: 5% 0 10%;
+  position: relative;
+}
+
+.actionBarTake {
+  background: $dark-purple;
+  box-shadow: 0 4px 4px rgba(0, 0, 0, 0.25);
+  border-radius: 10px;
+  color: white;
+  width: 140px;
+  height: 60px;
+  font-size: 30px;
+  transition: 0.3s;
+
+  &:hover {
+    opacity: 0.8;
+    cursor: pointer;
+  }
+}
+
+.slider {
+  margin-left: 15px;
+}
+
+.gameTable {
+  min-height: 20vh;
+  min-width: 70vw;
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+}
+
+.gameTableColumn {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.topPlayer {
+  margin-bottom: 40px;
+}
+
+.timer {
+  position: absolute;
+  bottom: -45px;
+  right: -30px;
+  height: 50px;
+  width: 105px;
+  background: #f6f6f6;
+  box-shadow: 0 4px 4px rgba(0, 0, 0, 0.25);
+  border-radius: 6px;
+  text-align: center;
+  line-height: 50px;
+  font-size: 35px;
+  font-family: Roboto, sans-serif;
+  font-weight: 500;
+  color: $dark-blue;
+}
+
+.progressBarTextTop {
+  font-size: 50px;
+  color: $dark-blue;
+  font-weight: 700;
+}
+
+.progressBarTextBottom {
+  font-size: 35px;
+  color: $dark-blue;
+  font-weight: 500;
+}
+
+.infoSection {
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+}
+
+.infoSectionTitle {
+  font-size: 48px;
+  font-weight: 700;
+  color: $dark-blue;
+  padding-right: 20px;
+}
