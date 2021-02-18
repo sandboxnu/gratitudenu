@@ -2,19 +2,25 @@ import { Injectable, BadRequestException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { FormResponse } from '../entities/formResponse.entity';
+import { User } from '../entities/user.entity';
+import { Question } from '../entities/question.entity';
 
 @Injectable()
 export class FormResponsesService {
   constructor(
     @InjectRepository(FormResponse)
     private formResponsesRepository: Repository<FormResponse>,
+    @InjectRepository(User)
+    private readonly usersRepository: Repository<User>,
+    @InjectRepository(Question)
+    private readonly questionsRepository: Repository<Question>,
   ) {}
 
-  getAllFormResponses(): Promise<FormResponse[]> {
+  findAll(): Promise<FormResponse[]> {
     return this.formResponsesRepository.find({ relations: ['user'] });
   }
 
-  async getFormResponseByUserId(id: number) {
+  async findOne(id: number) {
     const formResponse = await this.formResponsesRepository.findOne(id);
     if (!formResponse) {
       throw new BadRequestException('Form response not found');
@@ -22,7 +28,7 @@ export class FormResponsesService {
     return formResponse;
   }
 
-  async updateFormResponse(id: number, answer: string) {
+  async update(id: number, answer: string) {
     const formResponse = await this.formResponsesRepository.findOne(id);
     if (!formResponse) {
       throw new BadRequestException('Form response not found');
@@ -34,5 +40,23 @@ export class FormResponsesService {
       throw new BadRequestException('Update failed');
     }
     return updatedFormResponse;
+  }
+
+  async create(userId: number, questionId: number, answer: string) {
+    let formResponse = new FormResponse();
+    formResponse.answer = answer;
+
+    const question = await this.questionsRepository.findOne(questionId);
+    formResponse.question = question;
+
+    const newFormResponse = await this.formResponsesRepository.save(
+      formResponse,
+    );
+
+    const user = await this.usersRepository.findOne(userId);
+    user.formResponses.push(formResponse);
+    await this.usersRepository.save(user);
+
+    return newFormResponse;
   }
 }

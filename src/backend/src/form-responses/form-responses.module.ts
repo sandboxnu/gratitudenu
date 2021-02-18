@@ -10,4 +10,4 @@ import { User } from '../entities/user.entity';
   controllers: [FormResponsesController],
   exports: [TypeOrmModule],
 })
-export class UsersModule {}
+export class FormResponsesModule {}
