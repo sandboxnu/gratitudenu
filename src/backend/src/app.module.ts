@@ -15,6 +15,7 @@ import { FormResponse } from './entities/formResponse.entity';
 import { Question } from './entities/question.entity';
 import { FormResponsesController } from './form-responses/form-responses.controller';
 import { FormResponsesService } from './form-responses/form-responses.service';
+import { FormResponsesModule } from './form-responses/form-responses.module';
 
 @Module({
   imports: [
@@ -29,6 +30,7 @@ import { FormResponsesService } from './form-responses/form-responses.service';
       synchronize: true, // TODO: synchronize true should not be used in a production environment
     }),
     UsersModule,
+    FormResponsesModule,
   ],
   controllers: [AppController, UsersController, FormResponsesController],
   providers: [AppService, UsersService, FormResponsesService],
