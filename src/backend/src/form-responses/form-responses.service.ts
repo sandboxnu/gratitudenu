@@ -4,7 +4,7 @@ import { Repository } from 'typeorm';
 import { FormResponse } from '../entities/formResponse.entity';
 import { User } from '../entities/user.entity';
 import { Question } from '../entities/question.entity';
-import { CreateFormResponseDto } from './dto';
+import { CreateFormResponseDto, CreateMultiFormResponsesDto } from './dto';
 
 @Injectable()
 export class FormResponsesService {
@@ -63,5 +63,31 @@ export class FormResponsesService {
     await this.usersRepository.save(user);
 
     return newFormResponse;
+  }
+
+  async createMulti(
+    userId: number,
+    formResponsesData: CreateMultiFormResponsesDto,
+  ) {
+    const user = await this.usersRepository.findOne(userId);
+    const newFormResponses = formResponsesData.questionAnswerPairs.map(
+      async (questionAnswerPair) => {
+        const [questionId, answer] = questionAnswerPair;
+        let formResponse = new FormResponse();
+        formResponse.answer = answer;
+
+        const question = await this.questionsRepository.findOne(questionId);
+        formResponse.question = question;
+
+        user.formResponses.push(formResponse);
+
+        const newFormResponse = await this.formResponsesRepository.save(
+          formResponse,
+        );
+        return newFormResponse;
+      },
+    );
+    await this.usersRepository.save(user);
+    return newFormResponses;
   }
 }

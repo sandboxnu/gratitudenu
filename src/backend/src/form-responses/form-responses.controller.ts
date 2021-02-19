@@ -1,7 +1,7 @@
 import { Body, Controller, Post } from '@nestjs/common';
 import { FormResponse } from 'src/entities/formResponse.entity';
 import { FormResponsesService } from './form-responses.service';
-import { CreateFormResponseDto } from './dto';
+import { CreateFormResponseDto, CreateMultiFormResponsesDto } from './dto';
 
 @Controller('form-responses')
 export class FormResponsesController {
@@ -17,6 +17,17 @@ export class FormResponsesController {
       userId,
       questionId,
       formResponseData,
+    );
+  }
+
+  @Post('all')
+  async createAll(
+    @Body('userId') userId: number,
+    @Body('formResponsesData') formResponsesData: CreateMultiFormResponsesDto,
+  ) {
+    return await this.formResponsesService.createMulti(
+      userId,
+      formResponsesData,
     );
   }
 }
