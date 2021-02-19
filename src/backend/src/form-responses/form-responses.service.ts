@@ -17,7 +17,7 @@ export class FormResponsesService {
     private readonly questionsRepository: Repository<Question>,
   ) {}
 
-  findAll(): Promise<FormResponse[]> {
+  async findAll(): Promise<FormResponse[]> {
     return this.formResponsesRepository.find({ relations: ['user'] });
   }
 
