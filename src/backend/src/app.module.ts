@@ -14,6 +14,7 @@ import { Game } from './entities/game.entity';
 import { FormResponse } from './entities/formResponse.entity';
 import { Question } from './entities/question.entity';
 import { PlayersService } from './players/players.service';
+import { PlayersModule } from './players/players.module';
 
 @Module({
   imports: [
@@ -28,6 +29,7 @@ import { PlayersService } from './players/players.service';
       synchronize: true, // TODO: synchronize true should not be used in a production environment
     }),
     UsersModule,
+    PlayersModule,
   ],
   controllers: [AppController, UsersController],
   providers: [AppService, UsersService, PlayersService],
