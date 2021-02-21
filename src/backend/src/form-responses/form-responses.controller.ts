@@ -19,7 +19,7 @@ export class FormResponsesController {
   async createAll(
     @Body('userId') userId: number,
     @Body('formResponsesData') formResponsesData: CreateMultiFormResponsesDto,
-  ) {
+  ): Promise<number> {
     return await this.formResponsesService.createMulti(
       userId,
       formResponsesData,
