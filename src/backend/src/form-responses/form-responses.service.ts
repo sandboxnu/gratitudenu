@@ -21,7 +21,7 @@ export class FormResponsesService {
     return this.formResponsesRepository.find();
   }
 
-  async findOne(id: number) {
+  async findOne(id: number): Promise<FormResponse> {
     const formResponse = await this.formResponsesRepository.findOne(id);
     if (!formResponse) {
       throw new BadRequestException('Form response not found');
@@ -29,7 +29,7 @@ export class FormResponsesService {
     return formResponse;
   }
 
-  async update(id: number, answer: string) {
+  async update(id: number, answer: string): Promise<FormResponse> {
     const formResponse = await this.formResponsesRepository.findOne(id);
     if (!formResponse) {
       throw new BadRequestException('Form response not found');
@@ -45,49 +45,41 @@ export class FormResponsesService {
 
   async create(
     userId: number,
-    questionId: number,
     formResponseData: CreateFormResponseDto,
-  ) {
+  ): Promise<number> {
+    const [questionId, answer] = formResponseData.questionAnswerPair;
     let formResponse = new FormResponse();
-    formResponse.answer = formResponseData.answer;
-
+    formResponse.answer = answer;
     const question = await this.questionsRepository.findOne(questionId);
     formResponse.question = question;
-
-    const newFormResponse = await this.formResponsesRepository.save(
-      formResponse,
-    );
+    await this.formResponsesRepository.save(formResponse);
 
     const user = await this.usersRepository.findOne(userId);
     user.formResponses.push(formResponse);
     await this.usersRepository.save(user);
 
-    return newFormResponse;
+    return formResponse.id;
   }
 
+  // TODO: check question exists, userId hasn't answered already.
   async createMulti(
     userId: number,
     formResponsesData: CreateMultiFormResponsesDto,
-  ) {
+  ): Promise<number> {
     const user = await this.usersRepository.findOne(userId);
-    const newFormResponses = formResponsesData.questionAnswerPairs.map(
+    formResponsesData.questionAnswerPairs.forEach(
       async (questionAnswerPair) => {
         const [questionId, answer] = questionAnswerPair;
         let formResponse = new FormResponse();
         formResponse.answer = answer;
-
         const question = await this.questionsRepository.findOne(questionId);
         formResponse.question = question;
+        await this.formResponsesRepository.save(formResponse);
 
         user.formResponses.push(formResponse);
-
-        const newFormResponse = await this.formResponsesRepository.save(
-          formResponse,
-        );
-        return newFormResponse;
       },
     );
     await this.usersRepository.save(user);
-    return newFormResponses;
+    return user.id;
   }
 }

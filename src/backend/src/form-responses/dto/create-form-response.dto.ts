@@ -1,3 +1,5 @@
+import { questionAnswerPair } from '.';
+
 export class CreateFormResponseDto {
-  readonly answer: string;
+  readonly questionAnswerPair: questionAnswerPair;
 }

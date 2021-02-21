@@ -1,5 +1,4 @@
 import { Body, Controller, Post } from '@nestjs/common';
-import { FormResponse } from '../entities/formResponse.entity';
 import { FormResponsesService } from './form-responses.service';
 import { CreateFormResponseDto, CreateMultiFormResponsesDto } from './dto';
 
@@ -12,12 +11,8 @@ export class FormResponsesController {
     @Body('userId') userId: number,
     @Body('questionId') questionId: number,
     @Body('formResponse') formResponseData: CreateFormResponseDto,
-  ): Promise<FormResponse> {
-    return this.formResponsesService.create(
-      userId,
-      questionId,
-      formResponseData,
-    );
+  ): Promise<number> {
+    return this.formResponsesService.create(userId, formResponseData);
   }
 
   @Post('all')

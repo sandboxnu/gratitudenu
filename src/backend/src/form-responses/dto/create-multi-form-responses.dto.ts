@@ -1,4 +1,4 @@
-type questionAnswerPair = [number, string];
+import { questionAnswerPair } from '.';
 
 export class CreateMultiFormResponsesDto {
   readonly questionAnswerPairs: questionAnswerPair[];
