@@ -3,8 +3,8 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { UsersService } from './users.service';
 import { UsersController } from './users.controller';
 import { User } from '../entities/user.entity';
-import { FormResponse } from 'src/entities/formResponse.entity';
-import { FormResponsesModule } from 'src/form-responses/form-responses.module';
+import { FormResponse } from '../entities/formResponse.entity';
+import { FormResponsesModule } from '../form-responses/form-responses.module';
 
 @Module({
   imports: [

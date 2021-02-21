@@ -1,5 +1,5 @@
 import { Body, Controller, Post } from '@nestjs/common';
-import { FormResponse } from 'src/entities/formResponse.entity';
+import { FormResponse } from '../entities/formResponse.entity';
 import { FormResponsesService } from './form-responses.service';
 import { CreateFormResponseDto, CreateMultiFormResponsesDto } from './dto';
 

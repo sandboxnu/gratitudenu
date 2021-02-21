@@ -16,6 +16,9 @@ import { Question } from './entities/question.entity';
 import { FormResponsesController } from './form-responses/form-responses.controller';
 import { FormResponsesService } from './form-responses/form-responses.service';
 import { FormResponsesModule } from './form-responses/form-responses.module';
+import { QuestionsController } from './questions/questions.controller';
+import { QuestionsService } from './questions/questions.service';
+import { QuestionsModule } from './questions/questions.module';
 
 @Module({
   imports: [
@@ -31,9 +34,15 @@ import { FormResponsesModule } from './form-responses/form-responses.module';
     }),
     UsersModule,
     FormResponsesModule,
+    QuestionsModule,
   ],
-  controllers: [AppController, UsersController, FormResponsesController],
-  providers: [AppService, UsersService, FormResponsesService],
+  controllers: [
+    AppController,
+    UsersController,
+    FormResponsesController,
+    QuestionsController,
+  ],
+  providers: [AppService, UsersService, FormResponsesService, QuestionsService],
 })
 export class AppModule {
   constructor(private connection: Connection) {}

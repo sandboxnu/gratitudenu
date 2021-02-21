@@ -18,7 +18,7 @@ export class FormResponsesService {
   ) {}
 
   async findAll(): Promise<FormResponse[]> {
-    return this.formResponsesRepository.find({ relations: ['user'] });
+    return this.formResponsesRepository.find();
   }
 
   async findOne(id: number) {
