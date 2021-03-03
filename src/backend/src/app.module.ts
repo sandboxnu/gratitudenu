@@ -13,6 +13,9 @@ import { Round } from './entities/round.entity';
 import { Game } from './entities/game.entity';
 import { FormResponse } from './entities/formResponse.entity';
 import { Question } from './entities/question.entity';
+import { WaitingRoomController } from './waiting-room/waiting-room.controller';
+import { WaitingRoomService } from './waiting-room/waiting-room.service';
+import { SseService } from './sse/sse.service';
 
 @Module({
   imports: [
@@ -28,8 +31,8 @@ import { Question } from './entities/question.entity';
     }),
     UsersModule,
   ],
-  controllers: [AppController, UsersController],
-  providers: [AppService, UsersService],
+  controllers: [AppController, UsersController, WaitingRoomController],
+  providers: [AppService, UsersService, WaitingRoomService, SseService],
 })
 export class AppModule {
   constructor(private connection: Connection) {}
