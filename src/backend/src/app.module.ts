@@ -15,7 +15,8 @@ import { FormResponse } from './entities/formResponse.entity';
 import { Question } from './entities/question.entity';
 import { WaitingRoomController } from './waiting-room/waiting-room.controller';
 import { WaitingRoomService } from './waiting-room/waiting-room.service';
-import { SseService } from './sse/sse.service';
+import { SSEService } from './sse/sse.service';
+import { WaitingRoomSSEService } from './waiting-room/waiting-room.sse.service';
 
 @Module({
   imports: [
@@ -32,7 +33,13 @@ import { SseService } from './sse/sse.service';
     UsersModule,
   ],
   controllers: [AppController, UsersController, WaitingRoomController],
-  providers: [AppService, UsersService, WaitingRoomService, SseService],
+  providers: [
+    AppService,
+    UsersService,
+    WaitingRoomService,
+    WaitingRoomSSEService,
+    SSEService,
+  ],
 })
 export class AppModule {
   constructor(private connection: Connection) {}
