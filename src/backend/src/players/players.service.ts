@@ -2,15 +2,15 @@ import { BadRequestException, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Player } from '../entities/player.entity';
 import { Repository } from 'typeorm';
-import { User } from '../entities/user.entity';
+import { Game } from '../entities/game.entity';
 
 @Injectable()
 export class PlayersService {
   constructor(
     @InjectRepository(Player)
     private playersRepository: Repository<Player>,
-    @InjectRepository(User)
-    private readonly usersRepository: Repository<User>,
+    @InjectRepository(Game)
+    private readonly gamesRepository: Repository<Game>,
   ) {}
 
   async findAll(): Promise<Player[]> {
@@ -25,20 +25,22 @@ export class PlayersService {
     return player;
   }
 
-  // Not sure if I should be taking these in or userId, gameId?
-  async create(userId: number, gameId: number, color: string): Promise<Number> {
-    let player = new Player();
+  // Changed the create to update since we already have @Post create()
+  async update(
+    playerId: number,
+    gameId: number,
+    color: string,
+  ): Promise<Number> {
+    let player = await this.findOne(playerId);
     player.color = color;
 
-    const user = await this.usersRepository.findOne(userId);
-    if (!user) {
-      throw new BadRequestException('User not found');
+    const game = await this.gamesRepository.findOne(gameId);
+    if (!game) {
+      throw new BadRequestException('Game not found');
     }
-
-    // Set game by using gamesRepository.findOne() => does not exist
+    player.game = game;
 
     await this.playersRepository.save(player);
-
     return player.id;
   }
 }

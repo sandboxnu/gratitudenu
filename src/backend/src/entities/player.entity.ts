@@ -2,22 +2,28 @@ import {
   Entity,
   Column,
   PrimaryGeneratedColumn,
-  OneToOne,
-  JoinColumn,
   ManyToOne,
   BaseEntity,
 } from 'typeorm';
 import { Game } from './game.entity';
-import { User } from './user.entity';
+
+// IDK, just placeholder values for now
+export enum EmotionIdEnum {
+  Calm,
+  Greedy,
+  NotGreedy,
+}
 
 @Entity()
 export class Player extends BaseEntity {
-  @PrimaryGeneratedColumn()
+  @PrimaryGeneratedColumn() // Do we even need this anymore?
   id: number;
 
-  @OneToOne((type) => User)
-  @JoinColumn()
-  user: User;
+  @Column()
+  userId: number;
+
+  @Column()
+  emotionId: EmotionIdEnum;
 
   @ManyToOne((type) => Game, (game) => game.players)
   game: Game;
