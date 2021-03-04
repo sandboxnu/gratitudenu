@@ -32,7 +32,9 @@ export class WaitingRoomSSEService {
     //TODO: Start timer
     const timer = setTimeout(() => {
       // remove connection from the pool
+      //TODO::
       // update the room with number of players once again
+      //TODO::
       // close connection
       res.end();
     }, FIFTEEN_MINUTES);
@@ -58,13 +60,15 @@ export class WaitingRoomSSEService {
    *
    * @param client
    */
-  closeConnectionAndRemoveClient(client: Client<WaitingRoomClientMetadata>) {}
+  closeConnectionAndRemoveClient(
+    client: Client<WaitingRoomClientMetadata>,
+  ): void {}
 
   /**
    * Send
    * @param clients
    */
-  sendClientsToGame(clients: Client<WaitingRoomClientMetadata>[]) {
+  sendClientsToGame(clients: Client<WaitingRoomClientMetadata>[]): void {
     // create game with the given clients
     //TODO: real value
     const gameId = 'abc';
@@ -78,7 +82,10 @@ export class WaitingRoomSSEService {
    * @param gameId
    * @param clients
    */
-  sendGameId(gameId: string, clients: Client<WaitingRoomClientMetadata>[]) {
+  sendGameId(
+    gameId: string,
+    clients: Client<WaitingRoomClientMetadata>[],
+  ): void {
     this.sendMessage({ gameId }, clients);
     for (const { res } of clients) {
       res.end();
