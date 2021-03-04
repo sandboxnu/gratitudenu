@@ -28,6 +28,8 @@ export class Player extends BaseEntity {
   @ManyToOne((type) => Game, (game) => game.players)
   game: Game;
 
-  @Column()
-  color: string;
+  @Column({
+    nullable: true,
+  })
+  color!: string;
 }

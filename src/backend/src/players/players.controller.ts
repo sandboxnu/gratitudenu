@@ -1,4 +1,4 @@
-import { BadRequestException, Body, Post } from '@nestjs/common';
+import { BadRequestException, Body, Controller, Post } from '@nestjs/common';
 import { Player } from '../entities/player.entity';
 
 @Controller('players')
