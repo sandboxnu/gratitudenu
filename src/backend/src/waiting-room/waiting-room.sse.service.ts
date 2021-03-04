@@ -30,7 +30,12 @@ export class WaitingRoomSSEService {
       this.clients[metadata.emotionId] = [];
     }
     //TODO: Start timer
-    const timer = setTimeout(() => {}, FIFTEEN_MINUTES);
+    const timer = setTimeout(() => {
+      // remove connection from the pool
+      // update the room with number of players once again
+      // close connection
+      res.end();
+    }, FIFTEEN_MINUTES);
     this.clients[metadata.emotionId].push({ res, metadata });
 
     if (this.clients[metadata.emotionId].length === MAX_PLAYERS) {
