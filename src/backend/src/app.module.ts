@@ -9,6 +9,9 @@ import { Round } from './entities/round.entity';
 import { Game } from './entities/game.entity';
 import { PlayersService } from './players/players.service';
 import { PlayersModule } from './players/players.module';
+import { GameController } from './game/game.controller';
+import { GameService } from './game/game.service';
+import { RoundService } from './round/round.service';
 
 @Module({
   imports: [
@@ -24,8 +27,8 @@ import { PlayersModule } from './players/players.module';
     }),
     PlayersModule,
   ],
-  controllers: [AppController],
-  providers: [AppService, PlayersService],
+  controllers: [AppController, GameController],
+  providers: [AppService, PlayersService, GameService, RoundService],
 })
 export class AppModule {
   constructor(private connection: Connection) {}

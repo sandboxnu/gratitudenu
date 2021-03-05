@@ -5,7 +5,6 @@ import {
   OneToMany,
   BaseEntity,
 } from 'typeorm';
-import { Grab } from './grab.entity';
 import { Player } from './player.entity';
 import { Round } from './round.entity';
 
