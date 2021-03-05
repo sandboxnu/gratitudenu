@@ -20,7 +20,7 @@ export class PlayersService {
   async findOne(id: number): Promise<Player> {
     const player = this.playersRepository.findOne(id);
     if (!player) {
-      throw new BadRequestException('Player not found');
+      return;
     }
     return player;
   }

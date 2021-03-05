@@ -9,7 +9,9 @@ export class PlayersController {
     @Body('emotionId') emotionId: number,
   ): Promise<number> {
     if (!userId || !emotionId) {
-      throw new BadRequestException('Not all player fields are filled');
+      throw new BadRequestException(
+        'Create Player requires emotionId and userId',
+      );
     }
     const player = await Player.create({
       userId,
