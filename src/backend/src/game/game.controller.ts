@@ -1,10 +1,19 @@
-import { BadRequestException, Body, Controller, Post } from '@nestjs/common';
+import {
+  BadRequestException,
+  Body,
+  Controller,
+  Post,
+  Sse,
+  MessageEvent,
+} from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Player } from '../entities/player.entity';
 import { Repository } from 'typeorm';
 import { Game } from '../entities/game.entity';
 import { Grab } from '../entities/grab.entity';
 import { Round } from '../entities/round.entity';
+import { interval, Observable } from 'rxjs';
+import { map } from 'rxjs/operators';
 
 @Controller('game')
 export class GameController {
@@ -40,7 +49,6 @@ export class GameController {
     @Body('howMany') howMany: number,
     @Body('timeTaken') timeTaken: number,
     @Body('roundId') roundId: number,
-    @Body('gameId') gameId: number,
   ): Promise<number> {
     const player = await this.playersRepository.findOne(playerId);
     if (!player) {
@@ -62,9 +70,18 @@ export class GameController {
 
     return grab.id;
   }
-}
 
-/* TODO:
-- POST takeTurn()
-- SSE checkIfNewRound => createRound
- */
+  @Sse('sse')
+  async checkIfNewRound(
+    @Body('roundId') roundId: number,
+  ): Promise<Observable<MessageEvent>> {
+    const round = await this.roundsRepository.findOne(roundId);
+    if (!round) {
+      throw new BadRequestException('Round does not exist');
+    }
+    const isNewRound = round.playerMoves.length == 4;
+    return interval(1000).pipe(
+      map((_) => ({ data: { isNewRound: isNewRound } })),
+    );
+  }
+}
