@@ -1,6 +1,5 @@
 import { Body, Controller, Post, Res } from '@nestjs/common';
 import { Response } from 'express';
-import { PlayersModule } from 'src/players/players.module';
 import { PlayersService } from 'src/players/players.service';
 import { WaitingRoomSSEService } from './waiting-room.sse.service';
 

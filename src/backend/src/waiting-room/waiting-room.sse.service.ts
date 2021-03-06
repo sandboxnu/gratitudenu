@@ -1,19 +1,17 @@
 import { Injectable } from '@nestjs/common';
 import { Response } from 'express';
-import { WaitingRoomService } from './waiting-room.service';
 import { Client } from 'src/sse/sse.service';
 
 type WaitingRoomClientMetadata = { userId: number; emotionId: number };
-const FIFTEEN_MINUTES = 10000;
+const FIFTEEN_MINUTES = 900000;
 const TIMEOUT_EVENT = { timeout: true };
-const MAX_PLAYERS = 2;
+const MAX_PLAYERS = 4;
 /**
  * Handle sending Waiting Room sse events
  */
 @Injectable()
 export class WaitingRoomSSEService {
   private clients: Record<string, Client<WaitingRoomClientMetadata>[]> = {};
-  constructor(private waitingRoomService: WaitingRoomService) {}
 
   /**
    * Subscribe a Client to the Waiting Room
