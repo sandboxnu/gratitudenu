@@ -6,7 +6,7 @@ import { Client } from 'src/sse/sse.service';
 type WaitingRoomClientMetadata = { userId: number; emotionId: number };
 const FIFTEEN_MINUTES = 10000;
 const TIMEOUT_EVENT = { timeout: true };
-const MAX_PLAYERS = 4;
+const MAX_PLAYERS = 2;
 /**
  * Handle sending Waiting Room sse events
  */

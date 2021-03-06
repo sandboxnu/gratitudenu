@@ -6,7 +6,6 @@ import { Grab } from './entities/grab.entity';
 import { Player } from './entities/player.entity';
 import { Round } from './entities/round.entity';
 import { Game } from './entities/game.entity';
-import { WaitingRoomService } from './waiting-room/waiting-room.service';
 import { SSEService } from './sse/sse.service';
 import { WaitingRoomSSEService } from './waiting-room/waiting-room.sse.service';
 import { PlayersModule } from './players/players.module';
@@ -29,13 +28,7 @@ import { PlayersController } from './players/players.controller';
     }),
     PlayersModule,
   ],
-  providers: [
-    AppService,
-    PlayersService,
-    WaitingRoomService,
-    WaitingRoomSSEService,
-    SSEService,
-  ],
+  providers: [AppService, PlayersService, WaitingRoomSSEService, SSEService],
   controllers: [AppController, WaitingRoomController, PlayersController],
 })
 export class AppModule {
