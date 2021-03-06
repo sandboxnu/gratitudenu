@@ -43,7 +43,7 @@ export class GameController {
     return game.id;
   }
 
-  @Post()
+  @Post('take')
   async take(
     @Body('playerId') playerId: number,
     @Body('howMany') howMany: number,
