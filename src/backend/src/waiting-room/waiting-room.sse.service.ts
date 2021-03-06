@@ -4,11 +4,11 @@ import { WaitingRoomService } from './waiting-room.service';
 import { Client } from 'src/sse/sse.service';
 
 type WaitingRoomClientMetadata = { userId: number; emotionId: number };
-const FIFTEEN_MINUTES = 900000;
+const FIFTEEN_MINUTES = 10000;
 const TIMEOUT_EVENT = { timeout: true };
-const MAX_PLAYERS = 2; //TODO: Test with real number (i just don't know a rest test other than postman and insomnia)
+const MAX_PLAYERS = 3; //TODO: Test with real number (i just don't know a rest test other than postman and insomnia)
 /**
- * Handle sending queue sse events
+ * Handle sending Waiting Room sse events
  */
 @Injectable()
 export class WaitingRoomSSEService {
@@ -24,8 +24,9 @@ export class WaitingRoomSSEService {
     if (!(metadata.emotionId in this.clients)) {
       this.clients[metadata.emotionId] = [];
     }
-    //TODO: Start timer
+    // Start Timer to remove player
     setTimeout(() => this.clientTimerFunction(metadata), FIFTEEN_MINUTES);
+    // Add Client to emotion room
     this.clients[metadata.emotionId].push({ res, metadata });
 
     if (this.clients[metadata.emotionId].length === MAX_PLAYERS) {
@@ -38,7 +39,7 @@ export class WaitingRoomSSEService {
     }
   }
 
-  clientTimerFunction(client: WaitingRoomClientMetadata) {
+  clientTimerFunction(client: WaitingRoomClientMetadata): void {
     const clients = this.clients[client.emotionId];
     const index = this.clients[client.emotionId]?.findIndex(
       (cli) => cli.metadata.userId === client.userId,
@@ -52,6 +53,10 @@ export class WaitingRoomSSEService {
     }
   }
 
+  /**
+   * Update Room with number of players waiting for games
+   * @param clients
+   */
   updateEmotionRoomWithNumberOfPlayers(
     clients: Client<WaitingRoomClientMetadata>[],
   ): void {
@@ -59,15 +64,7 @@ export class WaitingRoomSSEService {
   }
 
   /**
-   *
-   * @param client
-   */
-  closeConnectionAndRemoveClient(
-    client: Client<WaitingRoomClientMetadata>,
-  ): void {}
-
-  /**
-   * Send
+   * Send clients to game room
    * @param clients
    */
   sendClientsToGame(clients: Client<WaitingRoomClientMetadata>[]): void {
@@ -75,20 +72,9 @@ export class WaitingRoomSSEService {
     //TODO: real value
     const gameId = 'abc';
     // send each client the game id
-    this.sendGameId(gameId, clients);
-    // cancel each clients timer
-  }
-
-  /**
-   *
-   * @param gameId
-   * @param clients
-   */
-  sendGameId(
-    gameId: string,
-    clients: Client<WaitingRoomClientMetadata>[],
-  ): void {
     this.sendMessage({ gameId }, clients);
+
+    // close each client connection
     for (const { res } of clients) {
       res.end();
     }
