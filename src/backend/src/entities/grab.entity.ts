@@ -9,16 +9,16 @@ import {
   BaseEntity,
 } from 'typeorm';
 import { Round } from './round.entity';
-import { User } from './user.entity';
+import { Player } from './player.entity';
 
 @Entity()
 export class Grab extends BaseEntity {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @OneToOne((type) => User)
+  @OneToOne((type) => Player)
   @JoinColumn()
-  user: User;
+  player: Player;
 
   /**
    * How Many Points were taken in this grab

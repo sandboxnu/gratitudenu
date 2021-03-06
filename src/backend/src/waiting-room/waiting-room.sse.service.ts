@@ -6,7 +6,7 @@ import { Client } from 'src/sse/sse.service';
 type WaitingRoomClientMetadata = { userId: number; emotionId: number };
 const FIFTEEN_MINUTES = 10000;
 const TIMEOUT_EVENT = { timeout: true };
-const MAX_PLAYERS = 3; //TODO: Test with real number (i just don't know a rest test other than postman and insomnia)
+const MAX_PLAYERS = 4;
 /**
  * Handle sending Waiting Room sse events
  */
@@ -81,7 +81,7 @@ export class WaitingRoomSSEService {
   }
 
   /**
-   *
+   * Send message to clients
    * @param message
    * @param clients
    */
