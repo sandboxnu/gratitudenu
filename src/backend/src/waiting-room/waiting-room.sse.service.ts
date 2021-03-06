@@ -4,20 +4,15 @@ import { WaitingRoomService } from './waiting-room.service';
 import { Client } from 'src/sse/sse.service';
 
 type WaitingRoomClientMetadata = { userId: number; emotionId: number };
-type WaitingRoomClientMetadataWithTimer = WaitingRoomClientMetadata & {
-  timer?: number;
-};
 const FIFTEEN_MINUTES = 900000;
+const TIMEOUT_EVENT = { timeout: true };
 const MAX_PLAYERS = 2; //TODO: Test with real number (i just don't know a rest test other than postman and insomnia)
 /**
  * Handle sending queue sse events
  */
 @Injectable()
 export class WaitingRoomSSEService {
-  private clients: Record<
-    string,
-    Client<WaitingRoomClientMetadataWithTimer>[]
-  > = {};
+  private clients: Record<string, Client<WaitingRoomClientMetadata>[]> = {};
   constructor(private waitingRoomService: WaitingRoomService) {}
 
   /**
@@ -30,14 +25,7 @@ export class WaitingRoomSSEService {
       this.clients[metadata.emotionId] = [];
     }
     //TODO: Start timer
-    const timer = setTimeout(() => {
-      // remove connection from the pool
-      //TODO::
-      // update the room with number of players once again
-      //TODO::
-      // close connection
-      res.end();
-    }, FIFTEEN_MINUTES);
+    setTimeout(() => this.clientTimerFunction(metadata), FIFTEEN_MINUTES);
     this.clients[metadata.emotionId].push({ res, metadata });
 
     if (this.clients[metadata.emotionId].length === MAX_PLAYERS) {
@@ -47,6 +35,20 @@ export class WaitingRoomSSEService {
       this.updateEmotionRoomWithNumberOfPlayers(
         this.clients[metadata.emotionId],
       );
+    }
+  }
+
+  clientTimerFunction(client: WaitingRoomClientMetadata) {
+    const clients = this.clients[client.emotionId];
+    const index = this.clients[client.emotionId]?.findIndex(
+      (cli) => cli.metadata.userId === client.userId,
+    );
+    if (clients && index !== undefined) {
+      const cli = this.clients[client.emotionId][index];
+      this.sendMessage(TIMEOUT_EVENT, [cli]);
+      clients.splice(index, 1);
+      this.updateEmotionRoomWithNumberOfPlayers(clients);
+      cli.res.end();
     }
   }
 
