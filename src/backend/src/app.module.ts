@@ -12,6 +12,7 @@ import { PlayersModule } from './players/players.module';
 import { GameController } from './game/game.controller';
 import { GameService } from './game/game.service';
 import { RoundService } from './round/round.service';
+import { GameModule } from './game/game.module';
 
 @Module({
   imports: [
@@ -26,8 +27,9 @@ import { RoundService } from './round/round.service';
       synchronize: true, // TODO: synchronize true should not be used in a production environment
     }),
     PlayersModule,
+    GameModule,
   ],
-  controllers: [AppController, GameController],
+  controllers: [AppController, GameController, GameController],
   providers: [AppService, PlayersService, GameService, RoundService],
 })
 export class AppModule {

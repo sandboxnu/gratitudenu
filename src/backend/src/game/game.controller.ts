@@ -24,25 +24,6 @@ export class GameController {
     private roundsRepository: Repository<Round>,
   ) {}
 
-  @Post()
-  async create(@Body('playerIds') playerIds: number[]): Promise<number> {
-    const players = await Promise.all(
-      playerIds.map(async (id) => {
-        return await this.playersRepository.findOne(id);
-      }),
-    );
-
-    const game = await Game.create();
-
-    game.ongoing = true;
-    game.players = players;
-    game.rounds = [];
-
-    game.save();
-
-    return game.id;
-  }
-
   @Post('take')
   async take(
     @Body('playerId') playerId: number,
