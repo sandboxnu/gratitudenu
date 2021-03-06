@@ -16,7 +16,6 @@ export class SSEService<T> {
   private clients: Record<any, Client<T>[]> = {};
 
   /** Add a client to a room */
-  // For Game, room is gameId, if this is the waiting room then we can use 'waiting-room' as the key
   subscribeClient(room: string, client: Client<T>): void {
     // Keep track of responses so we can send sse through them
     if (!(room in this.clients)) {
@@ -31,12 +30,10 @@ export class SSEService<T> {
     });
   }
 
-  unsubscribeClient(
-    room: string,
-    matchClient: (client: Client<T>) => boolean,
-  ): void {
+  unsubscribeRoom(room: string): void {
     const cli = this.clients[room];
-    cli.find(matchClient)?.res.end();
+    delete this.clients[room];
+    cli.forEach((client) => client.res.end());
   }
 
   /** Send some data to everyone in a room */
