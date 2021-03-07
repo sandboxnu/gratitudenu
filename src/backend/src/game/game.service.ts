@@ -20,7 +20,7 @@ export class GameService {
 
     const game = await Game.create({ rounds: [], ongoing: true, players });
 
-    game.save();
+    await game.save();
 
     return game.id;
   }

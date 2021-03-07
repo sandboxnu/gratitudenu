@@ -43,7 +43,7 @@ export class GameController {
 
     const grab = await Grab.create({ round, player, howMany, timeTaken });
 
-    grab.save();
+    await grab.save();
 
     return grab.id;
   }
