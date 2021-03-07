@@ -18,11 +18,7 @@ export class GameService {
       }),
     );
 
-    const game = await Game.create();
-
-    game.ongoing = true;
-    game.players = players;
-    game.rounds = [];
+    const game = await Game.create({ rounds: [], ongoing: true, players });
 
     game.save();
 

@@ -41,12 +41,8 @@ export class GameController {
       throw new BadRequestException('Round does not exist');
     }
 
-    const grab = await Grab.create();
+    const grab = await Grab.create({ round, player, howMany, timeTaken });
 
-    grab.round = round;
-    grab.player = player;
-    grab.howMany = howMany;
-    grab.timeTaken = timeTaken;
     grab.save();
 
     return grab.id;
