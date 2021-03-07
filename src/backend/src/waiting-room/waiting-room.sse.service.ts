@@ -6,7 +6,7 @@ import { Client } from 'src/sse/sse.service';
 type WaitingRoomClientMetadata = { playerId: number; emotionId: number };
 const FIFTEEN_MINUTES = 900000;
 const TIMEOUT_EVENT = { timeout: true };
-const MAX_PLAYERS = 2;
+const MAX_PLAYERS = 4;
 /**
  * Handle sending Waiting Room sse events
  */
@@ -75,7 +75,6 @@ export class WaitingRoomSSEService {
     // create game with the given clients
     const playerIds = clients.map((client) => client.metadata.playerId);
     const gameId = await this.gameService.create(playerIds);
-    console.log(gameId);
     // send each client the game id
     this.sendMessage({ gameId }, clients);
 
