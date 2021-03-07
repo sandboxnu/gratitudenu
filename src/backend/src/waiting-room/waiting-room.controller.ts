@@ -24,7 +24,7 @@ export class WaitingRoomController {
     });
 
     this.waitingRoomSseService.subscribeClient(res, {
-      userId: playerId,
+      playerId,
       emotionId: player.emotionId,
     });
   }
