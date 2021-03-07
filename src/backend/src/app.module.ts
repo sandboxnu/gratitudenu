@@ -13,6 +13,10 @@ import { PlayersService } from './players/players.service';
 import { AppController } from './app.controller';
 import { WaitingRoomController } from './waiting-room/waiting-room.controller';
 import { PlayersController } from './players/players.controller';
+import { GameController } from './game/game.controller';
+import { GameService } from './game/game.service';
+import { RoundService } from './round/round.service';
+import { GameModule } from './game/game.module';
 
 @Module({
   imports: [
@@ -27,9 +31,23 @@ import { PlayersController } from './players/players.controller';
       synchronize: true, // TODO: synchronize true should not be used in a production environment
     }),
     PlayersModule,
+    GameModule,
   ],
-  providers: [AppService, PlayersService, WaitingRoomSSEService, SSEService],
-  controllers: [AppController, WaitingRoomController, PlayersController],
+
+  providers: [
+    AppService,
+    PlayersService,
+    WaitingRoomSSEService,
+    SSEService,
+    GameService,
+    RoundService,
+  ],
+  controllers: [
+    AppController,
+    WaitingRoomController,
+    PlayersController,
+    GameController,
+  ],
 })
 export class AppModule {
   constructor(private connection: Connection) {}
