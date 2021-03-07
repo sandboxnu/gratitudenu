@@ -2,7 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { Response } from 'express';
 import { Client } from 'src/sse/sse.service';
 
-type WaitingRoomClientMetadata = { userId: number; emotionId: number };
+type WaitingRoomClientMetadata = { playerId: number; emotionId: number };
 const FIFTEEN_MINUTES = 900000;
 const TIMEOUT_EVENT = { timeout: true };
 const MAX_PLAYERS = 4;
@@ -40,7 +40,7 @@ export class WaitingRoomSSEService {
   clientTimerFunction(client: WaitingRoomClientMetadata): void {
     const clients = this.clients[client.emotionId];
     const index = this.clients[client.emotionId]?.findIndex(
-      (cli) => cli.metadata.userId === client.userId,
+      (cli) => cli.metadata.playerId === client.playerId,
     );
     if (clients && index !== undefined) {
       const cli = this.clients[client.emotionId][index];
