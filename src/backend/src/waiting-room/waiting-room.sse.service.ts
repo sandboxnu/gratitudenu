@@ -1,24 +1,28 @@
 import { Injectable } from '@nestjs/common';
 import { Response } from 'express';
+import { GameService } from 'src/game/game.service';
 import { Client } from 'src/sse/sse.service';
 
 type WaitingRoomClientMetadata = { playerId: number; emotionId: number };
 const FIFTEEN_MINUTES = 900000;
 const TIMEOUT_EVENT = { timeout: true };
-const MAX_PLAYERS = 4;
+const MAX_PLAYERS = 2;
 /**
  * Handle sending Waiting Room sse events
  */
 @Injectable()
 export class WaitingRoomSSEService {
   private clients: Record<string, Client<WaitingRoomClientMetadata>[]> = {};
-
+  constructor(private gameService: GameService) {}
   /**
    * Subscribe a Client to the Waiting Room
    * @param res
    * @param metadata
    */
-  subscribeClient(res: Response, metadata: WaitingRoomClientMetadata): void {
+  async subscribeClient(
+    res: Response,
+    metadata: WaitingRoomClientMetadata,
+  ): Promise<void> {
     if (!(metadata.emotionId in this.clients)) {
       this.clients[metadata.emotionId] = [];
     }
@@ -28,7 +32,7 @@ export class WaitingRoomSSEService {
     this.clients[metadata.emotionId].push({ res, metadata });
 
     if (this.clients[metadata.emotionId].length === MAX_PLAYERS) {
-      this.sendClientsToGame(this.clients[metadata.emotionId]);
+      await this.sendClientsToGame(this.clients[metadata.emotionId]);
       delete this.clients[metadata.emotionId];
     } else {
       this.updateEmotionRoomWithNumberOfPlayers(
@@ -65,10 +69,13 @@ export class WaitingRoomSSEService {
    * Send clients to game room
    * @param clients
    */
-  sendClientsToGame(clients: Client<WaitingRoomClientMetadata>[]): void {
+  async sendClientsToGame(
+    clients: Client<WaitingRoomClientMetadata>[],
+  ): Promise<void> {
     // create game with the given clients
-    //TODO: real value
-    const gameId = 'abc';
+    const playerIds = clients.map((client) => client.metadata.playerId);
+    const gameId = await this.gameService.create(playerIds);
+    console.log(gameId);
     // send each client the game id
     this.sendMessage({ gameId }, clients);
 

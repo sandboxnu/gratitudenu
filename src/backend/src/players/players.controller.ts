@@ -18,6 +18,6 @@ export class PlayersController {
       emotionId,
     }).save();
 
-    return player.userId;
+    return player.id;
   }
 }
