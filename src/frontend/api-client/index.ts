@@ -38,6 +38,8 @@ class APIClient {
     }): Promise<Number> => this.req('POST', '/players', Number, body),
   };
 
+  waitingRoom = {};
+
   constructor(baseURL = '') {
     this.axios = Axios.create({ baseURL: baseURL });
   }
