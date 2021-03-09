@@ -1,0 +1,34 @@
+@import 'constants';
+
+.container {
+  text-align: center;
+}
+.title {
+  margin: 100px 0 53px 0;
+  font-weight: bold;
+  font-size: $font-size-header;
+  color: $dark-blue;
+}
+
+.form {
+  display: flex;
+  justify-content: center;
+}
+
+.formInput {
+  text-align: left;
+  font-weight: 500;
+  font-size: 20px;
+  color: $dark-blue;
+
+  & input {
+    /* white */
+    height: 59px;
+    width: 306px;
+    margin: 4px 0 16px;
+    background: #ffffff;
+    border: 2px solid rgba(0, 42, 82, 0.5);
+    box-sizing: border-box;
+    border-radius: 4px;
+  }
+}
