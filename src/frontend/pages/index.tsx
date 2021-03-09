@@ -8,19 +8,20 @@ export default function Login(): ReactElement {
       <div>
         <div className={styles.formInput}>
           <div>
-            User Id
+            USER ID
             <div className={styles.form}>
               <input placeholder="Enter Input" />
             </div>
           </div>
           <div>
-            Emotion Id
+            EMOTION ID
             <div className={styles.form}>
               <input placeholder="Enter Input" />
             </div>
           </div>
         </div>
       </div>
+      <button className="primaryButton">Continue</button>
     </div>
   );
 }
