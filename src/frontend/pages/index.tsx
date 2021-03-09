@@ -1,7 +1,15 @@
-import { ReactElement } from 'react';
+import { ReactElement, useState } from 'react';
+import { API } from '../api-client';
 import styles from '../styles/Home.module.scss';
 
 export default function Login(): ReactElement {
+  const [userId, setUserId] = useState(null);
+  const [emotionId, setEmotionId] = useState(null);
+
+  const onContinue = async () => {
+    const playerId = await API.player.create({ userId, emotionId });
+    console.log(playerId);
+  };
   return (
     <div className={styles.container}>
       <div className={styles.title}>Behavior Game</div>
@@ -10,7 +18,7 @@ export default function Login(): ReactElement {
           <div>
             USER ID
             <div className={styles.form}>
-              <input placeholder="Enter Input" />
+              <input placeholder="Enter Input" value={} />
             </div>
           </div>
           <div>

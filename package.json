@@ -11,7 +11,10 @@
     "dev": "nodemon --config nodemon.json src/index.ts",
     "dev:debug": "nodemon --config nodemon.json --inspect-brk src/index.ts",
     "lint": "eslint '*/**/*.{js,ts,tsx}' --quiet --fix",
-    "start:dev:db": "./src/scripts/create-database.sh"
+    "start:dev:db": "./src/scripts/create-database.sh",
+    "start:dev:backend": "cd src/backend && npm run start:dev",
+    "start:dev:frontend": "cd src/frontend && npm run dev",
+    "start:dev": "npm run start:dev:backend & npm run start:dev:frontend"
   },
   "dependencies": {
     "@typescript-eslint/eslint-plugin": "^4.14.1",
