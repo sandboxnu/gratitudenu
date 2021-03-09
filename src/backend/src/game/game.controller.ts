@@ -3,17 +3,15 @@ import {
   Body,
   Controller,
   Post,
-  Sse,
-  MessageEvent,
+  Res,
 } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Player } from '../entities/player.entity';
 import { Repository } from 'typeorm';
-import { Game } from '../entities/game.entity';
 import { Grab } from '../entities/grab.entity';
 import { Round } from '../entities/round.entity';
-import { interval, Observable } from 'rxjs';
-import { map } from 'rxjs/operators';
+import { GameSseService } from './game.sse.service';
+import { Response } from 'express';
 
 @Controller('game')
 export class GameController {
@@ -22,6 +20,7 @@ export class GameController {
     private playersRepository: Repository<Player>,
     @InjectRepository(Round)
     private roundsRepository: Repository<Round>,
+    private gameSseService: GameSseService,
   ) {}
 
   @Post('take')
@@ -30,6 +29,7 @@ export class GameController {
     @Body('howMany') howMany: number,
     @Body('timeTaken') timeTaken: number,
     @Body('roundId') roundId: number,
+    @Res() res: Response,
   ): Promise<number> {
     const player = await this.playersRepository.findOne(playerId);
     if (!player) {
@@ -41,24 +41,16 @@ export class GameController {
       throw new BadRequestException('Round does not exist');
     }
 
-    const grab = await Grab.create({ round, player, howMany, timeTaken });
+    const grab = Grab.create({ round, player, howMany, timeTaken });
+
+    await this.gameSseService.subscribeClient(res, {
+      playerId: playerId,
+      gameId: player.game.id,
+      roundId,
+    });
 
     await grab.save();
 
     return grab.id;
-  }
-
-  @Sse('sse')
-  async checkIfNewRound(
-    @Body('roundId') roundId: number,
-  ): Promise<Observable<MessageEvent>> {
-    const round = await this.roundsRepository.findOne(roundId);
-    if (!round) {
-      throw new BadRequestException('Round does not exist');
-    }
-    const isNewRound = round.playerMoves.length == 4;
-    return interval(1000).pipe(
-      map((_) => ({ data: { isNewRound: isNewRound } })),
-    );
   }
 }

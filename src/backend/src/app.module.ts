@@ -17,6 +17,7 @@ import { GameController } from './game/game.controller';
 import { GameService } from './game/game.service';
 import { RoundService } from './round/round.service';
 import { GameModule } from './game/game.module';
+import { GameSseService } from './game/game.sse.service';
 
 @Module({
   imports: [
@@ -40,6 +41,7 @@ import { GameModule } from './game/game.module';
     WaitingRoomSSEService,
     SSEService,
     GameService,
+    GameSseService,
     RoundService,
   ],
   controllers: [

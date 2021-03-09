@@ -23,7 +23,7 @@ export class WaitingRoomController {
       Connection: 'keep-alive',
     });
 
-    this.waitingRoomSseService.subscribeClient(res, {
+    await this.waitingRoomSseService.subscribeClient(res, {
       playerId,
       emotionId: player.emotionId,
     });
