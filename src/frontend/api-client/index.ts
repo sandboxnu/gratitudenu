@@ -4,7 +4,7 @@ import { ClassType } from 'class-transformer/ClassTransformer';
 
 // Return type of array item, if T is an array
 type ItemIfArray<T> = T extends (infer I)[] ? I : T;
-const DEV_URL = 'http://localhost:3001/';
+const DEV_URL = 'http://localhost:3001';
 
 class APIClient {
   private axios: AxiosInstance;
@@ -28,7 +28,15 @@ class APIClient {
     responseClass?: ClassType<T>,
     body?: any,
   ): Promise<T> {
-    const res = (await this.axios.request({ method, url, data: body })).data;
+    console.log(body);
+    const res = (
+      await this.axios.request({
+        method,
+        url,
+        data: body,
+        headers: { 'Access-Control-Allow-Origin': '*' },
+      })
+    ).data;
     return responseClass ? plainToClass(responseClass, res) : res;
   }
 
@@ -37,7 +45,10 @@ class APIClient {
       userId: number;
       emotionId: number;
     }): // eslint-disable-next-line @typescript-eslint/ban-types
-    Promise<Number> => this.req('POST', '/players', Number, body),
+    Promise<Number> => {
+      console.log(body);
+      return this.req('POST', '/players', Number, body);
+    },
   };
 
   waitingRoom = {};
