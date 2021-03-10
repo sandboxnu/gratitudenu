@@ -1,3 +1,4 @@
+import { useRouter } from 'next/router';
 import { ReactElement, useState } from 'react';
 import { API } from '../api-client';
 import styles from '../styles/Home.module.scss';
@@ -5,6 +6,7 @@ import styles from '../styles/Home.module.scss';
 export default function Login(): ReactElement {
   const [userId, setUserId] = useState('');
   const [emotionId, setEmotionId] = useState('');
+  const router = useRouter();
 
   const onContinue = async () => {
     const uId = Number.parseInt(userId);
@@ -15,6 +17,7 @@ export default function Login(): ReactElement {
     }
     const playerId = await API.player.create({ userId: uId, emotionId: eId });
     console.log(playerId);
+    router.push(`/waiting-room?playerId=${playerId}`);
   };
 
   const updateUserId = (event) => {
