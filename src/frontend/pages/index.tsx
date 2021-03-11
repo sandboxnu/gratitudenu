@@ -1,57 +1,62 @@
-import Head from 'next/head';
-import styles from '../styles/Home.module.css';
+import { useRouter } from 'next/router';
+import { ReactElement, useState } from 'react';
+import { API } from '../api-client';
+import styles from '../styles/Home.module.scss';
 
-export default function Home() {
+export default function Login(): ReactElement {
+  const [userId, setUserId] = useState('');
+  const [emotionId, setEmotionId] = useState('');
+  const router = useRouter();
+
+  const onContinue = async () => {
+    const uId = Number.parseInt(userId);
+    const eId = Number.parseInt(emotionId);
+    if (isNaN(uId) || isNaN(eId)) {
+      //TODO: Add error messaging
+      return;
+    }
+    const playerId = await API.player.create({ userId: uId, emotionId: eId });
+    console.log(playerId);
+    router.push(`/waiting-room?playerId=${playerId}`);
+  };
+
+  const updateUserId = (event) => {
+    setUserId(event.target.value);
+  };
+
+  const updateEmotionId = (event) => {
+    setEmotionId(event.target.value);
+  };
   return (
     <div className={styles.container}>
-      <Head>
-        <title>RDG NU</title>
-        <link rel="icon" href="/favicon.ico" />
-      </Head>
-
-      <main className={styles.main}>
-        <h1 className={styles.title}>
-          Welcome to <a href="https://sandboxnu.com">RDG NU</a>
-        </h1>
-
-        <div className={styles.grid}>
-          <a href="https://nextjs.org/docs" className={styles.card}>
-            <h3>Hi &rarr;</h3>
-            <p>lorem ipsum something</p>
-          </a>
-
-          <a href="https://nextjs.org/learn" className={styles.card}>
-            <h3>blah &rarr;</h3>
-            <p>lorem ipsum something</p>
-          </a>
-
-          <a
-            href="https://github.com/vercel/next.js/tree/master/examples"
-            className={styles.card}
-          >
-            <h3>woooo &rarr;</h3>
-            <p>asdfgdsfgsdfg</p>
-          </a>
-
-          <a
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=default-template&utm_campaign=create-next-app"
-            className={styles.card}
-          >
-            <h3>rdg nu &rarr;</h3>
-            <p>sdfgsdfgsdfg</p>
-          </a>
+      <div className={styles.title}>Behavior Game</div>
+      <div>
+        <div className={styles.formInputs}>
+          <div className={styles.formInput}>
+            USER ID
+            <div className={styles.form}>
+              <input
+                placeholder="Enter Input"
+                value={userId}
+                onChange={updateUserId}
+              />
+            </div>
+          </div>
+          <div className={styles.formInput}>
+            EMOTION ID
+            <div className={styles.form}>
+              <input
+                placeholder="Enter Input"
+                value={emotionId}
+                onChange={updateEmotionId}
+              />
+            </div>
+          </div>
         </div>
-      </main>
-
-      <footer className={styles.footer}>
-        <a
-          href="https://vercel.com?utm_source=create-next-app&utm_medium=default-template&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Powered by Sandbox
-        </a>
-      </footer>
+      </div>
+      <button className="primaryButton" onClick={onContinue}>
+        Continue
+      </button>
     </div>
   );
 }
