@@ -11,7 +11,8 @@ export const useEventSource = (
       source.onmessage = function logEvents(event) {
         onmessage(JSON.parse(event.data));
       };
+
       return () => source.close();
     }
-  }, [url, onmessage]);
+  }, [url]);
 };

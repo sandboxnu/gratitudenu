@@ -11,12 +11,16 @@ export default function WaitingRoom(): ReactElement {
 
   const { playerId } = router.query;
   const [players, setPlayers] = useState(1); // assume it is just us to begin with
+  const waitingRoomUrl = `${DEV_URL}/waiting-room?playerId=${playerId}`;
 
   // subscribe to waiting room on load
-  useEventSource(`${DEV_URL}/waiting-room?playerId=${playerId}`, (message) => {
-    console.log(players);
+  useEventSource(waitingRoomUrl, (message) => {
     if (message.players) {
       setPlayers(message.players);
+    } else if (message.timeout) {
+      //TODO: Where does this lead to
+    } else if (message.gameId) {
+      router.push(`/game?gameId=${message.gameId}`);
     }
   });
 
