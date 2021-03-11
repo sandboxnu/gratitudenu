@@ -1,6 +1,7 @@
 import { useRouter } from 'next/dist/client/router';
 import { ReactElement } from 'react';
-import { API, DEV_URL } from '../api-client';
+import { DEV_URL } from '../api-client';
+import Timer from '../components/timer';
 import { useEventSource } from '../hooks/useEventSource';
 
 export default function WaitingRoom(): ReactElement {
@@ -14,5 +15,21 @@ export default function WaitingRoom(): ReactElement {
     console.log(message);
   });
 
-  return <div>Welcome to the waiting room {playerId}</div>;
+  const formatTimeIntoMinutes = (timer: number) => {
+    const minutes = Math.floor(timer / 60);
+
+    const seconds = timer % 60;
+    return `${minutes}:${seconds === 0 ? '00' : seconds}`;
+  };
+
+  return (
+    <div>
+      <div>You are in the waiting room </div>
+      <Timer
+        time={900}
+        onTimerOver={() => {}}
+        formatTime={formatTimeIntoMinutes}
+      />
+    </div>
+  );
 }
