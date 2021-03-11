@@ -1,4 +1,4 @@
-import { Body, Controller, Post, Res } from '@nestjs/common';
+import { Body, Controller, Get, Param, Res } from '@nestjs/common';
 import { Response } from 'express';
 import { PlayersService } from 'src/players/players.service';
 import { WaitingRoomSSEService } from './waiting-room.sse.service';
@@ -10,9 +10,9 @@ export class WaitingRoomController {
     private waitingRoomSseService: WaitingRoomSSEService,
   ) {}
 
-  @Post()
+  @Get()
   async addPlayerToRoom(
-    @Body('playerId') playerId: number,
+    @Param('playerId') playerId: number,
     @Res() res: Response,
   ): Promise<void> {
     const player = await this.playerService.findOne(playerId);

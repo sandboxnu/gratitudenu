@@ -4,7 +4,7 @@ import { ClassType } from 'class-transformer/ClassTransformer';
 
 // Return type of array item, if T is an array
 type ItemIfArray<T> = T extends (infer I)[] ? I : T;
-const DEV_URL = 'http://localhost:3001';
+export const DEV_URL = 'http://localhost:3001';
 
 class APIClient {
   private axios: AxiosInstance;
@@ -46,12 +46,15 @@ class APIClient {
       emotionId: number;
     }): // eslint-disable-next-line @typescript-eslint/ban-types
     Promise<Number> => {
-      console.log(body);
       return this.req('POST', '/players', Number, body);
     },
   };
 
-  waitingRoom = {};
+  waitingRoom = {
+    join: async (body: { playerId: number }): Promise<void> => {
+      return this.req('POST', '/waiting-room', undefined, body);
+    },
+  };
 
   constructor(baseURL = '') {
     this.axios = Axios.create({ baseURL: baseURL });
