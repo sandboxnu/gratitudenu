@@ -1,17 +1,18 @@
-import { Client } from '../sse/sse.service';
+import { Client, SSEService } from '../sse/sse.service';
 import { Response } from 'express';
 import { GameService } from './game.service';
 import { Round } from '../entities/round.entity';
 import { RoundService } from '../round/round.service';
 
 type GameClientMetadata = { playerId: number; gameId: number; roundId: number };
-const MAX_PLAYERS = 4;
+const MAX_PLAYERS = 2; // TODO: test temp
 
 export class GameSseService {
   private clients: Record<number, Client<GameClientMetadata>[]> = {}; // TODO: fix this type
   constructor(
     private gameService: GameService,
     private roundService: RoundService,
+    private sseService: SSEService<GameClientMetadata>,
   ) {}
 
   /**
@@ -23,27 +24,20 @@ export class GameSseService {
     res: Response,
     metadata: GameClientMetadata,
   ): Promise<void> {
-    if (!(metadata.gameId in this.clients)) {
-      this.clients[metadata.gameId] = [];
-    }
-    //
-    // if(!(metadata.roundId in this.clients[metadata.gameId])) {
-    //   this.clients[metadata.gameId][metadata.roundId] = [];
-    // }
+    this.sseService.subscribeClient(metadata.gameId, { res, metadata });
+  }
 
-    this.clients[metadata.gameId].push({ res, metadata });
-
-    const currRoundPlayers = this.clients[metadata.gameId].filter(
-      (client) => client.metadata.roundId === metadata.roundId,
-    );
-    if (currRoundPlayers.length === MAX_PLAYERS) {
-      await this.updateGameWithRoundResults(currRoundPlayers);
-    }
+  endGame(gameId: number) {
+    // Also send final results
+    this.sseService.sendEvent(gameId, 'The game is over');
+    this.sseService.unsubscribeRoom(gameId);
   }
 
   async updateGameWithRoundResults(
-    clients: Client<GameClientMetadata>[],
+    gameId: number,
+    roundId: number,
   ): Promise<void> {
+    // TODO: use gameID to get clients
     const sumPoints = (acc, cur: Client<GameClientMetadata>) =>
       acc + this.gameService.getPoints(cur.metadata.playerId);
     const totalTake: number = clients.reduce(sumPoints, 0);
@@ -51,41 +45,16 @@ export class GameSseService {
     const game = await this.gameService.findOne(clients[0].metadata.gameId);
     const round = await this.roundService.findOne(clients[0].metadata.roundId);
 
+    // TODO: make newRound somewhere else, sumPoints
     const newRound = Round.create({
-      roundNumber: round.roundNumber + 1, // TODO: DO WE NEED A ROUND NUMBER
-      pointsRemaining: round.pointsRemaining - totalTake,
+      roundNumber: round.roundNumber + 1,
+      pointsRemaining: round.pointsRemaining - 0.9 * totalTake, // TODO: this probably isn't right
       playerMoves: [],
       game,
     });
 
     await newRound.save();
 
-    this.sendMessage({ totalTake, newRound }, clients);
-  }
-
-  /**
-   * Send message to clients
-   * @param message
-   * @param clients
-   */
-  private sendMessage(message: any, clients: Client<GameClientMetadata>[]) {
-    for (const { res } of clients) {
-      const toSend = `data: ${JSON.stringify(message)}\n\n`;
-      res.write(toSend);
-    }
+    this.sseService.sendEvent(gameId, { newRound });
   }
 }
-
-// @Sse('sse')
-// async checkIfNewRound(
-//   @Body('roundId') roundId: number,
-// ): Promise<Observable<MessageEvent>> {
-//   const round = await this.roundsRepository.findOne(roundId);
-//   if (!round) {
-//   throw new BadRequestException('Round does not exist');
-// }
-// const isNewRound = round.playerMoves.length == 4;
-// return interval(1000).pipe(
-//   map((_) => ({ data: { isNewRound: isNewRound } })),
-// );
-// }
