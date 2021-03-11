@@ -1,0 +1,14 @@
+.fraction {
+  display: inline-block;
+  vertical-align: middle;
+  text-align: center;
+}
+.fraction > span {
+  display: block;
+}
+.fraction span.denominator {
+  border-top: thin solid black;
+}
+.fraction span.bar {
+  display: none;
+}
