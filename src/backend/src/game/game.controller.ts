@@ -23,6 +23,8 @@ export class GameController {
     private gameSseService: GameSseService,
   ) {}
 
+  // TODO: /sse endpoint to subscribe each player => waitingRoom
+
   @Post('take')
   async take(
     @Body('playerId') playerId: number,
@@ -41,15 +43,20 @@ export class GameController {
       throw new BadRequestException('Round does not exist');
     }
 
-    const grab = Grab.create({ round, player, howMany, timeTaken });
+    const grab = await Grab.create({
+      round,
+      player,
+      howMany,
+      timeTaken,
+    }).save();
 
-    await this.gameSseService.subscribeClient(res, {
-      playerId: playerId,
-      gameId: player.game.id,
-      roundId,
-    });
-
-    await grab.save();
+    if (round.playerMoves.length === 4) {
+      // Send round results to all players
+      await this.gameSseService.updateGameWithRoundResults(
+        player.game.id,
+        roundId,
+      );
+    } // If 4 moves and (game is over => no points left || max rounds)
 
     return grab.id;
   }

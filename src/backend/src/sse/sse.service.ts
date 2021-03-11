@@ -16,7 +16,7 @@ export class SSEService<T> {
   private clients: Record<any, Client<T>[]> = {};
 
   /** Add a client to a room */
-  subscribeClient(room: string, client: Client<T>): void {
+  subscribeClient(room: number, client: Client<T>): void {
     // Keep track of responses so we can send sse through them
     if (!(room in this.clients)) {
       this.clients[room] = [];
@@ -30,17 +30,17 @@ export class SSEService<T> {
     });
   }
 
-  unsubscribeRoom(room: string): void {
+  unsubscribeRoom(room: number): void {
     const cli = this.clients[room];
     delete this.clients[room];
     cli.forEach((client) => client.res.end());
   }
 
   /** Send some data to everyone in a room */
-  sendEvent<D>(room: string, payload: (metadata: T) => D): void {
+  sendEvent<D>(room: number, payload: D): void {
     if (room in this.clients) {
-      for (const { res, metadata } of this.clients[room]) {
-        const toSend = `data: ${JSON.stringify(payload(metadata))}\n\n`;
+      for (const { res } of this.clients[room]) {
+        const toSend = `data: ${JSON.stringify(payload)}\n\n`;
         res.write(toSend);
       }
     }
