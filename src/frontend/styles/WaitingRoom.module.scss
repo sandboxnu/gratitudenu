@@ -23,3 +23,25 @@
   height: 160px;
   font-size: 130px;
 }
+
+.bottomSection {
+  text-align: center;
+  display: flex;
+}
+
+.gameInstructions {
+  padding-left: 205px;
+  padding-top: 77px;
+  text-align: left;
+  width: 730px;
+}
+
+.gameInstructionsHeader {
+  font-weight: bold;
+  font-size: 35px;
+}
+
+.gameInstructionsList {
+  font-weight: 600;
+  font-size: 22px;
+}

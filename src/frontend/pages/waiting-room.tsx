@@ -42,10 +42,10 @@ export default function WaitingRoom(): ReactElement {
           customClass={styles.timer}
         />
       </div>
-      <div>
-        <div>
-          <div>Game Instructions</div>
-          <ol>
+      <div className={styles.bottomSection}>
+        <div className={styles.gameInstructions}>
+          <div className={styles.gameInstructionsHeader}>Game Instructions</div>
+          <ol className={styles.gameInstructionsList}>
             <li>
               Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nibh sem
               eget felis aliquet.
