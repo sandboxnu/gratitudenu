@@ -3,7 +3,7 @@ import styles from '../styles/timer.module.scss';
 
 type TimerProps = {
   time: number;
-  onTimerOver: () => void;
+  onTimerOver?: () => void;
   shouldResetTimer?: boolean;
   customClass?: string;
   formatTime?: (time: number) => string;
@@ -11,16 +11,16 @@ type TimerProps = {
 
 export default function Timer({
   time,
-  onTimerOver,
   shouldResetTimer,
   customClass = '',
   formatTime = (time) => time.toString(),
+  onTimerOver = () => '',
 }: TimerProps): ReactElement {
   const [timeLeft, setTimeLeft] = useState<number>(time);
 
   useEffect(() => {
     const interval = setInterval(
-      () => setTimeLeft((timeLeft) => timeLeft - 1),
+      () => setTimeLeft((timeLeft) => (timeLeft === 0 ? 0 : timeLeft - 1)),
       1000,
     );
 

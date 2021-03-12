@@ -4,6 +4,7 @@ import { DEV_URL } from '../api-client';
 import Fraction from '../components/fraction';
 import Timer from '../components/timer';
 import { useEventSource } from '../hooks/useEventSource';
+import styles from '../styles/WaitingRoom.module.scss';
 
 const MAX_PLAYERS = 4;
 export default function WaitingRoom(): ReactElement {
@@ -28,17 +29,17 @@ export default function WaitingRoom(): ReactElement {
     const minutes = Math.floor(timer / 60);
 
     const seconds = timer % 60;
-    return `${minutes}:${seconds === 0 ? '00' : seconds}`;
+    return `${minutes}:${seconds < 10 ? `0${seconds}` : seconds}`;
   };
 
   return (
-    <div>
-      <div>
-        <div>You are in the waiting room </div>
+    <div className={styles.waitingRoom}>
+      <div className={styles.headerSection}>
+        <div className={styles.header}>You are in the waiting room </div>
         <Timer
           time={900}
-          onTimerOver={() => {}}
           formatTime={formatTimeIntoMinutes}
+          customClass={styles.timer}
         />
       </div>
       <div>
