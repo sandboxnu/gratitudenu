@@ -18,7 +18,7 @@ export default function WaitingRoom(): ReactElement {
     if (message.players) {
       setPlayers(message.players);
     } else if (message.timeout) {
-      //TODO: Where does this lead to
+      router.push(`/thank-you`);
     } else if (message.gameId) {
       router.push(`/game?gameId=${message.gameId}`);
     }
