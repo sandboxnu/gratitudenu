@@ -50,12 +50,6 @@ class APIClient {
     },
   };
 
-  waitingRoom = {
-    join: async (body: { playerId: number }): Promise<void> => {
-      return this.req('POST', '/waiting-room', undefined, body);
-    },
-  };
-
   constructor(baseURL = '') {
     this.axios = Axios.create({ baseURL: baseURL });
   }
