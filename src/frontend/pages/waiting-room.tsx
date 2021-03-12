@@ -1,7 +1,6 @@
 import { useRouter } from 'next/dist/client/router';
 import { ReactElement, useState } from 'react';
 import { DEV_URL } from '../api-client';
-import Fraction from '../components/fraction';
 import Timer from '../components/timer';
 import { useEventSource } from '../hooks/useEventSource';
 import styles from '../styles/WaitingRoom.module.scss';
