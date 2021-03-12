@@ -58,10 +58,12 @@ export default function WaitingRoom(): ReactElement {
             </li>
           </ol>
         </div>
-        <div>
-          <div>The game will begin when the room is filled:</div>
-          <div>
-            <Fraction numerator={players} denominator={MAX_PLAYERS} />
+        <div className={styles.playerCountSection}>
+          <div className={styles.playerCountHeader}>
+            The game will begin when the room is filled:
+          </div>
+          <div className={styles.playerCountFraction}>
+            {players}/{MAX_PLAYERS}
           </div>
         </div>
       </div>
