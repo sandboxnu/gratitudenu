@@ -1,4 +1,4 @@
-import { Body, Controller, Get, Param, Query, Res } from '@nestjs/common';
+import { Controller, Get, Query, Res } from '@nestjs/common';
 import { Response } from 'express';
 import { PlayersService } from 'src/players/players.service';
 import { WaitingRoomSSEService } from './waiting-room.sse.service';
