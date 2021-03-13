@@ -5,6 +5,7 @@ import { Repository } from 'typeorm';
 import { Game } from '../entities/game.entity';
 import { GameSseService } from './game.sse.service';
 import { Round } from '../entities/round.entity';
+import { Grab } from 'src/entities/grab.entity';
 
 const MAX_POINTS = 200;
 type GameRoundID = {
@@ -19,8 +20,11 @@ export class GameService {
     private playersRepository: Repository<Player>,
     @InjectRepository(Game)
     private gamesRepository: Repository<Game>,
+    @InjectRepository(Round)
+    private roundRepository: Repository<Round>,
   ) {}
 
+  // create the initial round
   async create(playerIds: number[]): Promise<GameRoundID> {
     const players = await Promise.all(
       playerIds.map(async (id) => {
@@ -52,11 +56,35 @@ export class GameService {
     return pGrab.howMany;
   }
 
+  // get points remaining
+  async getSumPoints(roundId: number): Promise<number> {
+    const round = await this.roundRepository.findOne(roundId);
+    const prevSumPoints = round.pointsRemaining;
+    const sumPoints = (acc, cur: Grab) => acc + cur.howMany;
+    const totalGrabs = round.playerMoves.reduce(sumPoints, 0);
+
+    const currSumPoints = prevSumPoints - totalGrabs * 0.9; // give back 10%
+    return currSumPoints;
+  }
+
   async findOne(id: number): Promise<Game> {
     const game = this.gamesRepository.findOne(id);
     if (!game) {
       return;
     }
     return game;
+  }
+
+  async updateOngoing(gameId: number, roundId: number): Promise<boolean> {
+    const game: Game = await this.findOne(gameId);
+    // no points remaining, or max round
+    const pointsRemaining = await this.getSumPoints(roundId);
+    const roundCount = game.rounds.length;
+    const MAX_ROUND_COUNT = 10; // TODO move this maybe
+    if (pointsRemaining <= 0 || roundCount > MAX_ROUND_COUNT) {
+      game.ongoing = false;
+      await game.save();
+    }
+    return game.ongoing;
   }
 }

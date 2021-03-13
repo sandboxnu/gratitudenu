@@ -12,6 +12,8 @@ import { Grab } from '../entities/grab.entity';
 import { Round } from '../entities/round.entity';
 import { GameSseService } from './game.sse.service';
 import { Response } from 'express';
+import { PlayersService } from 'src/players/players.service';
+import { GameService } from './game.service';
 
 @Controller('game')
 export class GameController {
@@ -21,9 +23,29 @@ export class GameController {
     @InjectRepository(Round)
     private roundsRepository: Repository<Round>,
     private gameSseService: GameSseService,
+    private gameService: GameService,
+    private playerService: PlayersService,
   ) {}
 
-  // TODO: /sse endpoint to subscribe each player => waitingRoom
+  @Post('sse')
+  async subscribePlayer(
+    @Body('playerId') playerId: number,
+    @Body('gameId') gameId: number,
+    @Res() res: Response,
+  ): Promise<void> {
+    const player = await this.playerService.findOne(playerId);
+    res.set({
+      'Content-Type': 'text/event-stream',
+      'Cache-Control': 'no-cache',
+      'X-Accel-Buffering': 'no',
+      Connection: 'keep-alive',
+    });
+
+    await this.gameSseService.subscribeClient(res, {
+      playerId,
+      gameId,
+    });
+  }
 
   @Post('take')
   async take(
@@ -51,12 +73,22 @@ export class GameController {
     }).save();
 
     if (round.playerMoves.length === 4) {
-      // Send round results to all players
-      await this.gameSseService.updateGameWithRoundResults(
-        player.game.id,
+      // check if game is over
+      const isOngoing = await this.gameService.updateOngoing(
+        round.game.id,
         roundId,
       );
-    } // If 4 moves and (game is over => no points left || max rounds)
+      if (isOngoing) {
+        // Send round results to all players
+        await this.gameSseService.updateGameWithRoundResults(
+          player.game.id,
+          roundId,
+        );
+      }
+
+      // stop game
+      this.gameSseService.endGame(round.game.id);
+    }
 
     return grab.id;
   }

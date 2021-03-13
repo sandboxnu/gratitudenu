@@ -4,7 +4,7 @@ import { GameService } from './game.service';
 import { Round } from '../entities/round.entity';
 import { RoundService } from '../round/round.service';
 
-type GameClientMetadata = { playerId: number; gameId: number; roundId: number };
+type GameClientMetadata = { playerId: number; gameId: number };
 const MAX_PLAYERS = 2; // TODO: test temp
 
 export class GameSseService {
@@ -37,24 +37,14 @@ export class GameSseService {
     gameId: number,
     roundId: number,
   ): Promise<void> {
-    // TODO: use gameID to get clients
-    const sumPoints = (acc, cur: Client<GameClientMetadata>) =>
-      acc + this.gameService.getPoints(cur.metadata.playerId);
-    const totalTake: number = clients.reduce(sumPoints, 0);
-
-    const game = await this.gameService.findOne(clients[0].metadata.gameId);
-    const round = await this.roundService.findOne(clients[0].metadata.roundId);
-
-    // TODO: make newRound somewhere else, sumPoints
-    const newRound = Round.create({
-      roundNumber: round.roundNumber + 1,
-      pointsRemaining: round.pointsRemaining - 0.9 * totalTake, // TODO: this probably isn't right
-      playerMoves: [],
+    const game = await this.gameService.findOne(gameId);
+    const round = await this.roundService.findOne(roundId);
+    const adjustedTotal: number = await this.gameService.getSumPoints(roundId);
+    const newRound = await this.roundService.create(
+      adjustedTotal,
+      round.roundNumber,
       game,
-    });
-
-    await newRound.save();
-
+    );
     this.sseService.sendEvent(gameId, { newRound });
   }
 }
