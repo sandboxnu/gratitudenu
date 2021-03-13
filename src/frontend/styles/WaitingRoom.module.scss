@@ -1,0 +1,63 @@
+@import 'constants';
+
+.waitingRoom {
+  color: $dark-blue;
+}
+
+.headerSection {
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.header {
+  font-weight: 500;
+  font-size: 50px;
+  padding: 104px 0 50px;
+}
+
+.timer {
+  width: 440px;
+  height: 160px;
+  font-size: 130px;
+}
+
+.bottomSection {
+  text-align: center;
+  display: flex;
+  justify-content: space-evenly;
+}
+
+.gameInstructions {
+  padding-right: 60px;
+  padding-top: 77px;
+  text-align: left;
+  width: 585px;
+}
+
+.gameInstructionsHeader {
+  font-weight: bold;
+  font-size: 35px;
+}
+
+.gameInstructionsList {
+  font-weight: 600;
+  font-size: 22px;
+}
+
+.playerCountSection {
+  padding-top: 153px;
+}
+
+.playerCountHeader {
+  font-weight: bold;
+  font-size: 30px;
+  width: 359px;
+}
+
+.playerCountFraction {
+  font-weight: bold;
+  font-size: 50px;
+}

@@ -26,18 +26,22 @@ export class WaitingRoomSSEService {
     if (!(metadata.emotionId in this.clients)) {
       this.clients[metadata.emotionId] = [];
     }
+    const room = this.clients[metadata.emotionId];
+
+    if (room.find((client) => client.metadata.playerId === metadata.playerId)) {
+      return;
+    }
     // Start Timer to remove player
     setTimeout(() => this.clientTimerFunction(metadata), FIFTEEN_MINUTES);
     // Add Client to emotion room
     this.clients[metadata.emotionId].push({ res, metadata });
+    await this.updateEmotionRoomWithNumberOfPlayers(
+      this.clients[metadata.emotionId],
+    );
 
     if (this.clients[metadata.emotionId].length === MAX_PLAYERS) {
       await this.sendClientsToGame(this.clients[metadata.emotionId]);
       delete this.clients[metadata.emotionId];
-    } else {
-      this.updateEmotionRoomWithNumberOfPlayers(
-        this.clients[metadata.emotionId],
-      );
     }
   }
 

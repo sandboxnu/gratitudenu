@@ -11,6 +11,7 @@ import React, { ReactElement, useEffect, useRef, useState } from 'react';
 import Image from 'next/image';
 import gameConstants from '../constants/gameConstants';
 import Colors from '../constants/colorConstants';
+import Timer from '../components/timer';
 
 /**
  * TODO HIGH LEVEL
@@ -29,9 +30,7 @@ export default function Home(): ReactElement {
    *
    */
   const [takeVal, setTakeVal] = useState<number>(gameConstants.MIN_TAKE_VAL);
-  const [timeLeft, setTimeLeft] = useState<number>(
-    gameConstants.INIT_TIME_LEFT,
-  );
+  const TIMER_SECONDS = 10;
   const [modalIsOpen, setModalIsOpen] = useState<boolean>(false);
   const [playerColor, setPlayerColor] = useState<string>(
     gameConstants.DEFAULT_COLOR,
@@ -39,22 +38,6 @@ export default function Home(): ReactElement {
   const [playerCoins, setPlayerCoins] = useState<number>(
     gameConstants.INIT_PLAYER_COINS,
   );
-
-  // FUNCTIONS HERE
-  // TODO: add documentation for these functions
-  useEffect(() => {
-    const interval = setInterval(
-      () => setTimeLeft((timeLeft) => timeLeft - 1),
-      1000,
-    );
-
-    return () => clearInterval(interval);
-  }, [timeLeft]);
-
-  if (timeLeft === 0) {
-    setTakeVal(Math.floor(Math.random() * 11));
-    setTimeLeft(10);
-  }
 
   const handleTake = (event) => {
     event.preventDefault();
@@ -115,7 +98,12 @@ export default function Home(): ReactElement {
 
         <div className={styles.gameDisplay}>
           <GameTable takeVal={takeVal} />
-          <div className={styles.timer}>{timeLeft}</div>
+          <Timer
+            time={TIMER_SECONDS}
+            shouldResetTimer
+            onTimerOver={() => setTakeVal(Math.floor(Math.random() * 11))}
+            customClass={styles.gameTimer}
+          />
         </div>
 
         <div className={styles.actionBar}>
