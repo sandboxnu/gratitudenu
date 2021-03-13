@@ -17,18 +17,22 @@ import { GameController } from './game/game.controller';
 import { GameService } from './game/game.service';
 import { RoundService } from './round/round.service';
 import { GameModule } from './game/game.module';
+import { ConfigModule } from '@nestjs/config';
 
 @Module({
   imports: [
     TypeOrmModule.forRoot({
       type: 'postgres',
-      host: 'localhost',
-      port: 5432,
-      username: 'postgres',
-      password: 'mysecretpassword',
-      database: 'my_database',
+      url: process.env.DB_URL,
       entities: [Grab, Player, Round, Game],
       synchronize: true, // TODO: synchronize true should not be used in a production environment
+    }),
+    ConfigModule.forRoot({
+      envFilePath: [
+        '.env',
+        ...(process.env.NODE_ENV !== 'production' ? ['.env.dev'] : []),
+      ],
+      isGlobal: true,
     }),
     PlayersModule,
     GameModule,
