@@ -33,7 +33,6 @@ export class GameController {
     @Body('gameId') gameId: number,
     @Res() res: Response,
   ): Promise<void> {
-    const player = await this.playerService.findOne(playerId);
     res.set({
       'Content-Type': 'text/event-stream',
       'Cache-Control': 'no-cache',

@@ -3,12 +3,14 @@ import { Response } from 'express';
 import { GameService } from './game.service';
 import { Round } from '../entities/round.entity';
 import { RoundService } from '../round/round.service';
+import { Injectable } from '@nestjs/common';
 
 type GameClientMetadata = { playerId: number; gameId: number };
 const MAX_PLAYERS = 2; // TODO: test temp
 
+@Injectable()
 export class GameSseService {
-  private clients: Record<number, Client<GameClientMetadata>[]> = {}; // TODO: fix this type
+  private clients: Record<number, Client<GameClientMetadata>[]> = {};
   constructor(
     private gameService: GameService,
     private roundService: RoundService,
