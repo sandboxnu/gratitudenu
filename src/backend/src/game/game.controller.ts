@@ -59,7 +59,7 @@ export class GameController {
       throw new BadRequestException('Player does not exist');
     }
 
-    const round = await this.roundsRepository.findOne(roundId);
+    let round = await this.roundsRepository.findOne(roundId);
     if (!round) {
       throw new BadRequestException('Round does not exist');
     }
@@ -71,6 +71,10 @@ export class GameController {
       timeTaken,
     }).save();
 
+    round = await this.roundsRepository.findOne(roundId, {
+      relations: ['playerMoves', 'game'],
+    }); // Check for updates
+
     if (round.playerMoves.length === 4) {
       // check if game is over
       const isOngoing = await this.gameService.updateOngoing(
@@ -80,13 +84,13 @@ export class GameController {
       if (isOngoing) {
         // Send round results to all players
         await this.gameSseService.updateGameWithRoundResults(
-          player.game.id,
+          round.game.id,
           roundId,
         );
+      } else {
+        // stop game
+        this.gameSseService.endGame(round.game.id);
       }
-
-      // stop game
-      this.gameSseService.endGame(round.game.id);
     }
 
     return grab.id;

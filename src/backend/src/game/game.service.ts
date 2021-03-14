@@ -58,7 +58,9 @@ export class GameService {
 
   // get points remaining
   async getSumPoints(roundId: number): Promise<number> {
-    const round = await this.roundRepository.findOne(roundId);
+    const round = await this.roundRepository.findOne(roundId, {
+      relations: ['playerMoves'],
+    });
     const prevSumPoints = round.pointsRemaining;
     const sumPoints = (acc, cur: Grab) => acc + cur.howMany;
     const totalGrabs = round.playerMoves.reduce(sumPoints, 0);
@@ -68,7 +70,9 @@ export class GameService {
   }
 
   async findOne(id: number): Promise<Game> {
-    const game = this.gamesRepository.findOne(id);
+    const game = this.gamesRepository.findOne(id, {
+      relations: ['rounds'],
+    });
     if (!game) {
       return;
     }

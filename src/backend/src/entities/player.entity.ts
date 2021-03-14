@@ -4,8 +4,10 @@ import {
   PrimaryGeneratedColumn,
   ManyToOne,
   BaseEntity,
+  OneToMany,
 } from 'typeorm';
 import { Game } from './game.entity';
+import { Grab } from './grab.entity';
 
 // IDK, just placeholder values for now
 export enum EmotionIdEnum {
@@ -27,6 +29,9 @@ export class Player extends BaseEntity {
 
   @ManyToOne((type) => Game, (game) => game.players)
   game: Game;
+
+  @OneToMany((type) => Grab, (grab) => grab.player)
+  grabs: Grab[];
 
   @Column({
     nullable: true,
