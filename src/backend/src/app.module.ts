@@ -23,8 +23,7 @@ import { ConfigModule } from '@nestjs/config';
   imports: [
     ConfigModule.forRoot({
       envFilePath: [
-        '.env',
-        ...(process.env.NODE_ENV !== 'production' ? ['.env.dev'] : []),
+        process.env.NODE_ENV !== 'production' ? '.env.dev' : '.env',
       ],
       isGlobal: true,
     }),
