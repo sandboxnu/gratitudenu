@@ -65,7 +65,7 @@ export class GameService {
     const sumPoints = (acc, cur: Grab) => acc + cur.howMany;
     const totalGrabs = round.playerMoves.reduce(sumPoints, 0);
 
-    const currSumPoints = prevSumPoints - totalGrabs * 0.9; // give back 10%
+    const currSumPoints = Math.round(prevSumPoints - totalGrabs * 0.9); // give back 10%
     return currSumPoints;
   }
 
