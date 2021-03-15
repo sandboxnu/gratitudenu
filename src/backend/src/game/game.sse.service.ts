@@ -30,23 +30,13 @@ export class GameSseService {
   }
 
   endGame(gameId: number) {
-    // Also send final results
-    this.sseService.sendEvent(gameId, 'The game is over');
+    this.sseService.sendEvent(gameId, {
+      endMessage: 'The game is over',
+    });
     this.sseService.unsubscribeRoom(gameId);
   }
 
-  async updateGameWithRoundResults(
-    gameId: number,
-    roundId: number,
-  ): Promise<void> {
-    const game = await this.gameService.findOne(gameId);
-    const round = await this.roundService.findOne(roundId);
-    const adjustedTotal: number = await this.gameService.getSumPoints(roundId);
-    const newRound = await this.roundService.create(
-      adjustedTotal,
-      round.roundNumber,
-      game,
-    );
+  updateGameWithRoundResults(gameId: number, newRound: Round): void {
     this.sseService.sendEvent(gameId, { newRound });
   }
 }

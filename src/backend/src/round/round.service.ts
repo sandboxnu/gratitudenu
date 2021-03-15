@@ -22,11 +22,11 @@ export class RoundService {
   // creates a new round
   async create(
     pointsRemaining: number,
-    roundNumber: number,
+    prevRoundNum: number,
     game: Game,
   ): Promise<Round> {
     const newRound = Round.create({
-      roundNumber: roundNumber + 1,
+      roundNumber: prevRoundNum + 1,
       pointsRemaining: pointsRemaining,
       playerMoves: [],
       game,

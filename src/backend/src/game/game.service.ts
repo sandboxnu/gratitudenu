@@ -8,6 +8,8 @@ import { Round } from '../entities/round.entity';
 import { Grab } from 'src/entities/grab.entity';
 
 const MAX_POINTS = 200;
+const MAX_ROUND_COUNT = 10;
+
 type GameRoundID = {
   gameId: number;
   roundId: number;
@@ -48,14 +50,6 @@ export class GameService {
     return { gameId: game.id, roundId: newRound.id };
   }
 
-  async getPoints(playerId: number): Promise<number> {
-    const player = await this.playersRepository.findOne(playerId);
-    const lastRound = player.game.rounds.pop();
-    const pGrab = lastRound.playerMoves.find((g) => g.player.id === playerId);
-
-    return pGrab.howMany;
-  }
-
   // get points remaining
   async getSumPoints(roundId: number): Promise<number> {
     const round = await this.roundRepository.findOne(roundId, {
@@ -84,7 +78,6 @@ export class GameService {
     // no points remaining, or max round
     const pointsRemaining = await this.getSumPoints(roundId);
     const roundCount = game.rounds.length;
-    const MAX_ROUND_COUNT = 10; // TODO move this maybe
     if (pointsRemaining <= 0 || roundCount > MAX_ROUND_COUNT) {
       game.ongoing = false;
       await game.save();

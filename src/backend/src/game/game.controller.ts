@@ -14,6 +14,9 @@ import { Round } from '../entities/round.entity';
 import { GameSseService } from './game.sse.service';
 import { Response } from 'express';
 import { GameService } from './game.service';
+import { RoundService } from '../round/round.service';
+
+const MAX_PLAYERS = 4;
 
 @Controller('game')
 export class GameController {
@@ -22,6 +25,7 @@ export class GameController {
     private playersRepository: Repository<Player>,
     @InjectRepository(Round)
     private roundsRepository: Repository<Round>,
+    private roundService: RoundService,
     private gameSseService: GameSseService,
     private gameService: GameService,
   ) {}
@@ -73,18 +77,26 @@ export class GameController {
       relations: ['playerMoves', 'game'],
     }); // Check for updates
 
-    if (round.playerMoves.length === 4) {
+    if (round.playerMoves.length === MAX_PLAYERS) {
       // check if game is over
       const isOngoing = await this.gameService.updateOngoing(
         round.game.id,
         roundId,
       );
       if (isOngoing) {
-        // Send round results to all players
-        await this.gameSseService.updateGameWithRoundResults(
-          round.game.id,
+        // Create new Round after calculating remaining points
+        const game = await this.gameService.findOne(round.game.id);
+        const adjustedTotal: number = await this.gameService.getSumPoints(
           roundId,
         );
+        const newRound = await this.roundService.create(
+          adjustedTotal,
+          round.roundNumber,
+          game,
+        );
+
+        // Send round results to all players
+        this.gameSseService.updateGameWithRoundResults(game.id, newRound);
       } else {
         // stop game
         this.gameSseService.endGame(round.game.id);
