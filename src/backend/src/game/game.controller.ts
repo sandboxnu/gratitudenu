@@ -2,6 +2,7 @@ import {
   BadRequestException,
   Body,
   Controller,
+  Get,
   Post,
   Res,
 } from '@nestjs/common';
@@ -12,7 +13,6 @@ import { Grab } from '../entities/grab.entity';
 import { Round } from '../entities/round.entity';
 import { GameSseService } from './game.sse.service';
 import { Response } from 'express';
-import { PlayersService } from 'src/players/players.service';
 import { GameService } from './game.service';
 
 @Controller('game')
@@ -24,10 +24,9 @@ export class GameController {
     private roundsRepository: Repository<Round>,
     private gameSseService: GameSseService,
     private gameService: GameService,
-    private playerService: PlayersService,
   ) {}
 
-  @Post('sse')
+  @Get('sse')
   async subscribePlayer(
     @Body('playerId') playerId: number,
     @Body('gameId') gameId: number,
@@ -52,7 +51,6 @@ export class GameController {
     @Body('howMany') howMany: number,
     @Body('timeTaken') timeTaken: number,
     @Body('roundId') roundId: number,
-    @Res() res: Response,
   ): Promise<number> {
     const player = await this.playersRepository.findOne(playerId);
     if (!player) {

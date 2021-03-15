@@ -32,18 +32,18 @@ export class GameService {
       }),
     );
 
-    const game = await Game.create({ rounds: [], ongoing: true, players });
+    const game = await Game.create({
+      rounds: [],
+      ongoing: true,
+      players,
+    }).save();
 
-    await game.save();
-
-    const newRound = Round.create({
+    const newRound = await Round.create({
       roundNumber: 1,
       pointsRemaining: MAX_POINTS,
       playerMoves: [],
       game,
-    });
-
-    await newRound.save();
+    }).save();
 
     return { gameId: game.id, roundId: newRound.id };
   }
