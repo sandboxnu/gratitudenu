@@ -56,15 +56,16 @@ export class GameController {
     @Body('timeTaken') timeTaken: number,
     @Body('roundId') roundId: number,
   ): Promise<number> {
-    const player = await this.playersRepository.findOne(playerId);
-    if (!player) {
-      throw new BadRequestException('Player does not exist');
-    }
+    const player = await this.playersRepository.findOne(playerId, {
+      relations: ['grabs'],
+    });
 
-    let round = await this.roundsRepository.findOne(roundId);
-    if (!round) {
-      throw new BadRequestException('Round does not exist');
-    }
+    let round = await Round.findOne(roundId, {
+      relations: ['playerMoves', 'game'],
+    }); // Check for updates
+    this.validatePlayerAndRound(player, round);
+
+    console.log(round);
 
     const grab = await Grab.create({
       round,
@@ -104,5 +105,25 @@ export class GameController {
     }
 
     return grab.id;
+  }
+
+  private validatePlayerAndRound(player: Player, round: Round) {
+    if (!round) {
+      throw new BadRequestException('Round does not exist');
+    }
+
+    if (!player) {
+      throw new BadRequestException('Player does not exist');
+    }
+
+    if (
+      round.playerMoves.find((grab) =>
+        player.grabs.find((playerGrab) => playerGrab.id === grab.id),
+      )
+    ) {
+      throw new BadRequestException(
+        'This Player has already taken a turn this round',
+      );
+    }
   }
 }
