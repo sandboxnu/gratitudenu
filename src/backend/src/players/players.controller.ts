@@ -16,7 +16,6 @@ export class PlayersController {
     const player = await Player.create({
       userId,
       emotionId,
-      grabs: [],
     }).save();
 
     return player.id;
