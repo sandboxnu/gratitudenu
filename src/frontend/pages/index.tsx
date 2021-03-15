@@ -29,7 +29,7 @@ export default function Login(): ReactElement {
   };
   return (
     <div className={styles.container}>
-      <div className={styles.title}>Behavior Game</div>
+      <div className={styles.title}>Decision Making Game</div>
       <div>
         <div className={styles.formInputs}>
           <div className={styles.formInput}>

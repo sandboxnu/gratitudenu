@@ -1,0 +1,38 @@
+@import 'constants';
+
+.instructionsHeader {
+  color: $dark-blue;
+  font-weight: bold;
+  font-size: $font-size-header;
+  text-align: center;
+  margin-top: 50px;
+}
+
+.gameInstructionsContainer {
+  margin: 4rem 17rem;
+}
+
+.gameInstruction {
+  color: $dark-blue;
+  font-weight: 300;
+  font-size: $font-size-body;
+  padding-bottom: 1rem;
+  line-height: 35px;
+}
+
+.gameExample {
+  text-align: center;
+}
+
+.gameExampleText {
+  color: $dark-blue;
+  font-weight: 300;
+  font-style: italic;
+  font-size: $font-size-body;
+  line-height: 35px;
+}
+
+.buttonContainer {
+  text-align: right;
+  padding-top: 1rem;
+}
