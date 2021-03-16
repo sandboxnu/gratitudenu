@@ -4,6 +4,7 @@ import {
   Controller,
   Get,
   Post,
+  Query,
   Res,
 } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
@@ -32,12 +33,12 @@ export class GameController {
 
   @Get('sse')
   async subscribePlayer(
-    @Body('playerId') playerId: number,
-    @Body('gameId') gameId: number,
+    @Query('playerId') playerId: number,
+    @Query('gameId') gameId: number,
     @Res() res: Response,
   ): Promise<void> {
     const player = await this.playersRepository.findOne(playerId, {
-      relations: ['grabs'],
+      relations: ['game'],
     });
     if (player.game.id != gameId) {
       throw new BadRequestException(
@@ -81,9 +82,10 @@ export class GameController {
       timeTaken,
     }).save();
 
-    round = await this.roundsRepository.findOne(roundId, {
+    // await round.reload();
+    round = await Round.findOne(roundId, {
       relations: ['playerMoves', 'game'],
-    }); // Check for updates
+    });
 
     if (round.playerMoves.length === MAX_PLAYERS) {
       // check if game is over

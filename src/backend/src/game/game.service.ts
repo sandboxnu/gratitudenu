@@ -3,7 +3,6 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Player } from '../entities/player.entity';
 import { Repository } from 'typeorm';
 import { Game } from '../entities/game.entity';
-import { GameSseService } from './game.sse.service';
 import { Round } from '../entities/round.entity';
 import { Grab } from 'src/entities/grab.entity';
 
@@ -35,7 +34,6 @@ export class GameService {
     );
 
     const game = await Game.create({
-      rounds: [],
       ongoing: true,
       players,
     }).save();
@@ -43,7 +41,6 @@ export class GameService {
     const newRound = await Round.create({
       roundNumber: 1,
       pointsRemaining: MAX_POINTS,
-      playerMoves: [],
       game,
     }).save();
 

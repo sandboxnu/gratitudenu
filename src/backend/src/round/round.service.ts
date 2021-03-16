@@ -28,7 +28,6 @@ export class RoundService {
     const newRound = Round.create({
       roundNumber: prevRoundNum + 1,
       pointsRemaining: pointsRemaining,
-      playerMoves: [],
       game,
     });
     await newRound.save();
