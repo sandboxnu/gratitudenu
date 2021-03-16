@@ -36,6 +36,15 @@ export class GameController {
     @Body('gameId') gameId: number,
     @Res() res: Response,
   ): Promise<void> {
+    const player = await this.playersRepository.findOne(playerId, {
+      relations: ['grabs'],
+    });
+    if (player.game.id != gameId) {
+      throw new BadRequestException(
+        `Player ${playerId} does not belong to game ${gameId}`,
+      );
+    }
+
     res.set({
       'Content-Type': 'text/event-stream',
       'Cache-Control': 'no-cache',
@@ -64,8 +73,6 @@ export class GameController {
       relations: ['playerMoves', 'game'],
     }); // Check for updates
     this.validatePlayerAndRound(player, round);
-
-    console.log(round);
 
     const grab = await Grab.create({
       round,
