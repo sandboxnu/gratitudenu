@@ -20,7 +20,10 @@ export default function WaitingRoom(): ReactElement {
     } else if (message.timeout) {
       router.push(`/thank-you`);
     } else if (message.gameId) {
-      router.push(`/game?gameId=${message.gameId}`);
+      console.log('message.gameId', message.gameId);
+      router.push(
+        `/game?gameId=${message.gameId.gameId}&roundId=${message.gameId.roundId}&playerId=${playerId}`,
+      );
     }
   });
 

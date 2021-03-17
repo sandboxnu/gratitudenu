@@ -56,6 +56,18 @@ class APIClient {
     },
   };
 
+  game = {
+    take: async (body: {
+      playerId: number;
+      howmany: number;
+      timeTaken: number;
+      roundId: number;
+    }): // eslint-disable-next-line @typescript-eslint/ban-types
+    Promise<Number> => {
+      return this.req('POST', '/game/take', Number, body);
+    },
+  };
+
   constructor(baseURL = '') {
     this.axios = Axios.create({ baseURL: baseURL });
   }

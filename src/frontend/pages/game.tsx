@@ -12,6 +12,8 @@ import Image from 'next/image';
 import gameConstants from '../constants/gameConstants';
 import Colors from '../constants/colorConstants';
 import Timer from '../components/timer';
+import { API } from '../api-client';
+import { useRouter } from 'next/dist/client/router';
 
 /**
  * TODO HIGH LEVEL
@@ -29,6 +31,9 @@ export default function Home(): ReactElement {
    * playerCoins: total # of coins that this user has in this game
    *
    */
+  const [pointsRemaining, setPointsRemaining] = useState<number>(
+    gameConstants.INIT_TOTAL_COINS,
+  );
   const [takeVal, setTakeVal] = useState<number>(gameConstants.MIN_TAKE_VAL);
   const TIMER_SECONDS = 10;
   const [modalIsOpen, setModalIsOpen] = useState<boolean>(false);
@@ -38,8 +43,19 @@ export default function Home(): ReactElement {
   const [playerCoins, setPlayerCoins] = useState<number>(
     gameConstants.INIT_PLAYER_COINS,
   );
+  const router = useRouter();
 
-  const handleTake = (event) => {
+  const { gameId, roundId, playerId } = router.query;
+  console.log('router.query', router.query);
+  const pId = Number.parseInt(playerId as string);
+  const rId = Number.parseInt(roundId as string);
+  const handleTake = async (event) => {
+    await API.game.take({
+      playerId: pId,
+      howmany: takeVal,
+      timeTaken: TIMER_SECONDS, // TODO: time after grab
+      roundId: rId,
+    });
     event.preventDefault();
     alert(`you took ${takeVal} coins!`);
   };
@@ -58,6 +74,8 @@ export default function Home(): ReactElement {
       setTakeVal(intVal);
     }
   };
+
+  // TODO: FIXME, game ID is object
 
   // RETURN HERE
   return (
@@ -97,7 +115,7 @@ export default function Home(): ReactElement {
         </div>
 
         <div className={styles.gameDisplay}>
-          <GameTable takeVal={takeVal} />
+          <GameTable pointsRemaining={pointsRemaining} />
           <Timer
             time={TIMER_SECONDS}
             shouldResetTimer
@@ -171,21 +189,10 @@ export default function Home(): ReactElement {
 
 // GAME TABLE HERE
 interface GameTableProps {
-  takeVal: number;
+  pointsRemaining: number;
 }
 
-const GameTable = ({ takeVal }: GameTableProps): ReactElement => {
-  const [totalPointsLeft, setTotalPointsLeft] = useState(200);
-  const didMountRef = useRef(false); // Don't take points on first render
-
-  useEffect(() => {
-    if (didMountRef.current) {
-      setTotalPointsLeft(totalPointsLeft - takeVal);
-    } else {
-      didMountRef.current = true;
-    }
-  }, [takeVal]);
-
+const GameTable = ({ pointsRemaining }: GameTableProps): ReactElement => {
   return (
     <div className={styles.gameTable}>
       <div className={styles.gameTableColumn}>
@@ -209,14 +216,14 @@ const GameTable = ({ takeVal }: GameTableProps): ReactElement => {
       <div className={styles.gameTableMiddle}>
         <CircularProgressbarWithChildren
           maxValue={200}
-          value={totalPointsLeft}
+          value={pointsRemaining}
           counterClockwise={true}
           styles={buildStyles({
             pathColor: Colors.darkBlue,
             trailColor: 'white',
           })}
         >
-          <div className={styles.progressBarTextTop}>{totalPointsLeft}</div>
+          <div className={styles.progressBarTextTop}>{pointsRemaining}</div>
           <div className={styles.progressBarTextBottom}>Points Left</div>
         </CircularProgressbarWithChildren>
       </div>

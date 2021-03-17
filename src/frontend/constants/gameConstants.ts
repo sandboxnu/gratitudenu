@@ -4,4 +4,5 @@ export default {
   INIT_TIME_LEFT: 10,
   DEFAULT_COLOR: 'Green',
   INIT_PLAYER_COINS: 0,
+  INIT_TOTAL_COINS: 200,
 };
