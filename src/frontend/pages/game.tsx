@@ -90,7 +90,7 @@ export default function Home(): ReactElement {
         roundNumber: roundNumber,
       });
     }
-  };
+  }
 
   const inputOnChange = (eventVal: string) => {
     const intVal = parseInt(eventVal);
