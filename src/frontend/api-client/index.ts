@@ -59,9 +59,9 @@ class APIClient {
   game = {
     take: async (body: {
       playerId: number;
-      howmany: number;
+      howMany: number;
       timeTaken: number;
-      roundId: number;
+      roundNumber: number;
     }): // eslint-disable-next-line @typescript-eslint/ban-types
     Promise<Number> => {
       return this.req('POST', '/game/take', Number, body);

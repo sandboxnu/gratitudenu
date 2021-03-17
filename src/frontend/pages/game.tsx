@@ -12,8 +12,9 @@ import Image from 'next/image';
 import gameConstants from '../constants/gameConstants';
 import Colors from '../constants/colorConstants';
 import Timer from '../components/timer';
-import { API } from '../api-client';
+import { API, DEV_URL } from '../api-client';
 import { useRouter } from 'next/dist/client/router';
+import { useEventSource } from '../hooks/useEventSource';
 
 /**
  * TODO HIGH LEVEL
@@ -43,18 +44,35 @@ export default function Home(): ReactElement {
   const [playerCoins, setPlayerCoins] = useState<number>(
     gameConstants.INIT_PLAYER_COINS,
   );
+  const [roundNumber, setRoundNumber] = useState<number>(1);
   const router = useRouter();
+  const { gameId, playerId } = router.query;
 
-  const { gameId, roundId, playerId } = router.query;
-  console.log('router.query', router.query);
+  /* TODO:
+  - Move timer back, calculate time taken
+  - Add end game screen
+  */
+
+  const gameUrl = `${DEV_URL}/game/sse?playerId=${playerId}&gameId=${gameId}`;
+  useEventSource(gameUrl, (message) => {
+    if (message.endMessage !== undefined) {
+      // end the game
+    } else if (message.newRound !== undefined) {
+      // update roundId, pointsRemaining
+      setPointsRemaining(message.newRound.pointsRemaining);
+      setRoundNumber(message.newRound.roundNumber);
+    }
+  });
+
+  // console.log('router.query', router.query);
   const pId = Number.parseInt(playerId as string);
-  const rId = Number.parseInt(roundId as string);
   const handleTake = async (event) => {
+    // console.log("take", takeVal);
     await API.game.take({
       playerId: pId,
-      howmany: takeVal,
+      howMany: takeVal,
       timeTaken: TIMER_SECONDS, // TODO: time after grab
-      roundId: rId,
+      roundNumber: roundNumber,
     });
     event.preventDefault();
     alert(`you took ${takeVal} coins!`);
@@ -75,9 +93,6 @@ export default function Home(): ReactElement {
     }
   };
 
-  // TODO: FIXME, game ID is object
-
-  // RETURN HERE
   return (
     <div className={styles.container}>
       <Head>
