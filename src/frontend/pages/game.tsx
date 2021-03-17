@@ -62,7 +62,6 @@ export default function Home(): ReactElement {
 
   const gameUrl = `${DEV_URL}/game/sse?playerId=${playerId}&gameId=${gameId}`;
   useEventSource(gameUrl, (message) => {
-    console.log('message: ', message);
     if (message.endMessage !== undefined) {
       // end the game
       setGameOverModalIsOpen(true);
@@ -75,14 +74,12 @@ export default function Home(): ReactElement {
     }
   });
 
-  // console.log('router.query', router.query);
   const pId = Number.parseInt(playerId as string);
   const handleTake = async () => {
     if (!takeComplete) {
       setTakeComplete(true);
       setWaitModalIsOpen(false);
 
-      // console.log("take", takeVal);
       await API.game.take({
         playerId: pId,
         howMany: takeVal,
@@ -118,7 +115,6 @@ export default function Home(): ReactElement {
 
   if (timeLeft === 0 && !takeComplete) {
     setWaitModalIsOpen(true);
-    console.log('called for ', roundNumber);
     handleTake();
   }
 
