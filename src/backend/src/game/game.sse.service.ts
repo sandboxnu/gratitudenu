@@ -6,7 +6,6 @@ import { RoundService } from '../round/round.service';
 import { Injectable } from '@nestjs/common';
 
 type GameClientMetadata = { playerId: number; gameId: number };
-const MAX_PLAYERS = 2; // TODO: test temp
 
 @Injectable()
 export class GameSseService {
