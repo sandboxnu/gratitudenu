@@ -16,7 +16,7 @@ export class Grab extends BaseEntity {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @OneToOne((type) => Player)
+  @ManyToOne((type) => Player, (player) => player.grabs)
   @JoinColumn()
   player: Player;
 

@@ -18,6 +18,7 @@ import { GameService } from './game/game.service';
 import { RoundService } from './round/round.service';
 import { GameModule } from './game/game.module';
 import { ConfigModule } from '@nestjs/config';
+import { GameSseService } from './game/game.sse.service';
 
 @Module({
   imports: [
@@ -43,6 +44,7 @@ import { ConfigModule } from '@nestjs/config';
     WaitingRoomSSEService,
     SSEService,
     GameService,
+    GameSseService,
     RoundService,
   ],
   controllers: [
