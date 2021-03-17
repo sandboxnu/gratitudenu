@@ -19,6 +19,7 @@ import { RoundService } from './round/round.service';
 import { GameModule } from './game/game.module';
 import { ConfigModule } from '@nestjs/config';
 import { GameSseService } from './game/game.sse.service';
+import { ExportController } from './export/export.controller';
 
 @Module({
   imports: [
@@ -52,6 +53,7 @@ import { GameSseService } from './game/game.sse.service';
     WaitingRoomController,
     PlayersController,
     GameController,
+    ExportController,
   ],
 })
 export class AppModule {
