@@ -7,7 +7,7 @@ import { Round } from '../entities/round.entity';
 import { Grab } from 'src/entities/grab.entity';
 
 const MAX_POINTS = 200;
-const MAX_ROUND_COUNT = 3;
+const MAX_ROUND_COUNT = 10;
 
 type GameRoundID = {
   gameId: number;
