@@ -65,20 +65,23 @@ export class ExportController {
       const p4 = game.players[3];
 
       game.rounds.forEach((round) => {
-        console.log(p1);
         const p1Move = p1.grabs.find((grab) => grab.round.id === round.id);
         const p2Move = p2.grabs.find((grab) => grab.round.id === round.id);
         const p3Move = p3.grabs.find((grab) => grab.round.id === round.id);
         const p4Move = p4.grabs.find((grab) => grab.round.id === round.id);
         data.push({
           round: round.roundNumber,
-          playerOne: p1Move.howMany,
+          playerOne: p1.userId,
+          playerOneTake: p1Move.howMany,
           playerOneTime: p1Move.timeTaken,
-          playerTwo: p2Move.howMany,
+          playerTwo: p2.userId,
+          playerTwoTake: p2Move.howMany,
           playerTwoTime: p2Move.timeTaken,
-          playerThree: p3Move.howMany,
+          playerThree: p3.userId,
+          playerThreeTake: p3Move.howMany,
           playerThreeTime: p3Move.timeTaken,
-          playerFour: p4Move.howMany,
+          playerFour: p4.userId,
+          playerFourTake: p4Move.howMany,
           playerFourTime: p4Move.timeTaken,
         });
       });
@@ -90,12 +93,16 @@ export class ExportController {
         'emotion',
         'round',
         'playerOne',
+        'playerOneTake',
         'playerOneTime',
         'playerTwo',
+        'playerTwoTake',
         'playerTwoTime',
         'playerThree',
+        'playerThreeTake',
         'playerThreeTime',
         'playerFour',
+        'playerFourTake',
         'playerFourTime',
       ],
     });
