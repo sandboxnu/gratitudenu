@@ -2,16 +2,34 @@ import { Controller, Get } from '@nestjs/common';
 import { Game } from 'src/entities/game.entity';
 import * as Papa from 'papaparse';
 
+const COLUMNS = [
+  'game',
+  'emotion',
+  'round',
+  'playerOne',
+  'playerOneTake',
+  'playerOneTime',
+  'playerTwo',
+  'playerTwoTake',
+  'playerTwoTime',
+  'playerThree',
+  'playerThreeTake',
+  'playerThreeTime',
+  'playerFour',
+  'playerFourTake',
+  'playerFourTime',
+];
 @Controller('export')
 export class ExportController {
   @Get()
   async getStudyData(): Promise<void> {
     const data = [];
-
+    // find games
     const allFinishedGames = await Game.find({
       ongoing: false,
     });
 
+    // fill out each game with relations
     const gamesWithRelations = await Promise.all(
       allFinishedGames.map(
         async (game) =>
@@ -60,23 +78,7 @@ export class ExportController {
     });
 
     const csv = Papa.unparse(data, {
-      columns: [
-        'game',
-        'emotion',
-        'round',
-        'playerOne',
-        'playerOneTake',
-        'playerOneTime',
-        'playerTwo',
-        'playerTwoTake',
-        'playerTwoTime',
-        'playerThree',
-        'playerThreeTake',
-        'playerThreeTime',
-        'playerFour',
-        'playerFourTake',
-        'playerFourTime',
-      ],
+      columns: COLUMNS,
     });
 
     return csv;
