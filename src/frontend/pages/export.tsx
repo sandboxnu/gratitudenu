@@ -1,23 +1,20 @@
 import { ReactElement } from 'react';
-import { CSVLink, CSVDownload } from 'react-csv';
+import useSWR from 'swr';
+import { CSVLink } from 'react-csv';
+import { API } from '../api-client';
 
 export default function Export(): ReactElement {
-  const csvData = [
-    ['firstname', 'lastname', 'email'],
-    ['Ahmed', 'Tomi', 'ah@smthing.co.com'],
-    ['Raed', 'Labes', 'rl@smthing.co.com'],
-    ['Yezzi', 'Min l3b', 'ymin@cocococo.com'],
-  ];
+  const { data } = useSWR(`export`, async () => API.export.export());
 
-  const formatData = [
-    { game: 1, emotionId: 1, rounds: [{ round: 1, player: 'a' }] },
-    { game: 1, emotionId: 1, rounds: [{ round: 1, player: 'a' }] },
-  ];
+  console.log(data);
 
   return (
     <div>
-      Yeet
-      <CSVLink data={formatData}>Download me</CSVLink>;
+      <button>
+        <CSVLink data={data} filename="game-data.csv">
+          Download me
+        </CSVLink>
+      </button>
     </div>
   );
 }

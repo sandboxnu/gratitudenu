@@ -1,7 +1,6 @@
 import { Controller, Get } from '@nestjs/common';
 import { Game } from 'src/entities/game.entity';
 import * as Papa from 'papaparse';
-import { Round } from 'src/entities/round.entity';
 
 @Controller('export')
 export class ExportController {

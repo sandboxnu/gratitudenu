@@ -50,6 +50,13 @@ class APIClient {
     },
   };
 
+  export = {
+    // eslint-disable-next-line @typescript-eslint/ban-types
+    export: async (): Promise<String> => {
+      return this.req('GET', '/export', String);
+    },
+  };
+
   constructor(baseURL = '') {
     this.axios = Axios.create({ baseURL: baseURL });
   }
