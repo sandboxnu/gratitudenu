@@ -12,7 +12,7 @@ export default function Export(): ReactElement {
       {data && (
         <button className="primaryButton">
           <CSVLink data={data} filename="game-data.csv">
-            Download me
+            Export Study Data
           </CSVLink>
         </button>
       )}
