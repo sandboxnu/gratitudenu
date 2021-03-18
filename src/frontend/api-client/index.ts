@@ -28,7 +28,6 @@ class APIClient {
     responseClass?: ClassType<T>,
     body?: any,
   ): Promise<T> {
-    console.log(body);
     const res = (
       await this.axios.request({
         method,
