@@ -1,6 +1,7 @@
 import { Controller, Get } from '@nestjs/common';
 import { Game } from 'src/entities/game.entity';
 import * as Papa from 'papaparse';
+import { Round } from 'src/entities/round.entity';
 
 @Controller('export')
 export class ExportController {
@@ -33,10 +34,71 @@ export class ExportController {
       },
     ];
 
-    const data = {};
+    const data = [];
 
-    const allFinishedGames = Game.find({ ongoing: false });
-    const csv = Papa.unparse(fakeData, { header: false });
+    const allFinishedGames = await Game.find({
+      ongoing: false,
+    });
+
+    const gamesWithRelations = await Promise.all(
+      allFinishedGames.map(
+        async (game) =>
+          await Game.findOne(game.id, {
+            relations: [
+              'players',
+              'rounds',
+              'players.grabs',
+              'players.grabs.round',
+            ],
+          }),
+      ),
+    );
+
+    gamesWithRelations.forEach((game) => {
+      data.push({
+        game: `Game: ${game.id}`,
+        emotion: `Emotion: ${game.players[0].emotionId}`,
+      });
+      const p1 = game.players[0];
+      const p2 = game.players[1];
+      const p3 = game.players[2];
+      const p4 = game.players[3];
+
+      game.rounds.forEach((round) => {
+        console.log(p1);
+        const p1Move = p1.grabs.find((grab) => grab.round.id === round.id);
+        const p2Move = p2.grabs.find((grab) => grab.round.id === round.id);
+        const p3Move = p3.grabs.find((grab) => grab.round.id === round.id);
+        const p4Move = p4.grabs.find((grab) => grab.round.id === round.id);
+        data.push({
+          round: round.roundNumber,
+          playerOne: p1Move.howMany,
+          playerOneTime: p1Move.timeTaken,
+          playerTwo: p2Move.howMany,
+          playerTwoTime: p2Move.timeTaken,
+          playerThree: p3Move.howMany,
+          playerThreeTime: p3Move.timeTaken,
+          playerFour: p4Move.howMany,
+          playerFourTime: p4Move.timeTaken,
+        });
+      });
+    });
+
+    const csv = Papa.unparse(data, {
+      columns: [
+        'game',
+        'emotion',
+        'round',
+        'playerOne',
+        'playerOneTime',
+        'playerTwo',
+        'playerTwoTime',
+        'playerThree',
+        'playerThreeTime',
+        'playerFour',
+        'playerFourTime',
+      ],
+    });
 
     return csv;
   }
