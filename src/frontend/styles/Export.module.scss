@@ -1,5 +1,35 @@
+@import 'constants';
+
 .export {
   display: flex;
   justify-content: center;
   padding-top: 30px;
+}
+
+.formInput {
+  width: fit-content;
+  font-weight: 500;
+  font-size: 20px;
+  color: $dark-blue;
+}
+
+.form {
+  display: flex;
+  justify-content: center;
+
+  & input {
+    /* white */
+    height: 59px;
+    width: 306px;
+    margin: 4px 0 16px;
+    background: #ffffff;
+    border: 2px solid rgba(0, 42, 82, 0.5);
+    box-sizing: border-box;
+    border-radius: 4px;
+  }
+}
+
+.button {
+  display: flex;
+  justify-content: center;
 }

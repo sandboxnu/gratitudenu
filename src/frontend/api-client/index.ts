@@ -51,8 +51,8 @@ class APIClient {
 
   export = {
     // eslint-disable-next-line @typescript-eslint/ban-types
-    export: async (): Promise<String> => {
-      return this.req('GET', '/export', String);
+    export: async (body: { password: String }): Promise<String> => {
+      return this.req('GET', '/export', String, body);
     },
   };
 
