@@ -10,10 +10,14 @@ export default function Export(): ReactElement {
     setPassword(event.target.value);
   };
 
-  const onSubmitPassword = useCallback(async () => {
-    const exportData = await API.export.export({ password });
-    setData(exportData);
-  }, []);
+  const onSubmitPassword = async () => {
+    try {
+      const exportData = await API.export.export({ password });
+      setData(exportData);
+    } catch (e) {
+      console.log(e);
+    }
+  };
 
   return (
     <div className={styles.export}>

@@ -1,4 +1,10 @@
-import { Controller, Get } from '@nestjs/common';
+import {
+  BadRequestException,
+  Body,
+  Controller,
+  Get,
+  Req,
+} from '@nestjs/common';
 import { Game } from 'src/entities/game.entity';
 import * as Papa from 'papaparse';
 
@@ -22,7 +28,8 @@ const COLUMNS = [
 @Controller('export')
 export class ExportController {
   @Get()
-  async getStudyData(): Promise<void> {
+  async getStudyData(@Body('password') password: string): Promise<void> {
+    this.verifyPassword(password);
     const data = [];
     // find games
     const allFinishedGames = await Game.find({
@@ -51,6 +58,15 @@ export class ExportController {
     });
 
     return csv;
+  }
+
+  private verifyPassword(password: string) {
+    const realPassword = process.env.EXPORT_PASSWORD;
+    console.log(realPassword);
+    console.log(password);
+    if (realPassword !== password) {
+      throw new BadRequestException('Incorrect Password');
+    }
   }
 
   private formatGameIntoData(data, game: Game) {
