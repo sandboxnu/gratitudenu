@@ -32,8 +32,6 @@ export class ExportController {
     @Body('password') password: string,
     @Req() ahhh,
   ): Promise<void> {
-    console.log(ahhh);
-    console.log(password);
     this.verifyPassword(password);
     const data = [];
     // find games
@@ -67,8 +65,7 @@ export class ExportController {
 
   private verifyPassword(password: string) {
     const realPassword = process.env.EXPORT_PASSWORD;
-    console.log(realPassword);
-    console.log(password);
+
     if (realPassword !== password) {
       throw new BadRequestException('Incorrect Password');
     }
