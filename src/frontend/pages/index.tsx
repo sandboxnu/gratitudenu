@@ -16,7 +16,6 @@ export default function Login(): ReactElement {
       return;
     }
     const playerId = await API.player.create({ userId: uId, emotionId: eId });
-    console.log(playerId);
     router.push(`/waiting-room?playerId=${playerId}`);
   };
 

@@ -28,7 +28,6 @@ class APIClient {
     responseClass?: ClassType<T>,
     body?: any,
   ): Promise<T> {
-    console.log(body);
     const res = (
       await this.axios.request({
         method,
@@ -47,6 +46,13 @@ class APIClient {
     }): // eslint-disable-next-line @typescript-eslint/ban-types
     Promise<Number> => {
       return this.req('POST', '/players', Number, body);
+    },
+  };
+
+  export = {
+    // eslint-disable-next-line @typescript-eslint/ban-types
+    export: async (body: { password: string }): Promise<String> => {
+      return this.req('POST', '/export', String, body);
     },
   };
 
