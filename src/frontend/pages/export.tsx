@@ -1,11 +1,9 @@
 import { ReactElement, useCallback, useState } from 'react';
-import useSWR from 'swr';
 import { CSVLink } from 'react-csv';
 import { API } from '../api-client';
 import styles from '../styles/Export.module.scss';
 
 export default function Export(): ReactElement {
-  // const { data } = useSWR(`export`, async () => API.export.export());
   const [data, setData] = useState(null);
   const [password, setPassword] = useState('');
   const onPasswordChange = (event) => {
