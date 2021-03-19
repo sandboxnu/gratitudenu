@@ -28,10 +28,7 @@ const COLUMNS = [
 @Controller('export')
 export class ExportController {
   @Post()
-  async getStudyData(
-    @Body('password') password: string,
-    @Req() ahhh,
-  ): Promise<void> {
+  async getStudyData(@Body('password') password: string): Promise<void> {
     this.verifyPassword(password);
     const data = [];
     // find games
