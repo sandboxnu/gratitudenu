@@ -1,10 +1,4 @@
-import {
-  BadRequestException,
-  Body,
-  Controller,
-  Post,
-  Req,
-} from '@nestjs/common';
+import { BadRequestException, Body, Controller, Post } from '@nestjs/common';
 import { Game } from 'src/entities/game.entity';
 import * as Papa from 'papaparse';
 
