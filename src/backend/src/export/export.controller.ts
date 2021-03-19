@@ -2,7 +2,7 @@ import {
   BadRequestException,
   Body,
   Controller,
-  Get,
+  Post,
   Req,
 } from '@nestjs/common';
 import { Game } from 'src/entities/game.entity';
@@ -27,8 +27,13 @@ const COLUMNS = [
 ];
 @Controller('export')
 export class ExportController {
-  @Get()
-  async getStudyData(@Body('password') password: string): Promise<void> {
+  @Post()
+  async getStudyData(
+    @Body('password') password: string,
+    @Req() ahhh,
+  ): Promise<void> {
+    console.log(ahhh);
+    console.log(password);
     this.verifyPassword(password);
     const data = [];
     // find games
