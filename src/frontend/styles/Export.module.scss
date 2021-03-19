@@ -33,3 +33,9 @@
   display: flex;
   justify-content: center;
 }
+
+.error {
+  color: $error;
+  text-align: center;
+  padding-top: 5px;
+}

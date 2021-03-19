@@ -6,6 +6,7 @@ import styles from '../styles/Export.module.scss';
 export default function Export(): ReactElement {
   const [data, setData] = useState(null);
   const [password, setPassword] = useState('');
+  const [error, setError] = useState(null);
   const onPasswordChange = (event) => {
     setPassword(event.target.value);
   };
@@ -14,8 +15,9 @@ export default function Export(): ReactElement {
     try {
       const exportData = await API.export.export({ password });
       setData(exportData);
+      setError(null);
     } catch (e) {
-      console.log(e);
+      setError(e.response.data.message);
     }
   };
 
@@ -44,6 +46,7 @@ export default function Export(): ReactElement {
               Submit Password
             </button>
           </div>
+          {error && <div className={styles.error}>{error}</div>}
         </div>
       )}
     </div>
