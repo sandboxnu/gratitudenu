@@ -56,12 +56,9 @@ export default function Home(): ReactElement {
   );
   const [waitModalIsOpen, setWaitModalIsOpen] = useState<boolean>(false);
 
-  /* TODO:
-  - Points remaining is wrong
-  */
-
   const gameUrl = `${DEV_URL}/game/sse?playerId=${playerId}&gameId=${gameId}`;
   useEventSource(gameUrl, (message) => {
+    // console.log(message)
     if (message.endMessage !== undefined) {
       // end the game
       setGameOverModalIsOpen(true);
