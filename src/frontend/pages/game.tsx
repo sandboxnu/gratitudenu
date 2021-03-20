@@ -56,6 +56,7 @@ export default function Home(): ReactElement {
   );
   const [waitModalIsOpen, setWaitModalIsOpen] = useState<boolean>(false);
 
+
   const gameUrl = `${DEV_URL}/game/sse?playerId=${playerId}&gameId=${gameId}`;
   useEventSource(gameUrl, (message) => {
     // console.log(message)
