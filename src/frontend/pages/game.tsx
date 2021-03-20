@@ -11,7 +11,6 @@ import React, { ReactElement, useEffect, useRef, useState } from 'react';
 import Image from 'next/image';
 import gameConstants from '../constants/gameConstants';
 import Colors from '../constants/colorConstants';
-import Timer from '../components/timer';
 import { API, DEV_URL } from '../api-client';
 import { useRouter } from 'next/dist/client/router';
 import { useEventSource } from '../hooks/useEventSource';
@@ -47,14 +46,19 @@ export default function Home(): ReactElement {
   const [roundNumber, setRoundNumber] = useState<number>(1);
   const router = useRouter();
   const { gameId, playerId } = router.query;
+  const [timeLeft, setTimeLeft] = useState<number>(
+    gameConstants.INIT_TIME_LEFT,
+  );
+  const [takeComplete, setTakeComplete] = useState<boolean>(false);
 
   /* TODO:
-  - Move timer back, calculate time taken
+  - Debug timer (400 error)
   - Add end game screen
   */
 
   const gameUrl = `${DEV_URL}/game/sse?playerId=${playerId}&gameId=${gameId}`;
   useEventSource(gameUrl, (message) => {
+    // console.log(message)
     if (message.endMessage !== undefined) {
       // end the game
     } else if (message.newRound !== undefined) {
@@ -66,7 +70,7 @@ export default function Home(): ReactElement {
 
   // console.log('router.query', router.query);
   const pId = Number.parseInt(playerId as string);
-  const handleTake = async (event) => {
+  const handleTake = async () => {
     // console.log("take", takeVal);
     await API.game.take({
       playerId: pId,
@@ -74,8 +78,8 @@ export default function Home(): ReactElement {
       timeTaken: TIMER_SECONDS, // TODO: time after grab
       roundNumber: roundNumber,
     });
-    event.preventDefault();
     alert(`you took ${takeVal} coins!`);
+    setTakeComplete(true);
   };
 
   const inputOnChange = (eventVal: string) => {
@@ -92,6 +96,27 @@ export default function Home(): ReactElement {
       setTakeVal(intVal);
     }
   };
+
+  useEffect(() => {
+    const interval = setInterval(
+      () => setTimeLeft((timeLeft) => (timeLeft === 0 ? 0 : timeLeft - 1)),
+      1000,
+    );
+
+    return () => clearInterval(interval);
+  }, [timeLeft]);
+
+  const onTimerOver = () => {
+    if (!takeComplete) {
+      handleTake();
+    }
+  };
+
+  if (timeLeft === 0) {
+    onTimerOver();
+    setTimeLeft(gameConstants.INIT_TIME_LEFT);
+    setTakeComplete(false);
+  }
 
   return (
     <div className={styles.container}>
@@ -131,12 +156,7 @@ export default function Home(): ReactElement {
 
         <div className={styles.gameDisplay}>
           <GameTable pointsRemaining={pointsRemaining} />
-          <Timer
-            time={TIMER_SECONDS}
-            shouldResetTimer
-            onTimerOver={() => setTakeVal(Math.floor(Math.random() * 11))}
-            customClass={styles.gameTimer}
-          />
+          <div className={`${styles.timer}`}>{timeLeft.toString()}</div>
         </div>
 
         <div className={styles.actionBar}>
