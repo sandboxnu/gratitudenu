@@ -50,6 +50,7 @@ export default function Home(): ReactElement {
     gameConstants.INIT_TIME_LEFT,
   );
   const [takeComplete, setTakeComplete] = useState<boolean>(false);
+  const [gameOverModalIsOpen, setGameOverModalIsOpen] = useState<boolean>(true);
 
   /* TODO:
   - Debug timer (400 error)
@@ -61,6 +62,7 @@ export default function Home(): ReactElement {
     // console.log(message)
     if (message.endMessage !== undefined) {
       // end the game
+      setGameOverModalIsOpen(true);
     } else if (message.newRound !== undefined) {
       // update roundId, pointsRemaining
       setPointsRemaining(message.newRound.pointsRemaining);
@@ -126,6 +128,26 @@ export default function Home(): ReactElement {
       </Head>
 
       <main className={styles.main}>
+        <Modal
+          isOpen={gameOverModalIsOpen}
+          style={{
+            content: {
+              minWidth: '300px',
+              minHeight: '100px',
+              fontSize: '64px',
+              textAlign: 'center',
+              top: '50%',
+              left: '50%',
+              right: 'auto',
+              bottom: 'auto',
+              marginRight: '-50%',
+              transform: 'translate(-50%, -50%)',
+            },
+          }}
+          contentLabel="Instructions Modal"
+        >
+          Game Over
+        </Modal>
         <div className={styles.infoSection}>
           <p className={styles.infoSectionTitle}>Game</p>
           <Image
