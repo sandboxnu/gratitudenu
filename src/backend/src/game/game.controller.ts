@@ -95,13 +95,13 @@ export class GameController {
       // check if game is over
       const isOngoing = await this.gameService.updateOngoing(
         round.game.id,
-        roundNumber,
+        roundId,
       );
       if (isOngoing) {
         // Create new Round after calculating remaining points
         const game = await this.gameService.findOne(round.game.id);
         const adjustedTotal: number = await this.gameService.getSumPoints(
-          roundNumber,
+          roundId,
         );
         const newRound = await this.roundService.create(
           adjustedTotal,
