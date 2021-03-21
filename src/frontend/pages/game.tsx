@@ -56,10 +56,9 @@ export default function Home(): ReactElement {
   );
   const [waitModalIsOpen, setWaitModalIsOpen] = useState<boolean>(false);
 
-
   const gameUrl = `${DEV_URL}/game/sse?playerId=${playerId}&gameId=${gameId}`;
   useEventSource(gameUrl, (message) => {
-    // console.log(message)
+    console.log('message: ', message);
     if (message.endMessage !== undefined) {
       // end the game
       setGameOverModalIsOpen(true);
@@ -85,7 +84,7 @@ export default function Home(): ReactElement {
         roundNumber: roundNumber,
       });
     }
-  }
+  };
 
   const inputOnChange = (eventVal: string) => {
     const intVal = parseInt(eventVal);
