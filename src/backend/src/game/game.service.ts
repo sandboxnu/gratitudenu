@@ -74,7 +74,7 @@ export class GameService {
     // no points remaining, or max round
     const pointsRemaining = await this.getSumPoints(roundId);
     const roundCount = game.rounds.length;
-    if (pointsRemaining <= 0 || roundCount > MAX_ROUND_COUNT) {
+    if (pointsRemaining <= 0 || roundCount >= MAX_ROUND_COUNT) {
       game.ongoing = false;
       await game.save();
     }

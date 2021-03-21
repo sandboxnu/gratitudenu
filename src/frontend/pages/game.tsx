@@ -50,16 +50,18 @@ export default function Home(): ReactElement {
     gameConstants.INIT_TIME_LEFT,
   );
   const [takeComplete, setTakeComplete] = useState<boolean>(false);
-  const [gameOverModalIsOpen, setGameOverModalIsOpen] = useState<boolean>(true);
+  const [gameOverModalIsOpen, setGameOverModalIsOpen] = useState<boolean>(
+    false,
+  );
 
   /* TODO:
-  - Debug timer (400 error)
-  - Add end game screen
+  - Points remaining is wrong
+  - Timer styling
   */
 
   const gameUrl = `${DEV_URL}/game/sse?playerId=${playerId}&gameId=${gameId}`;
   useEventSource(gameUrl, (message) => {
-    // console.log(message)
+    console.log('message: ', message);
     if (message.endMessage !== undefined) {
       // end the game
       setGameOverModalIsOpen(true);
@@ -67,21 +69,25 @@ export default function Home(): ReactElement {
       // update roundId, pointsRemaining
       setPointsRemaining(message.newRound.pointsRemaining);
       setRoundNumber(message.newRound.roundNumber);
+      setTimeLeft(gameConstants.INIT_TIME_LEFT);
+      setTakeComplete(false);
     }
   });
 
   // console.log('router.query', router.query);
   const pId = Number.parseInt(playerId as string);
   const handleTake = async () => {
-    // console.log("take", takeVal);
-    await API.game.take({
-      playerId: pId,
-      howMany: takeVal,
-      timeTaken: TIMER_SECONDS, // TODO: time after grab
-      roundNumber: roundNumber,
-    });
-    alert(`you took ${takeVal} coins!`);
-    setTakeComplete(true);
+    if (!takeComplete) {
+      setTakeComplete(true);
+
+      // console.log("take", takeVal);
+      await API.game.take({
+        playerId: pId,
+        howMany: takeVal,
+        timeTaken: TIMER_SECONDS - timeLeft, // TODO: time after grab
+        roundNumber: roundNumber,
+      });
+    }
   };
 
   const inputOnChange = (eventVal: string) => {
@@ -108,16 +114,9 @@ export default function Home(): ReactElement {
     return () => clearInterval(interval);
   }, [timeLeft]);
 
-  const onTimerOver = () => {
-    if (!takeComplete) {
-      handleTake();
-    }
-  };
-
-  if (timeLeft === 0) {
-    onTimerOver();
-    setTimeLeft(gameConstants.INIT_TIME_LEFT);
-    setTakeComplete(false);
+  if (timeLeft === 0 && !takeComplete) {
+    console.log('called for ', roundNumber);
+    handleTake();
   }
 
   return (
@@ -223,7 +222,11 @@ export default function Home(): ReactElement {
             </span>
           </div>
           <div className={styles.actionBarRight}>
-            <button className={styles.actionBarTake} onClick={handleTake}>
+            <button
+              className={styles.actionBarTake}
+              onClick={handleTake}
+              disabled={takeComplete}
+            >
               Take
             </button>
             {/* TODO: add socket send here */}
