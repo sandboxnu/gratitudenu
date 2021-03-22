@@ -1,0 +1,15 @@
+@import 'constants';
+
+.endTextContainer {
+  color: $dark-blue;
+  font-size: 30px;
+  text-align: center;
+  margin: auto;
+  max-width: 500px;
+}
+
+.gameOver {
+  font-size: 40px;
+  padding: 2rem;
+  font-weight: bold;
+}

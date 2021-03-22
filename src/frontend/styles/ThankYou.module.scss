@@ -1,9 +1,13 @@
 @import 'constants';
 
-.thankYouText {
-  color: $dark-blue;
-  font-size: 30px;
+.messageContainer {
+  margin: 150px auto;
+  max-width: 600px;
+}
+
+.timeOutMessage {
   text-align: center;
-  margin: auto;
-  max-width: 500px;
+  font-size: 40px;
+  color: $dark-blue;
+  margin: 20px 0;
 }
