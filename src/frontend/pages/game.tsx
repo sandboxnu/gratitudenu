@@ -52,7 +52,6 @@ export default function Home(): ReactElement {
 
   const gameUrl = `${DEV_URL}/game/sse?playerId=${playerId}&gameId=${gameId}`;
   useEventSource(gameUrl, (message) => {
-    console.log('message: ', message);
     if (message.endMessage !== undefined) {
       // end the game
       setGameOverModalIsOpen(true);
@@ -84,7 +83,6 @@ export default function Home(): ReactElement {
   const inputOnChange = (eventVal: string) => {
     const intVal = parseInt(eventVal);
 
-    // TODO: You can't type a '-', not sure we need this first condition
     if (intVal < 0) {
       alert('Input cannot be negative');
       setTakeVal(0);
