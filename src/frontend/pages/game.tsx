@@ -35,7 +35,7 @@ export default function Home(): ReactElement {
   const [playerColor, setPlayerColor] = useState<string>(
     gameConstants.DEFAULT_COLOR,
   );
-  const [playerCoins, setPlayerCoins] = useState<number>(
+  const [playerPoints, setPlayerPoints] = useState<number>(
     gameConstants.INIT_PLAYER_COINS,
   );
   const [roundNumber, setRoundNumber] = useState<number>(1);
@@ -70,11 +70,12 @@ export default function Home(): ReactElement {
     if (!takeComplete) {
       setTakeComplete(true);
       setWaitModalIsOpen(false);
+      setPlayerPoints(playerPoints + takeVal);
 
       await API.game.take({
         playerId: pId,
         howMany: takeVal,
-        timeTaken: TIMER_SECONDS - timeLeft, // TODO: time after grab
+        timeTaken: TIMER_SECONDS - timeLeft,
         roundNumber: roundNumber,
       });
     }
@@ -163,7 +164,7 @@ export default function Home(): ReactElement {
             </h4>
             <h4 className={styles.actionBarText}>
               Your Total Coins:{' '}
-              <span style={{ color: Colors.darkPurple }}>{playerCoins} </span>
+              <span style={{ color: Colors.darkPurple }}>{playerPoints} </span>
             </h4>
           </div>
           <div className={styles.actionBarMiddle}>
