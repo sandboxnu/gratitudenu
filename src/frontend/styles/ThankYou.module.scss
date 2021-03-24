@@ -1,0 +1,13 @@
+@import 'constants';
+
+.messageContainer {
+  margin: 150px auto;
+  max-width: 600px;
+}
+
+.timeOutMessage {
+  text-align: center;
+  font-size: 40px;
+  color: $dark-blue;
+  margin: 20px 0;
+}
