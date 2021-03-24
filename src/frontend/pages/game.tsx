@@ -16,12 +16,6 @@ import { API, DEV_URL } from '../api-client';
 import { useRouter } from 'next/dist/client/router';
 import { useEventSource } from '../hooks/useEventSource';
 
-/**
- * TODO HIGH LEVEL
- * add documentation for Home react element function
- * make all the alerts into clean notifications
- */
-
 export default function Home(): ReactElement {
   /**
    * *STATE VARIABLES*
