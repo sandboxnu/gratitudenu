@@ -7,9 +7,10 @@ import {
   CircularProgressbarWithChildren,
 } from 'react-circular-progressbar';
 import 'react-circular-progressbar/dist/styles.css';
-import React, { ReactElement, useEffect, useRef, useState } from 'react';
+import React, { ReactElement, useEffect, useState } from 'react';
 import Image from 'next/image';
 import gameConstants from '../constants/gameConstants';
+import GameModal from '../components/gameModal';
 import Colors from '../constants/colorConstants';
 import { API, DEV_URL } from '../api-client';
 import { useRouter } from 'next/dist/client/router';
@@ -53,10 +54,10 @@ export default function Home(): ReactElement {
   const [gameOverModalIsOpen, setGameOverModalIsOpen] = useState<boolean>(
     false,
   );
+  const [waitModalIsOpen, setWaitModalIsOpen] = useState<boolean>(false);
 
   /* TODO:
   - Points remaining is wrong
-  - Timer styling
   */
 
   const gameUrl = `${DEV_URL}/game/sse?playerId=${playerId}&gameId=${gameId}`;
@@ -79,6 +80,7 @@ export default function Home(): ReactElement {
   const handleTake = async () => {
     if (!takeComplete) {
       setTakeComplete(true);
+      setWaitModalIsOpen(false);
 
       // console.log("take", takeVal);
       await API.game.take({
@@ -115,6 +117,7 @@ export default function Home(): ReactElement {
   }, [timeLeft]);
 
   if (timeLeft === 0 && !takeComplete) {
+    setWaitModalIsOpen(true);
     console.log('called for ', roundNumber);
     handleTake();
   }
@@ -127,26 +130,8 @@ export default function Home(): ReactElement {
       </Head>
 
       <main className={styles.main}>
-        <Modal
-          isOpen={gameOverModalIsOpen}
-          style={{
-            content: {
-              minWidth: '300px',
-              minHeight: '100px',
-              fontSize: '64px',
-              textAlign: 'center',
-              top: '50%',
-              left: '50%',
-              right: 'auto',
-              bottom: 'auto',
-              marginRight: '-50%',
-              transform: 'translate(-50%, -50%)',
-            },
-          }}
-          contentLabel="Instructions Modal"
-        >
-          Game Over
-        </Modal>
+        <GameModal isOpen={gameOverModalIsOpen} text="Game Over" />
+        <GameModal isOpen={waitModalIsOpen} text="Wait for other players..." />
         <div className={styles.infoSection}>
           <p className={styles.infoSectionTitle}>Game</p>
           <Image
