@@ -8,9 +8,6 @@ export default function TimeOut(): ReactElement {
         Unfortunately, we were unable to find other players to begin the game at
         this time.
       </div>
-      <div className={styles.timeOutMessage}>
-        Please return to Qualtrics and try again.
-      </div>
     </div>
   );
 }
