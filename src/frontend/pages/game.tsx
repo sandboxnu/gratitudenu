@@ -50,7 +50,7 @@ export default function Home(): ReactElement {
 
   const gameUrl = `${DEV_URL}/game/sse?playerId=${playerId}&gameId=${gameId}`;
   useEventSource(gameUrl, (message) => {
-    if (message.endMessage !== undefined) {
+    if (message.endMessage) {
       setGameOverModalIsOpen(true);
     } else if (message.newRound !== undefined) {
       setPointsRemaining(message.newRound.pointsRemaining);
