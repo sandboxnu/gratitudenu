@@ -45,9 +45,7 @@ export default function Home(): ReactElement {
     gameConstants.INIT_TIME_LEFT,
   );
   const [takeComplete, setTakeComplete] = useState<boolean>(false);
-  const [gameOverModalIsOpen, setGameOverModalIsOpen] = useState<boolean>(
-    false,
-  );
+  const [gameOverModalIsOpen, setGameOverModalIsOpen] = useState<boolean>(true);
   const [waitModalIsOpen, setWaitModalIsOpen] = useState<boolean>(false);
 
   const gameUrl = `${DEV_URL}/game/sse?playerId=${playerId}&gameId=${gameId}`;

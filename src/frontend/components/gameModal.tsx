@@ -1,5 +1,6 @@
 import React, { ReactElement } from 'react';
 import Modal from 'react-modal';
+import styles from '../styles/GameModal.module.scss';
 
 type GameModalProps = {
   isOpen: boolean;
@@ -13,20 +14,7 @@ export default function GameModal({
   return (
     <Modal
       isOpen={isOpen}
-      style={{
-        content: {
-          minWidth: '300px',
-          minHeight: '100px',
-          fontSize: '64px',
-          textAlign: 'center',
-          top: '50%',
-          left: '50%',
-          right: 'auto',
-          bottom: 'auto',
-          marginRight: '-50%',
-          transform: 'translate(-50%, -50%)',
-        },
-      }}
+      className={styles.gameModal}
       contentLabel="Instructions Modal"
     >
       {text}
