@@ -43,9 +43,8 @@ export class RoundService {
 
     const roundId = game.rounds.find((r) => r.roundNumber === roundNumber).id;
 
-    const round = await this.roundRepository.findOne(roundId, {
+    return  this.roundRepository.findOne(roundId, {
       relations: ['playerMoves', 'game'],
     });
-    return round;
   }
 }
