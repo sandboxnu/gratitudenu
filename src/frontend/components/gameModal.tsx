@@ -1,10 +1,11 @@
 import React, { ReactElement } from 'react';
 import Modal from 'react-modal';
+import EndingText from './endingText';
 import styles from '../styles/GameModal.module.scss';
 
 type GameModalProps = {
   isOpen: boolean;
-  text: string;
+  text: string | ReactElement;
 };
 
 export default function GameModal({
@@ -17,7 +18,7 @@ export default function GameModal({
       className={styles.gameModal}
       contentLabel="Instructions Modal"
     >
-      {text}
+      {text == 'Game over' ? <EndingText /> : text}
     </Modal>
   );
 }

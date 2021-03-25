@@ -32,9 +32,6 @@ export default function Home(): ReactElement {
   const [takeVal, setTakeVal] = useState<number>(gameConstants.MIN_TAKE_VAL);
   const TIMER_SECONDS = 10;
   const [modalIsOpen, setModalIsOpen] = useState<boolean>(false);
-  const [playerColor, setPlayerColor] = useState<string>(
-    gameConstants.DEFAULT_COLOR,
-  );
   const [playerPoints, setPlayerPoints] = useState<number>(
     gameConstants.INIT_PLAYER_COINS,
   );
@@ -45,8 +42,9 @@ export default function Home(): ReactElement {
     gameConstants.INIT_TIME_LEFT,
   );
   const [takeComplete, setTakeComplete] = useState<boolean>(false);
-  const [gameOverModalIsOpen, setGameOverModalIsOpen] = useState<boolean>(true);
-  const [waitModalIsOpen, setWaitModalIsOpen] = useState<boolean>(false);
+  const [gameOverModalIsOpen, setGameOverModalIsOpen] = useState<boolean>(
+    false,
+  );
 
   const gameUrl = `${DEV_URL}/game/sse?playerId=${playerId}&gameId=${gameId}`;
   useEventSource(gameUrl, (message) => {
@@ -64,7 +62,6 @@ export default function Home(): ReactElement {
   const handleTake = async () => {
     if (!takeComplete) {
       setTakeComplete(true);
-      setWaitModalIsOpen(false);
       setPlayerPoints(playerPoints + takeVal);
 
       await API.game.take({
@@ -100,7 +97,6 @@ export default function Home(): ReactElement {
   }, [timeLeft]);
 
   if (timeLeft === 0 && !takeComplete) {
-    setWaitModalIsOpen(true);
     handleTake();
   }
 
@@ -112,8 +108,11 @@ export default function Home(): ReactElement {
       </Head>
 
       <main className={styles.main}>
-        <GameModal isOpen={gameOverModalIsOpen} text="Game Over" />
-        <GameModal isOpen={waitModalIsOpen} text="Wait for other players..." />
+        <GameModal isOpen={gameOverModalIsOpen} text={'Game over'} />
+        <GameModal
+          isOpen={takeComplete && !gameOverModalIsOpen}
+          text="Wait for other players..."
+        />
         <div className={styles.infoSection}>
           <p className={styles.infoSectionTitle}>Game</p>
           <Image
@@ -152,8 +151,10 @@ export default function Home(): ReactElement {
             {/* TODO: both of these values will be given by an API/socket */}
             <h4 className={styles.actionBarText}>
               You Are:{' '}
-              <span style={{ color: playerColor.toLowerCase() }}>
-                {playerColor}{' '}
+              <span
+                style={{ color: gameConstants.DEFAULT_COLOR.toLowerCase() }}
+              >
+                {gameConstants.DEFAULT_COLOR}{' '}
               </span>
             </h4>
             <h4 className={styles.actionBarText}>
