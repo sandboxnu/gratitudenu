@@ -64,15 +64,16 @@ export class GameController {
     @Body('playerId') playerId: number,
     @Body('howMany') howMany: number,
     @Body('timeTaken') timeTaken: number,
-    @Body('roundId') roundId: number,
+    @Body('roundNumber') roundNumber: number,
   ): Promise<number> {
     const player = await this.playersRepository.findOne(playerId, {
-      relations: ['grabs'],
+      relations: ['grabs', 'game'],
     });
 
-    let round = await Round.findOne(roundId, {
-      relations: ['playerMoves', 'game'],
-    }); // Check for updates
+    let round = await this.roundService.findByRoundNumber(
+      roundNumber,
+      player.game.id,
+    ); // Check for updates
     this.validatePlayerAndRound(player, round);
 
     const grab = await Grab.create({
@@ -83,7 +84,7 @@ export class GameController {
     }).save();
 
     // await round.reload();
-    round = await Round.findOne(roundId, {
+    round = await Round.findOne(round.id, {
       relations: ['playerMoves', 'game'],
     });
 
@@ -91,13 +92,13 @@ export class GameController {
       // check if game is over
       const isOngoing = await this.gameService.updateOngoing(
         round.game.id,
-        roundId,
+        round.id,
       );
       if (isOngoing) {
         // Create new Round after calculating remaining points
         const game = await this.gameService.findOne(round.game.id);
         const adjustedTotal: number = await this.gameService.getSumPoints(
-          roundId,
+          round.id,
         );
         const newRound = await this.roundService.create(
           adjustedTotal,

@@ -49,6 +49,18 @@ class APIClient {
     },
   };
 
+  game = {
+    take: async (body: {
+      playerId: number;
+      howMany: number;
+      timeTaken: number;
+      roundNumber: number;
+    }): // eslint-disable-next-line @typescript-eslint/ban-types
+      Promise<Number> => {
+      return this.req('POST', '/game/take', Number, body);
+    },
+  };
+
   export = {
     // eslint-disable-next-line @typescript-eslint/ban-types
     export: async (body: { password: string }): Promise<String> => {

@@ -87,7 +87,7 @@ top: 580.41px; */
 }
 
 .gameDisplay {
-  margin: 5% 0 10%;
+  margin: 5% 0;
   position: relative;
 }
 
@@ -169,4 +169,18 @@ top: 580.41px; */
   font-weight: 700;
   color: $dark-blue;
   padding-right: 20px;
+}
+
+.timer {
+  background: #f6f6f6;
+  box-shadow: 0 4px 4px rgba(0, 0, 0, 0.25);
+  border-radius: 6px;
+  text-align: center;
+  font-size: 35px;
+  font-family: Roboto, sans-serif;
+  font-weight: 500;
+  color: $dark-blue;
+  width: 105px;
+  padding: 15px;
+  margin: 5% 5% 0 auto;
 }

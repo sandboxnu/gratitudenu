@@ -11,7 +11,6 @@ const MAX_ROUND_COUNT = 10;
 
 type GameRoundID = {
   gameId: number;
-  roundId: number;
 };
 
 @Injectable()
@@ -44,7 +43,7 @@ export class GameService {
       game,
     }).save();
 
-    return { gameId: game.id, roundId: newRound.id };
+    return { gameId: game.id };
   }
 
   // get points remaining
@@ -75,7 +74,7 @@ export class GameService {
     // no points remaining, or max round
     const pointsRemaining = await this.getSumPoints(roundId);
     const roundCount = game.rounds.length;
-    if (pointsRemaining <= 0 || roundCount > MAX_ROUND_COUNT) {
+    if (pointsRemaining <= 0 || roundCount >= MAX_ROUND_COUNT) {
       game.ongoing = false;
       await game.save();
     }

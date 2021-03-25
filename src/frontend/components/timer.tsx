@@ -1,4 +1,4 @@
-import { ReactElement, useEffect, useState } from 'react';
+import React, { ReactElement, useEffect, useState } from 'react';
 import styles from '../styles/timer.module.scss';
 
 type TimerProps = {

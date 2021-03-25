@@ -7,17 +7,14 @@ import {
   CircularProgressbarWithChildren,
 } from 'react-circular-progressbar';
 import 'react-circular-progressbar/dist/styles.css';
-import React, { ReactElement, useEffect, useRef, useState } from 'react';
+import React, { ReactElement, useEffect, useState } from 'react';
 import Image from 'next/image';
 import gameConstants from '../constants/gameConstants';
+import GameModal from '../components/gameModal';
 import Colors from '../constants/colorConstants';
-import Timer from '../components/timer';
-
-/**
- * TODO HIGH LEVEL
- * add documentation for Home react element function
- * make all the alerts into clean notifications
- */
+import { API, DEV_URL } from '../api-client';
+import { useRouter } from 'next/dist/client/router';
+import { useEventSource } from '../hooks/useEventSource';
 
 export default function Home(): ReactElement {
   /**
@@ -29,25 +26,56 @@ export default function Home(): ReactElement {
    * playerCoins: total # of coins that this user has in this game
    *
    */
+  const [pointsRemaining, setPointsRemaining] = useState<number>(
+    gameConstants.INIT_TOTAL_COINS,
+  );
   const [takeVal, setTakeVal] = useState<number>(gameConstants.MIN_TAKE_VAL);
   const TIMER_SECONDS = 10;
   const [modalIsOpen, setModalIsOpen] = useState<boolean>(false);
-  const [playerColor, setPlayerColor] = useState<string>(
-    gameConstants.DEFAULT_COLOR,
-  );
-  const [playerCoins, setPlayerCoins] = useState<number>(
+  const [playerPoints, setPlayerPoints] = useState<number>(
     gameConstants.INIT_PLAYER_COINS,
   );
+  const [roundNumber, setRoundNumber] = useState<number>(1);
+  const router = useRouter();
+  const { gameId, playerId } = router.query;
+  const [timeLeft, setTimeLeft] = useState<number>(
+    gameConstants.INIT_TIME_LEFT,
+  );
+  const [takeComplete, setTakeComplete] = useState<boolean>(false);
+  const [gameOverModalIsOpen, setGameOverModalIsOpen] = useState<boolean>(
+    false,
+  );
 
-  const handleTake = (event) => {
-    event.preventDefault();
-    alert(`you took ${takeVal} coins!`);
+  const gameUrl = `${DEV_URL}/game/sse?playerId=${playerId}&gameId=${gameId}`;
+  useEventSource(gameUrl, (message) => {
+    if (message.endMessage) {
+      setGameOverModalIsOpen(true);
+    } else if (message.newRound !== undefined) {
+      setPointsRemaining(message.newRound.pointsRemaining);
+      setRoundNumber(message.newRound.roundNumber);
+      setTimeLeft(gameConstants.INIT_TIME_LEFT);
+      setTakeComplete(false);
+    }
+  });
+
+  const pId = Number.parseInt(playerId as string);
+  const handleTake = async () => {
+    if (!takeComplete) {
+      setTakeComplete(true);
+      setPlayerPoints(playerPoints + takeVal);
+
+      await API.game.take({
+        playerId: pId,
+        howMany: takeVal,
+        timeTaken: TIMER_SECONDS - timeLeft,
+        roundNumber: roundNumber,
+      });
+    }
   };
 
   const inputOnChange = (eventVal: string) => {
     const intVal = parseInt(eventVal);
 
-    // TODO: You can't type a '-', not sure we need this first condition
     if (intVal < 0) {
       alert('Input cannot be negative');
       setTakeVal(0);
@@ -59,7 +87,19 @@ export default function Home(): ReactElement {
     }
   };
 
-  // RETURN HERE
+  useEffect(() => {
+    const interval = setInterval(
+      () => setTimeLeft((timeLeft) => (timeLeft === 0 ? 0 : timeLeft - 1)),
+      1000,
+    );
+
+    return () => clearInterval(interval);
+  }, [timeLeft]);
+
+  if (timeLeft === 0 && !takeComplete) {
+    handleTake();
+  }
+
   return (
     <div className={styles.container}>
       <Head>
@@ -68,6 +108,11 @@ export default function Home(): ReactElement {
       </Head>
 
       <main className={styles.main}>
+        <GameModal isOpen={gameOverModalIsOpen} text={'Game over'} />
+        <GameModal
+          isOpen={takeComplete && !gameOverModalIsOpen}
+          text="Wait for other players..."
+        />
         <div className={styles.infoSection}>
           <p className={styles.infoSectionTitle}>Game</p>
           <Image
@@ -97,13 +142,8 @@ export default function Home(): ReactElement {
         </div>
 
         <div className={styles.gameDisplay}>
-          <GameTable takeVal={takeVal} />
-          <Timer
-            time={TIMER_SECONDS}
-            shouldResetTimer
-            onTimerOver={() => setTakeVal(Math.floor(Math.random() * 11))}
-            customClass={styles.gameTimer}
-          />
+          <GameTable pointsRemaining={pointsRemaining} />
+          <div className={styles.timer}>{timeLeft}</div>
         </div>
 
         <div className={styles.actionBar}>
@@ -111,13 +151,15 @@ export default function Home(): ReactElement {
             {/* TODO: both of these values will be given by an API/socket */}
             <h4 className={styles.actionBarText}>
               You Are:{' '}
-              <span style={{ color: playerColor.toLowerCase() }}>
-                {playerColor}{' '}
+              <span
+                style={{ color: gameConstants.DEFAULT_COLOR.toLowerCase() }}
+              >
+                {gameConstants.DEFAULT_COLOR}{' '}
               </span>
             </h4>
             <h4 className={styles.actionBarText}>
               Your Total Coins:{' '}
-              <span style={{ color: Colors.darkPurple }}>{playerCoins} </span>
+              <span style={{ color: Colors.darkPurple }}>{playerPoints} </span>
             </h4>
           </div>
           <div className={styles.actionBarMiddle}>
@@ -148,10 +190,13 @@ export default function Home(): ReactElement {
             </span>
           </div>
           <div className={styles.actionBarRight}>
-            <button className={styles.actionBarTake} onClick={handleTake}>
+            <button
+              className={styles.actionBarTake}
+              onClick={handleTake}
+              disabled={takeComplete}
+            >
               Take
             </button>
-            {/* TODO: add socket send here */}
           </div>
         </div>
       </main>
@@ -171,21 +216,10 @@ export default function Home(): ReactElement {
 
 // GAME TABLE HERE
 interface GameTableProps {
-  takeVal: number;
+  pointsRemaining: number;
 }
 
-const GameTable = ({ takeVal }: GameTableProps): ReactElement => {
-  const [totalPointsLeft, setTotalPointsLeft] = useState(200);
-  const didMountRef = useRef(false); // Don't take points on first render
-
-  useEffect(() => {
-    if (didMountRef.current) {
-      setTotalPointsLeft(totalPointsLeft - takeVal);
-    } else {
-      didMountRef.current = true;
-    }
-  }, [takeVal]);
-
+const GameTable = ({ pointsRemaining }: GameTableProps): ReactElement => {
   return (
     <div className={styles.gameTable}>
       <div className={styles.gameTableColumn}>
@@ -209,14 +243,14 @@ const GameTable = ({ takeVal }: GameTableProps): ReactElement => {
       <div className={styles.gameTableMiddle}>
         <CircularProgressbarWithChildren
           maxValue={200}
-          value={totalPointsLeft}
+          value={pointsRemaining}
           counterClockwise={true}
           styles={buildStyles({
             pathColor: Colors.darkBlue,
             trailColor: 'white',
           })}
         >
-          <div className={styles.progressBarTextTop}>{totalPointsLeft}</div>
+          <div className={styles.progressBarTextTop}>{pointsRemaining}</div>
           <div className={styles.progressBarTextBottom}>Points Left</div>
         </CircularProgressbarWithChildren>
       </div>
