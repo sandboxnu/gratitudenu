@@ -36,15 +36,16 @@ export class RoundService {
     return newRound;
   }
 
-  async findByRoundNumber(
-    roundNumber: number,
-    gameId: number,
-  ): Promise<number> {
+  async findByRoundNumber(roundNumber: number, gameId: number): Promise<Round> {
     const game = await this.gameRepository.findOne(gameId, {
       relations: ['rounds'],
     });
 
-    const round = game.rounds.find((r) => r.roundNumber === roundNumber);
-    return round.id;
+    const roundId = game.rounds.find((r) => r.roundNumber === roundNumber).id;
+
+    const round = await this.roundRepository.findOne(roundId, {
+      relations: ['playerMoves', 'game'],
+    });
+    return round;
   }
 }
