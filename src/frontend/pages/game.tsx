@@ -51,10 +51,8 @@ export default function Home(): ReactElement {
   const gameUrl = `${DEV_URL}/game/sse?playerId=${playerId}&gameId=${gameId}`;
   useEventSource(gameUrl, (message) => {
     if (message.endMessage !== undefined) {
-      // end the game
       setGameOverModalIsOpen(true);
     } else if (message.newRound !== undefined) {
-      // update roundId, pointsRemaining
       setPointsRemaining(message.newRound.pointsRemaining);
       setRoundNumber(message.newRound.roundNumber);
       setTimeLeft(gameConstants.INIT_TIME_LEFT);
@@ -198,7 +196,6 @@ export default function Home(): ReactElement {
             >
               Take
             </button>
-            {/* TODO: add socket send here */}
           </div>
         </div>
       </main>

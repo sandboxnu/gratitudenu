@@ -73,10 +73,7 @@ export class GameController {
     let round = await this.roundService.findByRoundNumber(
       roundNumber,
       player.game.id,
-    );
-    if (!round) {
-      throw new BadRequestException('Round number does not exist');
-    } // Check for updates
+    ); // Check for updates
     this.validatePlayerAndRound(player, round);
 
     const grab = await Grab.create({
