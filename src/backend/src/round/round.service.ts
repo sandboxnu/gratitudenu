@@ -45,9 +45,6 @@ export class RoundService {
     });
 
     const round = game.rounds.find((r) => r.roundNumber === roundNumber);
-    if (!round) {
-      throw new BadRequestException('Round number does not exist');
-    }
     return round.id;
   }
 }

@@ -74,6 +74,9 @@ export class GameController {
       roundNumber,
       player.game.id,
     );
+    if (!roundId) {
+      throw new BadRequestException('Round number does not exist');
+    }
     let round = await Round.findOne(roundId, {
       relations: ['playerMoves', 'game'],
     }); // Check for updates
