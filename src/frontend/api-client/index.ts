@@ -49,13 +49,6 @@ class APIClient {
     },
   };
 
-  export = {
-    // eslint-disable-next-line @typescript-eslint/ban-types
-    export: async (body: { password: string }): Promise<String> => {
-      return this.req('POST', '/export', String, body);
-    },
-  };
-
   game = {
     take: async (body: {
       playerId: number;
@@ -63,8 +56,15 @@ class APIClient {
       timeTaken: number;
       roundNumber: number;
     }): // eslint-disable-next-line @typescript-eslint/ban-types
-    Promise<Number> => {
+      Promise<Number> => {
       return this.req('POST', '/game/take', Number, body);
+    },
+  };
+
+  export = {
+    // eslint-disable-next-line @typescript-eslint/ban-types
+    export: async (body: { password: string }): Promise<String> => {
+      return this.req('POST', '/export', String, body);
     },
   };
 
