@@ -2,27 +2,12 @@ import { BadRequestException, Body, Controller, Post } from '@nestjs/common';
 import { Game } from 'src/entities/game.entity';
 import * as Papa from 'papaparse';
 
-const COLUMNS = [
-  'game',
-  'emotion',
-  'round',
-  'playerOne',
-  'playerOneTake',
-  'playerOneTime',
-  'playerTwo',
-  'playerTwoTake',
-  'playerTwoTime',
-  'playerThree',
-  'playerThreeTake',
-  'playerThreeTime',
-  'playerFour',
-  'playerFourTake',
-  'playerFourTime',
-];
+const BASE_COLUMNS = ['game', 'emotion', 'userId'];
 @Controller('export')
 export class ExportController {
   @Post()
-  async getStudyData(@Body('password') password: string): Promise<void> {
+  async export(@Body('password') password: string): Promise<void> {
+    let maxRounds = 0;
     this.verifyPassword(password);
     const data = [];
     // find games
@@ -45,10 +30,15 @@ export class ExportController {
       ),
     );
 
-    gamesWithRelations.forEach((game) => this.formatGameIntoData(data, game));
+    gamesWithRelations.forEach((game) => {
+      if (game.rounds.length > maxRounds) {
+        maxRounds = game.rounds.length;
+      }
+      this.formatGameToCsv(game, data);
+    });
 
     const csv = Papa.unparse(data, {
-      columns: COLUMNS,
+      columns: this.generateColumns(maxRounds),
     });
 
     return csv;
@@ -62,37 +52,29 @@ export class ExportController {
     }
   }
 
-  private formatGameIntoData(data, game: Game) {
+  private formatGameToCsv(game: Game, data: Record<string, any>[]) {
     data.push({
       game: `Game: ${game.id}`,
       emotion: `Emotion: ${game.players[0].emotionId}`,
     });
-    const p1 = game.players[0];
-    const p2 = game.players[1];
-    const p3 = game.players[2];
-    const p4 = game.players[3];
+    game.players.forEach((player) => {
+      const playerData = { userId: player.userId };
 
-    game.rounds.forEach((round) => {
-      const p1Move = p1.grabs.find((grab) => grab.round.id === round.id);
-      const p2Move = p2.grabs.find((grab) => grab.round.id === round.id);
-      const p3Move = p3.grabs.find((grab) => grab.round.id === round.id);
-      const p4Move = p4.grabs.find((grab) => grab.round.id === round.id);
-      data.push({
-        round: round.roundNumber,
-        playerOne: p1.userId,
-        playerOneTake: p1Move.howMany,
-        playerOneTime: p1Move.timeTaken,
-        playerTwo: p2.userId,
-        playerTwoTake: p2Move.howMany,
-        playerTwoTime: p2Move.timeTaken,
-        playerThree: p3.userId,
-        playerThreeTake: p3Move.howMany,
-        playerThreeTime: p3Move.timeTaken,
-        playerFour: p4.userId,
-        playerFourTake: p4Move.howMany,
-        playerFourTime: p4Move.timeTaken,
+      player.grabs.forEach((grab) => {
+        playerData[`round${grab.round.roundNumber}Take`] = grab.howMany;
+        playerData[`round${grab.round.roundNumber}Time`] = grab.timeTaken;
       });
+
+      data.push(playerData);
     });
-    data.push({}); // new line in between
+  }
+
+  private generateColumns(maxRounds: number): string[] {
+    const columns = BASE_COLUMNS;
+
+    for (let i = 1; i <= maxRounds; i++) {
+      columns.push(`round${i}Take`, `round${i}Time`);
+    }
+    return columns;
   }
 }
