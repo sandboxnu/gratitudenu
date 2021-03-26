@@ -21,6 +21,8 @@ import { ConfigModule } from '@nestjs/config';
 import { GameSseService } from './game/game.sse.service';
 import { ExportController } from './export/export.controller';
 import { Setting } from './entities/setting.entity';
+import { AdminController } from './admin/admin.controller';
+import { AdminService } from './admin/admin.service';
 
 @Module({
   imports: [
@@ -48,6 +50,7 @@ import { Setting } from './entities/setting.entity';
     GameService,
     GameSseService,
     RoundService,
+    AdminService,
   ],
   controllers: [
     AppController,
@@ -55,6 +58,7 @@ import { Setting } from './entities/setting.entity';
     PlayersController,
     GameController,
     ExportController,
+    AdminController,
   ],
 })
 export class AppModule {
