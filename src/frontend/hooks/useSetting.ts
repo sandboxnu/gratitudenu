@@ -8,6 +8,7 @@ export const useSetting: Hook = (settingName: string, defaultValue: number) => {
     `/admin?settingName=${settingName}`,
     async () => API.settings.get(settingName),
   );
+  console.log(data);
   if (data) {
     return data.valueOf();
   }

@@ -71,7 +71,16 @@ class APIClient {
   settings = {
     // eslint-disable-next-line @typescript-eslint/ban-types
     get: async (settingName: string): Promise<Number> => {
-      return this.req('POST', `/admin?settingName=${settingName}`, Number);
+      return this.req('GET', `/admin?settingName=${settingName}`, Number);
+    },
+
+    update: async (body: {
+      settingName: string;
+      value: number;
+      password: string;
+    }): // eslint-disable-next-line @typescript-eslint/ban-types
+    Promise<Number> => {
+      return this.req('PATCH', `/admin/setting`, Number, body);
     },
   };
 

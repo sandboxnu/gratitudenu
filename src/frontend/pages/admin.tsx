@@ -1,4 +1,4 @@
-import { ReactElement, useState } from 'react';
+import { ReactElement, useEffect, useState } from 'react';
 import { CSVLink } from 'react-csv';
 import { API } from '../api-client';
 import { useSetting } from '../hooks/useSetting';
@@ -9,14 +9,28 @@ type AdminPageProps = {
   password: string;
 };
 const DEFAULT_ROUNDS = 10;
+const ROUND = 'ROUND';
 
 function AdminPage({ csvData, password }: AdminPageProps): ReactElement {
-  const settingRounds = useSetting('ROUNDS', DEFAULT_ROUNDS);
-  const [maxRounds, setMaxRounds] = useState(settingRounds);
+  const settingRounds = useSetting(ROUND, DEFAULT_ROUNDS);
+  const [maxRounds, setMaxRounds] = useState(0);
+  useEffect(() => {
+    setMaxRounds(settingRounds);
+  }, [settingRounds]);
 
   const onRoundChange = (event) => {
     setMaxRounds(event.target.value);
   };
+  const saveRound = async () => {
+    console.log(password);
+    const response = await API.settings.update({
+      settingName: ROUND,
+      value: maxRounds,
+      password,
+    });
+    console.log(response);
+  };
+
   return (
     <div className={styles.export}>
       <div className={styles.formInput}>
@@ -28,7 +42,12 @@ function AdminPage({ csvData, password }: AdminPageProps): ReactElement {
             onChange={onRoundChange}
             type="number"
           />
-          <button className={`primaryButton ${styles.saveButton}`}>Save</button>
+          <button
+            className={`primaryButton ${styles.saveButton}`}
+            onClick={saveRound}
+          >
+            Save
+          </button>
         </div>
       </div>
       {/* <div className={styles.formInput}>
