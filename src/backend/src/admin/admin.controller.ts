@@ -1,10 +1,17 @@
-import { Body, Controller, Patch } from '@nestjs/common';
+import { Body, Controller, Get, Patch, Query } from '@nestjs/common';
 import { Setting } from 'src/entities/setting.entity';
 import { AdminService } from './admin.service';
 
 @Controller('admin')
 export class AdminController {
   constructor(private adminService: AdminService) {}
+
+  @Get()
+  async getSetting(@Query('settingName') settingName: string): Promise<number> {
+    const setting = await Setting.findOne(settingName);
+
+    return setting?.value;
+  }
 
   @Patch('setting')
   async updateSetting(

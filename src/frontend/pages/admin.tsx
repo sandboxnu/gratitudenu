@@ -1,9 +1,43 @@
 import { ReactElement, useState } from 'react';
 import { CSVLink } from 'react-csv';
 import { API } from '../api-client';
-import styles from '../styles/Export.module.scss';
+import styles from '../styles/Admin.module.scss';
 
-export default function Export(): ReactElement {
+type AdminPageProps = {
+  csvData: string;
+  password: string;
+};
+
+function AdminPage({ csvData, password }: AdminPageProps): ReactElement {
+  const [maxRounds, setMaxRounds] = useState();
+  return (
+    <div className={styles.export}>
+      <div className={styles.formInput}>
+        Max Rounds:
+        <div className={styles.form}>
+          <input
+            placeholder="Enter Max Rounds"
+            value={password}
+            type="number"
+          />
+        </div>
+      </div>
+      {/* <div className={styles.formInput}>
+        Max Players:
+        <div className={styles.form}>
+          <input placeholder="Enter Password" value={password} />
+        </div>
+      </div> */}
+      <button className="primaryButton">
+        <CSVLink data={csvData} filename="game-data.csv">
+          Export Study Data
+        </CSVLink>
+      </button>
+    </div>
+  );
+}
+
+export default function Admin(): ReactElement {
   const [data, setData] = useState(null);
   const [password, setPassword] = useState('');
   const [error, setError] = useState(null);
@@ -24,11 +58,7 @@ export default function Export(): ReactElement {
   return (
     <div className={styles.export}>
       {data ? (
-        <button className="primaryButton">
-          <CSVLink data={data} filename="game-data.csv">
-            Export Study Data
-          </CSVLink>
-        </button>
+        <AdminPage csvData={data} password={password} />
       ) : (
         <div>
           <div className={styles.formInput}>
