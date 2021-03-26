@@ -30,7 +30,6 @@ export class AdminController {
       setting.value = value;
       await setting.save();
     }
-    console.log(setting);
     return setting.value;
   }
 }

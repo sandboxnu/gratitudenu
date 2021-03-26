@@ -21,14 +21,12 @@ function AdminPage({ csvData, password }: AdminPageProps): ReactElement {
   const onRoundChange = (event) => {
     setMaxRounds(event.target.value);
   };
-  const saveRound = async () => {
-    console.log(password);
-    const response = await API.settings.update({
+  const saveRound = () => {
+    API.settings.update({
       settingName: ROUND,
       value: maxRounds,
       password,
     });
-    console.log(response);
   };
 
   return (
