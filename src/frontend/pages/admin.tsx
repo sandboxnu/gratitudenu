@@ -1,15 +1,22 @@
 import { ReactElement, useState } from 'react';
 import { CSVLink } from 'react-csv';
 import { API } from '../api-client';
+import { useSetting } from '../hooks/useSetting';
 import styles from '../styles/Admin.module.scss';
 
 type AdminPageProps = {
   csvData: string;
   password: string;
 };
+const DEFAULT_ROUNDS = 10;
 
 function AdminPage({ csvData, password }: AdminPageProps): ReactElement {
-  const [maxRounds, setMaxRounds] = useState();
+  const settingRounds = useSetting('ROUNDS', DEFAULT_ROUNDS);
+  const [maxRounds, setMaxRounds] = useState(settingRounds);
+
+  const onRoundChange = (event) => {
+    setMaxRounds(event.target.value);
+  };
   return (
     <div className={styles.export}>
       <div className={styles.formInput}>
@@ -17,9 +24,11 @@ function AdminPage({ csvData, password }: AdminPageProps): ReactElement {
         <div className={styles.form}>
           <input
             placeholder="Enter Max Rounds"
-            value={password}
+            value={maxRounds}
+            onChange={onRoundChange}
             type="number"
           />
+          <button className={`primaryButton ${styles.saveButton}`}>Save</button>
         </div>
       </div>
       {/* <div className={styles.formInput}>
