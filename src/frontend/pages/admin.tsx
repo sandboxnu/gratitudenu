@@ -9,22 +9,33 @@ type AdminPageProps = {
   password: string;
 };
 const DEFAULT_ROUNDS = 10;
+const DEFAULT_PLAYERS = 4;
 const ROUND = 'ROUND';
+const PLAYERS = 'PLAYERS';
 
 function AdminPage({ csvData, password }: AdminPageProps): ReactElement {
   const settingRounds = useSetting(ROUND, DEFAULT_ROUNDS);
-  const [maxRounds, setMaxRounds] = useState(0);
+  const settingPlayers = useSetting(PLAYERS, DEFAULT_PLAYERS);
+  const [maxRounds, setMaxRounds] = useState(10);
+  const [players, setPlayers] = useState(4);
   useEffect(() => {
     setMaxRounds(settingRounds);
   }, [settingRounds]);
 
+  useEffect(() => {
+    setPlayers(settingPlayers);
+  }, [settingPlayers]);
+
   const onRoundChange = (event) => {
     setMaxRounds(event.target.value);
   };
-  const saveRound = () => {
+  const onPlayersChange = (event) => {
+    setPlayers(event.target.value);
+  };
+  const saveSetting = (setting: string, value: number) => {
     API.settings.update({
-      settingName: ROUND,
-      value: maxRounds,
+      settingName: setting,
+      value: value,
       password,
     });
   };
@@ -42,18 +53,29 @@ function AdminPage({ csvData, password }: AdminPageProps): ReactElement {
           />
           <button
             className={`primaryButton ${styles.saveButton}`}
-            onClick={saveRound}
+            onClick={() => saveSetting(ROUND, maxRounds)}
           >
             Save
           </button>
         </div>
       </div>
-      {/* <div className={styles.formInput}>
-        Max Players:
+      <div className={styles.formInput}>
+        Players per game:
         <div className={styles.form}>
-          <input placeholder="Enter Password" value={password} />
+          <input
+            placeholder="Enter Players"
+            value={players}
+            onChange={onPlayersChange}
+            type="number"
+          />
+          <button
+            className={`primaryButton ${styles.saveButton}`}
+            onClick={() => saveSetting(PLAYERS, players)}
+          >
+            Save
+          </button>
         </div>
-      </div> */}
+      </div>
       <button className="primaryButton">
         <CSVLink data={csvData} filename="game-data.csv">
           Export Study Data
