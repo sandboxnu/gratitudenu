@@ -8,7 +8,6 @@ import { Grab } from 'src/entities/grab.entity';
 import { Setting } from 'src/entities/setting.entity';
 
 const MAX_POINTS = 200;
-const MAX_ROUND_COUNT = 10;
 
 type GameRoundID = {
   gameId: number;
@@ -36,7 +35,7 @@ export class GameService {
     );
 
     const roundSetting = await Setting.findOne(ROUND_SETTING_NAME);
-    const maxRounds = roundSetting?.value || MAX_ROUND_COUNT;
+    const maxRounds = roundSetting.value;
 
     const game = await Game.create({
       ongoing: true,

@@ -8,14 +8,12 @@ type AdminPageProps = {
   csvData: string;
   password: string;
 };
-const DEFAULT_ROUNDS = 10;
-export const DEFAULT_PLAYERS = 4;
 const ROUND = 'ROUND';
 export const PLAYERS = 'PLAYERS';
 
 function AdminPage({ csvData, password }: AdminPageProps): ReactElement {
-  const settingRounds = useSetting(ROUND, DEFAULT_ROUNDS);
-  const settingPlayers = useSetting(PLAYERS, DEFAULT_PLAYERS);
+  const settingRounds = useSetting(ROUND);
+  const settingPlayers = useSetting(PLAYERS);
   const [maxRounds, setMaxRounds] = useState(10);
   const [players, setPlayers] = useState(4);
   useEffect(() => {
@@ -87,6 +85,9 @@ function AdminPage({ csvData, password }: AdminPageProps): ReactElement {
 
 export default function Admin(): ReactElement {
   const [data, setData] = useState(null);
+  const [dataReturnedWithoutError, setDataReturnedWithoutError] = useState(
+    false,
+  );
   const [password, setPassword] = useState('');
   const [error, setError] = useState(null);
   const onPasswordChange = (event) => {
@@ -98,14 +99,16 @@ export default function Admin(): ReactElement {
       const exportData = await API.export.export({ password });
       setData(exportData);
       setError(null);
+      setDataReturnedWithoutError(true);
     } catch (e) {
       setError(e.response.data.message);
+      setDataReturnedWithoutError(false);
     }
   };
 
   return (
     <div className={styles.export}>
-      {data ? (
+      {dataReturnedWithoutError ? (
         <AdminPage csvData={data} password={password} />
       ) : (
         <div>

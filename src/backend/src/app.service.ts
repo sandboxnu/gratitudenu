@@ -9,14 +9,16 @@ export class AppService {
     const playerSetting = await Setting.findOne('PLAYERS');
     const roundSetting = await Setting.findOne('ROUND');
     if (!playerSetting) {
-      playerSetting.value = DEFAULT_PLAYERS;
-
-      await playerSetting.save();
+      await Setting.create({
+        settingName: 'PLAYERS',
+        value: DEFAULT_PLAYERS,
+      }).save();
     }
     if (!roundSetting) {
-      roundSetting.value = DEFAULT_ROUNDS;
-
-      await roundSetting.save();
+      await Setting.create({
+        settingName: 'ROUND',
+        value: DEFAULT_ROUNDS,
+      }).save();
     }
   }
 }

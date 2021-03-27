@@ -5,11 +5,11 @@ import Timer from '../components/timer';
 import { useEventSource } from '../hooks/useEventSource';
 import { useSetting } from '../hooks/useSetting';
 import styles from '../styles/WaitingRoom.module.scss';
-import { PLAYERS, DEFAULT_PLAYERS } from './admin';
+import { PLAYERS } from './admin';
 
 export default function WaitingRoom(): ReactElement {
   const router = useRouter();
-  const playersPerGame = useSetting(PLAYERS, DEFAULT_PLAYERS);
+  const playersPerGame = useSetting(PLAYERS);
 
   const { playerId } = router.query;
   const [players, setPlayers] = useState(1); // assume it is just us to begin with

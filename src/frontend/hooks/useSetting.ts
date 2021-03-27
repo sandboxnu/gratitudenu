@@ -1,16 +1,12 @@
 import useSWR from 'swr';
 import { API } from '../api-client';
 
-type Hook = (settingName: string, defaultValue: number) => number;
+type Hook = (settingName: string) => number;
 
-export const useSetting: Hook = (settingName: string, defaultValue: number) => {
+export const useSetting: Hook = (settingName: string) => {
   const { data } = useSWR(`/admin?settingName=${settingName}`, async () =>
     API.settings.get(settingName),
   );
 
-  if (data) {
-    return data.valueOf();
-  }
-
-  return defaultValue;
+  return data?.valueOf();
 };
