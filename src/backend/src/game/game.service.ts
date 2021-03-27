@@ -35,8 +35,8 @@ export class GameService {
       }),
     );
 
-    const maxRounds =
-      (await Setting.findOne(ROUND_SETTING_NAME)).value || MAX_ROUND_COUNT;
+    const roundSetting = await Setting.findOne(ROUND_SETTING_NAME);
+    const maxRounds = roundSetting?.value || MAX_ROUND_COUNT;
 
     const game = await Game.create({
       ongoing: true,
