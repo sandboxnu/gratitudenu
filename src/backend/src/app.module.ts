@@ -62,5 +62,7 @@ import { AdminService } from './admin/admin.service';
   ],
 })
 export class AppModule {
-  constructor(private connection: Connection) {}
+  constructor(private connection: Connection, private appService: AppService) {
+    this.appService.initializeSettings();
+  }
 }
