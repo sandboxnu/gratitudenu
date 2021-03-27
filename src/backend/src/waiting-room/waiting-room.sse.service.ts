@@ -1,5 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { Response } from 'express';
+import { Setting } from 'src/entities/setting.entity';
 import { GameService } from 'src/game/game.service';
 import { Client } from 'src/sse/sse.service';
 
@@ -39,7 +40,10 @@ export class WaitingRoomSSEService {
       this.clients[metadata.emotionId],
     );
 
-    if (this.clients[metadata.emotionId].length === MAX_PLAYERS) {
+    const playerSetting = await Setting.findOne('PLAYERS');
+    const maxPlayers = playerSetting?.value || MAX_PLAYERS;
+
+    if (this.clients[metadata.emotionId].length === maxPlayers) {
       await this.sendClientsToGame(this.clients[metadata.emotionId]);
       delete this.clients[metadata.emotionId];
     }
