@@ -9,9 +9,9 @@ type AdminPageProps = {
   password: string;
 };
 const DEFAULT_ROUNDS = 10;
-const DEFAULT_PLAYERS = 4;
+export const DEFAULT_PLAYERS = 4;
 const ROUND = 'ROUND';
-const PLAYERS = 'PLAYERS';
+export const PLAYERS = 'PLAYERS';
 
 function AdminPage({ csvData, password }: AdminPageProps): ReactElement {
   const settingRounds = useSetting(ROUND, DEFAULT_ROUNDS);

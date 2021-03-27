@@ -3,11 +3,13 @@ import { ReactElement, useState } from 'react';
 import { DEV_URL } from '../api-client';
 import Timer from '../components/timer';
 import { useEventSource } from '../hooks/useEventSource';
+import { useSetting } from '../hooks/useSetting';
 import styles from '../styles/WaitingRoom.module.scss';
+import { PLAYERS, DEFAULT_PLAYERS } from './admin';
 
-const MAX_PLAYERS = 4;
 export default function WaitingRoom(): ReactElement {
   const router = useRouter();
+  const playersPerGame = useSetting(PLAYERS, DEFAULT_PLAYERS);
 
   const { playerId } = router.query;
   const [players, setPlayers] = useState(1); // assume it is just us to begin with
@@ -62,7 +64,7 @@ export default function WaitingRoom(): ReactElement {
             The game will begin when the room is filled:
           </div>
           <div className={styles.playerCountFraction}>
-            {players}/{MAX_PLAYERS}
+            {players}/{playersPerGame}
           </div>
         </div>
       </div>
