@@ -1,9 +1,11 @@
 @import 'constants';
+
 .gameModal {
   position: relative;
-  width: 400px;
-  height: 300px;
-  font-size: 64px;
+  width: 350px;
+  height: 230px;
+  font-size: 40px;
+  color: $dark-blue;
   text-align: center;
   top: 50%;
   left: 50%;
@@ -11,11 +13,10 @@
   bottom: auto;
   margin-right: -50%;
   transform: translate(-50%, -50%);
-
-  border: 1px solid black;
-  background: #fff;
+  background: #f6f6f6;
+  box-shadow: 0 8px 8px rgba(0, 0, 0, 0.35);
   overflow: auto;
-  border-radius: 4px;
-  outline: none;
-  padding: 20px;
+  border-radius: 8px;
+  padding: 70px 10px 0 10px;
+  font-weight: 600;
 }
