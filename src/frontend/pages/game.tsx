@@ -104,7 +104,7 @@ export default function Home(): ReactElement {
     <div className={styles.container}>
       <Head>
         <title>RDG NU | Game Page</title>
-        <link rel="icon" href="/favicon.ico" />
+        <link rel="icon" href="/favicon.ico?v=1" />
       </Head>
 
       <main className={styles.main}>
@@ -132,12 +132,26 @@ export default function Home(): ReactElement {
                 right: 'auto',
                 bottom: 'auto',
                 marginRight: '-50%',
+                maxWidth: '500px',
                 transform: 'translate(-50%, -50%)',
               },
             }}
             contentLabel="Instructions Modal"
           >
-            Game instruction summary
+            <div className={styles.instructionsText}>
+              <h2>Game Instructions</h2>
+              <ol>
+                <li>
+                  Select the amount of points you will take for each round
+                  (1-10) using the slider or the input box.
+                </li>
+                <li>Click the "Take" button to receive your points.</li>
+                <li>
+                  Points will be replenished by 10% at the end of every round.
+                  Continue taking points until the game is over.
+                </li>
+              </ol>
+            </div>
           </Modal>
         </div>
 
@@ -158,7 +172,7 @@ export default function Home(): ReactElement {
               </span>
             </h4>
             <h4 className={styles.actionBarText}>
-              Your Total Coins:{' '}
+              Your Total Points:{' '}
               <span style={{ color: Colors.darkPurple }}>{playerPoints} </span>
             </h4>
           </div>
