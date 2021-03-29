@@ -4,7 +4,6 @@ import {
   Controller,
   Delete,
   Get,
-  Param,
 } from '@nestjs/common';
 import { AppService } from './app.service';
 import { Game } from './entities/game.entity';
