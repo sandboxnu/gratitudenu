@@ -1,4 +1,11 @@
-import { Controller, Delete, Get } from '@nestjs/common';
+import {
+  BadRequestException,
+  Body,
+  Controller,
+  Delete,
+  Get,
+  Param,
+} from '@nestjs/common';
 import { AppService } from './app.service';
 import { Game } from './entities/game.entity';
 import { Grab } from './entities/grab.entity';
@@ -15,7 +22,10 @@ export class AppController {
   }
 
   @Delete('db')
-  async tearDownDb(): Promise<boolean> {
+  async tearDownDb(@Body('password') password: string): Promise<boolean> {
+    if (process.env.DELETE_PASSWORD !== password) {
+      throw new BadRequestException('Password is not correct');
+    }
     await Game.delete({});
     await Grab.delete({});
     await Player.delete({});
