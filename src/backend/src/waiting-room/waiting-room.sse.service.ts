@@ -1,12 +1,12 @@
 import { Injectable } from '@nestjs/common';
 import { Response } from 'express';
+import { Setting } from 'src/entities/setting.entity';
 import { GameService } from 'src/game/game.service';
 import { Client } from 'src/sse/sse.service';
 
 type WaitingRoomClientMetadata = { playerId: number; emotionId: number };
 const FIFTEEN_MINUTES = 900000;
 const TIMEOUT_EVENT = { timeout: true };
-const MAX_PLAYERS = 4;
 /**
  * Handle sending Waiting Room sse events
  */
@@ -39,7 +39,10 @@ export class WaitingRoomSSEService {
       this.clients[metadata.emotionId],
     );
 
-    if (this.clients[metadata.emotionId].length === MAX_PLAYERS) {
+    const playerSetting = await Setting.findOne('PLAYERS');
+    const maxPlayers = playerSetting.value;
+
+    if (this.clients[metadata.emotionId].length === maxPlayers) {
       await this.sendClientsToGame(this.clients[metadata.emotionId]);
       delete this.clients[metadata.emotionId];
     }

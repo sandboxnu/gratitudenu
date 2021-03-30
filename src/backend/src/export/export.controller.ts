@@ -1,14 +1,17 @@
 import { BadRequestException, Body, Controller, Post } from '@nestjs/common';
 import { Game } from 'src/entities/game.entity';
 import * as Papa from 'papaparse';
+import { AdminService } from 'src/admin/admin.service';
 
 const BASE_COLUMNS = ['game', 'emotion', 'userId'];
 @Controller('export')
 export class ExportController {
+  constructor(private adminService: AdminService) {}
+
   @Post()
   async export(@Body('password') password: string): Promise<void> {
     let maxRounds = 0;
-    this.verifyPassword(password);
+    this.adminService.verifyPassword(password);
     const data = [];
     // find games
     const allFinishedGames = await Game.find({
@@ -42,14 +45,6 @@ export class ExportController {
     });
 
     return csv;
-  }
-
-  private verifyPassword(password: string) {
-    const realPassword = process.env.EXPORT_PASSWORD;
-
-    if (realPassword !== password) {
-      throw new BadRequestException('Incorrect Password');
-    }
   }
 
   private formatGameToCsv(game: Game, data: Record<string, any>[]) {

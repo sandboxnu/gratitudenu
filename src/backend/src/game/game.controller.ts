@@ -17,15 +17,11 @@ import { Response } from 'express';
 import { GameService } from './game.service';
 import { RoundService } from '../round/round.service';
 
-const MAX_PLAYERS = 4;
-
 @Controller('game')
 export class GameController {
   constructor(
     @InjectRepository(Player)
     private playersRepository: Repository<Player>,
-    @InjectRepository(Round)
-    private roundsRepository: Repository<Round>,
     private roundService: RoundService,
     private gameSseService: GameSseService,
     private gameService: GameService,
@@ -85,10 +81,10 @@ export class GameController {
 
     // await round.reload();
     round = await Round.findOne(round.id, {
-      relations: ['playerMoves', 'game'],
+      relations: ['playerMoves', 'game', 'game.players'],
     });
 
-    if (round.playerMoves.length === MAX_PLAYERS) {
+    if (round.playerMoves.length === round.game.players.length) {
       // check if game is over
       const isOngoing = await this.gameService.updateOngoing(
         round.game.id,
