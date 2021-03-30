@@ -20,6 +20,9 @@ import { GameModule } from './game/game.module';
 import { ConfigModule } from '@nestjs/config';
 import { GameSseService } from './game/game.sse.service';
 import { ExportController } from './export/export.controller';
+import { Setting } from './entities/setting.entity';
+import { AdminController } from './admin/admin.controller';
+import { AdminService } from './admin/admin.service';
 
 @Module({
   imports: [
@@ -32,7 +35,7 @@ import { ExportController } from './export/export.controller';
     TypeOrmModule.forRoot({
       type: 'postgres',
       url: process.env.DB_URL,
-      entities: [Grab, Player, Round, Game],
+      entities: [Grab, Player, Round, Game, Setting],
       synchronize: true, // TODO: synchronize true should not be used in a production environment
     }),
     PlayersModule,
@@ -47,6 +50,7 @@ import { ExportController } from './export/export.controller';
     GameService,
     GameSseService,
     RoundService,
+    AdminService,
   ],
   controllers: [
     AppController,
@@ -54,8 +58,11 @@ import { ExportController } from './export/export.controller';
     PlayersController,
     GameController,
     ExportController,
+    AdminController,
   ],
 })
 export class AppModule {
-  constructor(private connection: Connection) {}
+  constructor(private connection: Connection, private appService: AppService) {
+    this.appService.initializeSettings();
+  }
 }

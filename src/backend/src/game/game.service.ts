@@ -5,13 +5,15 @@ import { Repository } from 'typeorm';
 import { Game } from '../entities/game.entity';
 import { Round } from '../entities/round.entity';
 import { Grab } from 'src/entities/grab.entity';
+import { Setting } from 'src/entities/setting.entity';
 
 const MAX_POINTS = 200;
-const MAX_ROUND_COUNT = 10;
 
 type GameRoundID = {
   gameId: number;
 };
+
+const ROUND_SETTING_NAME = 'ROUND';
 
 @Injectable()
 export class GameService {
@@ -32,12 +34,16 @@ export class GameService {
       }),
     );
 
+    const roundSetting = await Setting.findOne(ROUND_SETTING_NAME);
+    const maxRounds = roundSetting.value;
+
     const game = await Game.create({
       ongoing: true,
       players,
+      maxRounds,
     }).save();
 
-    const newRound = await Round.create({
+    await Round.create({
       roundNumber: 1,
       pointsRemaining: MAX_POINTS,
       game,
@@ -74,7 +80,7 @@ export class GameService {
     // no points remaining, or max round
     const pointsRemaining = await this.getSumPoints(roundId);
     const roundCount = game.rounds.length;
-    if (pointsRemaining <= 0 || roundCount >= MAX_ROUND_COUNT) {
+    if (pointsRemaining <= 0 || roundCount >= game.maxRounds) {
       game.ongoing = false;
       await game.save();
     }

@@ -3,6 +3,8 @@
 .export {
   display: flex;
   justify-content: center;
+  align-items: center;
+  flex-direction: column;
   padding-top: 30px;
 }
 
@@ -15,12 +17,13 @@
 
 .form {
   display: flex;
-  justify-content: center;
+  justify-content: space-between;
+  padding-bottom: 20px;
 
   & input {
     /* white */
     height: 59px;
-    width: 306px;
+    width: 300px;
     margin: 4px 0 16px;
     background: #ffffff;
     border: 2px solid rgba(0, 42, 82, 0.5);
@@ -32,6 +35,12 @@
 .button {
   display: flex;
   justify-content: center;
+  align-items: center;
+}
+
+.saveButton {
+  height: 59px;
+  margin: 4px 0 16px;
 }
 
 .error {

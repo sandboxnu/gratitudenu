@@ -16,6 +16,10 @@ import { API, DEV_URL } from '../api-client';
 import { useRouter } from 'next/dist/client/router';
 import { useEventSource } from '../hooks/useEventSource';
 
+/**
+ * TODO: Account for varying number of players in this view
+ */
+
 export default function Home(): ReactElement {
   /**
    * *STATE VARIABLES*
