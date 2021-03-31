@@ -8,21 +8,20 @@ import Image from 'next/image';
 import Modal from 'react-modal';
 import Colors from '../constants/colorConstants';
 import Slider from 'react-input-slider';
-import { GameTable } from './game';
+import { GameInstructionsModal, GameTable } from './game';
 
 export default function PracticeGame(): ReactElement {
   const [pointsRemaining, setPointsRemaining] = useState<number>(
     gameConstants.INIT_TOTAL_COINS,
   );
   const [takeVal, setTakeVal] = useState<number>(gameConstants.MIN_TAKE_VAL);
-  const TIMER_SECONDS = 10;
   const [modalIsOpen, setModalIsOpen] = useState<boolean>(false);
   const [playerPoints, setPlayerPoints] = useState<number>(
     gameConstants.INIT_PLAYER_COINS,
   );
   const [roundNumber, setRoundNumber] = useState<number>(1);
   const router = useRouter();
-  const { gameId, playerId } = router.query;
+  const { playerId } = router.query;
   const [timeLeft, setTimeLeft] = useState<number>(
     gameConstants.INIT_TIME_LEFT,
   );
@@ -51,15 +50,23 @@ export default function PracticeGame(): ReactElement {
     if (!takeComplete) {
       handleTake();
     }
+
     // Take random number of points from pot
-    setPointsRemaining(
-      pointsRemaining - (takeVal + 3 * Math.floor(Math.random() * 9)),
-    );
+    if (!gameOverModalIsOpen) {
+      setPointsRemaining(
+        pointsRemaining - (takeVal + 3 * Math.floor(Math.random() * 9)),
+      );
+    }
+
     setRoundNumber(roundNumber + 1);
     setGameOverModalIsOpen(roundNumber >= 3);
     setTimeLeft(gameConstants.INIT_TIME_LEFT);
     setTakeComplete(false);
   }
+
+  const handleContinueClick = () => {
+    router.push(`/waiting-room?playerId=${playerId}`);
+  };
 
   return (
     <div className={styles.container}>
@@ -69,7 +76,19 @@ export default function PracticeGame(): ReactElement {
       </Head>
 
       <main className={styles.main}>
-        <GameModal isOpen={gameOverModalIsOpen} text={'Game over'} />
+        <Modal
+          isOpen={gameOverModalIsOpen}
+          contentLabel="Practice Round Modal"
+          className={styles.gameOverModal}
+        >
+          Practice Round Over
+          <button
+            className={styles.gameOverButton}
+            onClick={handleContinueClick}
+          >
+            Click to Continue
+          </button>
+        </Modal>
         <GameModal
           isOpen={takeComplete && !gameOverModalIsOpen}
           text="Wait for other players..."
@@ -98,7 +117,7 @@ export default function PracticeGame(): ReactElement {
             }}
             contentLabel="Instructions Modal"
           >
-            Game instruction summary
+            <GameInstructionsModal />
           </Modal>
         </div>
 

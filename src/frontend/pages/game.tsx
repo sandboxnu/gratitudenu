@@ -142,20 +142,7 @@ export default function Home(): ReactElement {
             }}
             contentLabel="Instructions Modal"
           >
-            <div className={styles.instructionsText}>
-              <h2>Game Instructions</h2>
-              <ol>
-                <li>
-                  Select the amount of points you will take for each round
-                  (1-10) using the slider or the input box.
-                </li>
-                <li>Click the "Take" button to receive your points.</li>
-                <li>
-                  Points will be replenished by 10% at the end of every round.
-                  Continue taking points until the game is over.
-                </li>
-              </ol>
-            </div>
+            <GameInstructionsModal />
           </Modal>
         </div>
 
@@ -291,6 +278,25 @@ export const GameTable = ({
           />
         </div>
       </div>
+    </div>
+  );
+};
+
+export const GameInstructionsModal = (): ReactElement => {
+  return (
+    <div className={styles.instructionsText}>
+      <h2>Game Instructions</h2>
+      <ol>
+        <li>
+          Select the amount of points you will take for each round (1-10) using
+          the slider or the input box.
+        </li>
+        <li>Click the "Take" button to receive your points.</li>
+        <li>
+          Points will be replenished by 10% at the end of every round. Continue
+          taking points until the game is over.
+        </li>
+      </ol>
     </div>
   );
 };
