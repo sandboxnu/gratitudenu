@@ -9,16 +9,14 @@ import {
 import { Game } from './game.entity';
 import { Grab } from './grab.entity';
 
-// IDK, just placeholder values for now
 export enum EmotionIdEnum {
-  Calm,
-  Greedy,
-  NotGreedy,
+  Greedy = 1,
+  NotGreedy = 2,
 }
 
 @Entity()
 export class Player extends BaseEntity {
-  @PrimaryGeneratedColumn() // Do we even need this anymore?
+  @PrimaryGeneratedColumn()
   id: number;
 
   @Column()

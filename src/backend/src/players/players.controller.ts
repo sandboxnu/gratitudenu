@@ -13,6 +13,9 @@ export class PlayersController {
         'Create Player requires emotionId and userId',
       );
     }
+    if (emotionId != 0 && emotionId != 1) {
+      throw new BadRequestException('EmotionId has to be either 0 or 1');
+    }
     const player = await Player.create({
       userId,
       emotionId,
