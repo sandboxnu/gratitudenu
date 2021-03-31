@@ -14,7 +14,7 @@ export class PlayersController {
       );
     }
     if (!Object.values(EmotionIdEnum).includes(emotionId)) {
-      throw new BadRequestException('EmotionId has to be either 0 or 1');
+      throw new BadRequestException('EmotionId is invalid');
     }
     const player = await Player.create({
       userId,
