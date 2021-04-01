@@ -12,7 +12,7 @@ import Image from 'next/image';
 import gameConstants from '../constants/gameConstants';
 import GameModal from '../components/gameModal';
 import Colors from '../constants/colorConstants';
-import { API, DEV_URL } from '../api-client';
+import { API, API_URL } from '../api-client';
 import { useRouter } from 'next/dist/client/router';
 import { useEventSource } from '../hooks/useEventSource';
 
@@ -50,7 +50,7 @@ export default function Home(): ReactElement {
     false,
   );
 
-  const gameUrl = `${DEV_URL}/game/sse?playerId=${playerId}&gameId=${gameId}`;
+  const gameUrl = `${API_URL}/game/sse?playerId=${playerId}&gameId=${gameId}`;
   useEventSource(gameUrl, (message) => {
     if (message.endMessage) {
       setGameOverModalIsOpen(true);
