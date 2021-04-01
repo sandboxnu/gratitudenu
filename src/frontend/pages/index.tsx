@@ -42,7 +42,7 @@ export default function Login(): ReactElement {
             </div>
           </div>
           <div className={styles.formInput}>
-            EMOTION ID
+            ACCESS CODE
             <div className={styles.form}>
               <input
                 placeholder="Enter Input"
