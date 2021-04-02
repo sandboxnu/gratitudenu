@@ -1,6 +1,6 @@
 import { useRouter } from 'next/dist/client/router';
 import { ReactElement, useState } from 'react';
-import { DEV_URL } from '../api-client';
+import { API_URL } from '../api-client';
 import Timer from '../components/timer';
 import { useEventSource } from '../hooks/useEventSource';
 import { useSetting } from '../hooks/useSetting';
@@ -13,7 +13,7 @@ export default function WaitingRoom(): ReactElement {
 
   const { playerId } = router.query;
   const [players, setPlayers] = useState(1); // assume it is just us to begin with
-  const waitingRoomUrl = `${DEV_URL}/waiting-room?playerId=${playerId}`;
+  const waitingRoomUrl = `${API_URL}/waiting-room?playerId=${playerId}`;
 
   // subscribe to waiting room on load
   useEventSource(waitingRoomUrl, (message) => {
