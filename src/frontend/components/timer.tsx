@@ -33,8 +33,9 @@ export default function Timer({
       setTimeLeft(time);
     }
   }
+
   return (
-    <div className={`${styles.timer} ${customClass}`}>
+    <div className={timeLeft <= 3 ? `${styles.turnRed}` : `${styles.timer}`}>
       {formatTime(timeLeft)}
     </div>
   );
