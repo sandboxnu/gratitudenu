@@ -1,47 +1,27 @@
-import Head from 'next/head';
-import styles from '../styles/Game.module.scss';
-import Slider from 'react-input-slider';
-import Modal from 'react-modal';
-import {
-  buildStyles,
-  CircularProgressbarWithChildren,
-} from 'react-circular-progressbar';
-import 'react-circular-progressbar/dist/styles.css';
 import React, { ReactElement, useEffect, useState } from 'react';
-import Image from 'next/image';
 import gameConstants from '../constants/gameConstants';
-import GameModal from '../components/gameModal';
-import Colors from '../constants/colorConstants';
-import { API, API_URL } from '../api-client';
 import { useRouter } from 'next/dist/client/router';
-import { useEventSource } from '../hooks/useEventSource';
+import styles from '../styles/Game.module.scss';
+import Head from 'next/head';
+import GameModal from '../components/gameModal';
+import Image from 'next/image';
+import Modal from 'react-modal';
+import Colors from '../constants/colorConstants';
+import Slider from 'react-input-slider';
+import { GameInstructionsModal, GameTable } from './game';
 
-/**
- * TODO: Account for varying number of players in this view
- */
-
-export default function Home(): ReactElement {
-  /**
-   * *STATE VARIABLES*
-   * -takeVal: currently selected coins from slider that they are taking that turn
-   * timeLeft: time left on the timer (starts at 10 seconds)
-   * modalIsOpen: for modal open close
-   * playerColor: value brought in from endpoint for this userID, will be one of ('Green', 'Yellow', 'Red', 'Blue)
-   * playerCoins: total # of coins that this user has in this game
-   *
-   */
+export default function PracticeGame(): ReactElement {
   const [pointsRemaining, setPointsRemaining] = useState<number>(
     gameConstants.INIT_TOTAL_COINS,
   );
   const [takeVal, setTakeVal] = useState<number>(gameConstants.MIN_TAKE_VAL);
-  const TIMER_SECONDS = 10;
   const [modalIsOpen, setModalIsOpen] = useState<boolean>(false);
   const [playerPoints, setPlayerPoints] = useState<number>(
     gameConstants.INIT_PLAYER_COINS,
   );
   const [roundNumber, setRoundNumber] = useState<number>(1);
   const router = useRouter();
-  const { gameId, playerId } = router.query;
+  const { playerId } = router.query;
   const [timeLeft, setTimeLeft] = useState<number>(
     gameConstants.INIT_TIME_LEFT,
   );
@@ -50,44 +30,10 @@ export default function Home(): ReactElement {
     false,
   );
 
-  const gameUrl = `${API_URL}/game/sse?playerId=${playerId}&gameId=${gameId}`;
-  useEventSource(gameUrl, (message) => {
-    if (message.endMessage) {
-      setGameOverModalIsOpen(true);
-    } else if (message.newRound !== undefined) {
-      setPointsRemaining(message.newRound.pointsRemaining);
-      setRoundNumber(message.newRound.roundNumber);
-      setTimeLeft(gameConstants.INIT_TIME_LEFT);
-      setTakeComplete(false);
-    }
-  });
-
-  const pId = Number.parseInt(playerId as string);
-  const handleTake = async () => {
+  const handleTake = () => {
     if (!takeComplete) {
       setTakeComplete(true);
       setPlayerPoints(playerPoints + takeVal);
-
-      await API.game.take({
-        playerId: pId,
-        howMany: takeVal,
-        timeTaken: TIMER_SECONDS - timeLeft,
-        roundNumber: roundNumber,
-      });
-    }
-  };
-
-  const inputOnChange = (eventVal: string) => {
-    const intVal = parseInt(eventVal);
-
-    if (intVal < 0) {
-      alert('Input cannot be negative');
-      setTakeVal(0);
-    } else if (intVal > 10) {
-      alert('Input cannot be greater than 10');
-      setTakeVal(takeVal);
-    } else {
-      setTakeVal(intVal);
     }
   };
 
@@ -100,19 +46,49 @@ export default function Home(): ReactElement {
     return () => clearInterval(interval);
   }, [timeLeft]);
 
-  if (timeLeft === 0 && !takeComplete) {
-    handleTake();
+  if (timeLeft === 0) {
+    if (!takeComplete) {
+      handleTake();
+    }
+
+    // Take random number of points from pot
+    if (!gameOverModalIsOpen) {
+      setPointsRemaining(
+        pointsRemaining - (takeVal + 3 * Math.floor(Math.random() * 9)),
+      );
+    }
+
+    setRoundNumber(roundNumber + 1);
+    setGameOverModalIsOpen(roundNumber >= 3);
+    setTimeLeft(gameConstants.INIT_TIME_LEFT);
+    setTakeComplete(false);
   }
+
+  const handleContinueClick = () => {
+    router.push(`/waiting-room?playerId=${playerId}`);
+  };
 
   return (
     <div className={styles.container}>
       <Head>
         <title>RDG NU | Game Page</title>
-        <link rel="icon" href="/favicon.ico?v=1" />
+        <link rel="icon" href="/favicon.ico" />
       </Head>
 
       <main className={styles.main}>
-        <GameModal isOpen={gameOverModalIsOpen} text={'Game over'} />
+        <Modal
+          isOpen={gameOverModalIsOpen}
+          contentLabel="Practice Round Modal"
+          className={styles.gameOverModal}
+        >
+          Practice Round Over
+          <button
+            className={styles.gameOverButton}
+            onClick={handleContinueClick}
+          >
+            Click to Continue
+          </button>
+        </Modal>
         <GameModal
           isOpen={takeComplete && !gameOverModalIsOpen}
           text="Wait for other players..."
@@ -136,7 +112,6 @@ export default function Home(): ReactElement {
                 right: 'auto',
                 bottom: 'auto',
                 marginRight: '-50%',
-                maxWidth: '500px',
                 transform: 'translate(-50%, -50%)',
               },
             }}
@@ -217,86 +192,3 @@ export default function Home(): ReactElement {
     </div>
   );
 }
-
-// GAME TABLE HERE
-interface GameTableProps {
-  pointsRemaining: number;
-}
-
-export const GameTable = ({
-  pointsRemaining,
-}: GameTableProps): ReactElement => {
-  return (
-    <div className={styles.gameTable}>
-      <div className={styles.gameTableColumn}>
-        <div className={styles.topPlayer}>
-          <Image
-            src="/player-icon-green.svg"
-            alt="green"
-            width={110}
-            height={140}
-          />
-        </div>
-        <div>
-          <Image
-            src="/player-icon-yellow.svg"
-            alt="yellow"
-            width={80}
-            height={110}
-          />
-        </div>
-      </div>
-      <div className={styles.gameTableMiddle}>
-        <CircularProgressbarWithChildren
-          maxValue={200}
-          value={pointsRemaining}
-          counterClockwise={true}
-          styles={buildStyles({
-            pathColor: Colors.darkBlue,
-            trailColor: 'white',
-          })}
-        >
-          <div className={styles.progressBarTextTop}>{pointsRemaining}</div>
-          <div className={styles.progressBarTextBottom}>Points Left</div>
-        </CircularProgressbarWithChildren>
-      </div>
-      <div className={styles.gameTableColumn}>
-        <div className={styles.topPlayer}>
-          <Image
-            src="/player-icon-red.svg"
-            alt="green"
-            width={80}
-            height={110}
-          />
-        </div>
-        <div>
-          <Image
-            src="/player-icon-blue.svg"
-            alt="yellow"
-            width={80}
-            height={110}
-          />
-        </div>
-      </div>
-    </div>
-  );
-};
-
-export const GameInstructionsModal = (): ReactElement => {
-  return (
-    <div className={styles.instructionsText}>
-      <h2>Game Instructions</h2>
-      <ol>
-        <li>
-          Select the amount of points you will take for each round (1-10) using
-          the slider or the input box.
-        </li>
-        <li>Click the "Take" button to receive your points.</li>
-        <li>
-          Points will be replenished by 10% at the end of every round. Continue
-          taking points until the game is over.
-        </li>
-      </ol>
-    </div>
-  );
-};
