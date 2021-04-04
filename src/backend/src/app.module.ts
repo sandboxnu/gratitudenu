@@ -64,5 +64,6 @@ import { AdminService } from './admin/admin.service';
 export class AppModule {
   constructor(private connection: Connection, private appService: AppService) {
     this.appService.initializeSettings();
+    console.log(process.env.NODE_ENV);
   }
 }
