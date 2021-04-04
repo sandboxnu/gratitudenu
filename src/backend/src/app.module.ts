@@ -27,9 +27,7 @@ import { AdminService } from './admin/admin.service';
 @Module({
   imports: [
     ConfigModule.forRoot({
-      envFilePath: [
-        process.env.NODE_ENV !== 'production' ? '.env.dev' : '.env',
-      ],
+      envFilePath: ['.env'],
       isGlobal: true,
     }),
     TypeOrmModule.forRoot({
