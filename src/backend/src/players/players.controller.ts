@@ -1,5 +1,5 @@
 import { BadRequestException, Body, Controller, Post } from '@nestjs/common';
-import { Player } from '../entities/player.entity';
+import { Player, EmotionIdEnum } from '../entities/player.entity';
 
 @Controller('players')
 export class PlayersController {
@@ -12,6 +12,9 @@ export class PlayersController {
       throw new BadRequestException(
         'Create Player requires emotionId and userId',
       );
+    }
+    if (!Object.values(EmotionIdEnum).includes(emotionId)) {
+      throw new BadRequestException('EmotionId is invalid');
     }
     const player = await Player.create({
       userId,

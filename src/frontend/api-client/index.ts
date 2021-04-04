@@ -4,7 +4,9 @@ import { ClassType } from 'class-transformer/ClassTransformer';
 
 // Return type of array item, if T is an array
 type ItemIfArray<T> = T extends (infer I)[] ? I : T;
-export const DEV_URL = 'http://localhost:3001';
+export const API_URL = process.env.NEXT_PUBLIC_GRATITUDE_API_URL
+  ? process.env.NEXT_PUBLIC_GRATITUDE_API_URL
+  : 'http://localhost:3001';
 
 class APIClient {
   private axios: AxiosInstance;
@@ -89,4 +91,4 @@ class APIClient {
   }
 }
 
-export const API = new APIClient(DEV_URL);
+export const API = new APIClient(API_URL);

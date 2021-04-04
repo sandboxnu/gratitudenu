@@ -16,7 +16,8 @@ export default function Login(): ReactElement {
       return;
     }
     const playerId = await API.player.create({ userId: uId, emotionId: eId });
-    router.push(`/waiting-room?playerId=${playerId}`);
+    router.push(`/practice-game?playerId=${playerId}`);
+    // Will change to game-instructions in separate PR
   };
 
   const updateUserId = (event) => {
@@ -42,7 +43,7 @@ export default function Login(): ReactElement {
             </div>
           </div>
           <div className={styles.formInput}>
-            EMOTION ID
+            ACCESS CODE
             <div className={styles.form}>
               <input
                 placeholder="Enter Input"
