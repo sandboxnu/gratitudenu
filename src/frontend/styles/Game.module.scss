@@ -180,7 +180,21 @@
   color: $dark-blue;
   width: 105px;
   padding: 15px;
-  margin: 5% 5% 0 auto;
+  margin: 5% 5% -3% 81.5%;
+}
+
+.turnRed {
+  background: #f6f6f6;
+  box-shadow: 0 4px 4px rgba(0, 0, 0, 0.25);
+  border-radius: 6px;
+  text-align: center;
+  font-size: 35px;
+  font-family: Roboto, sans-serif;
+  font-weight: 500;
+  color: red;
+  width: 105px;
+  padding: 15px;
+  margin: 5% 5% -3% 81.5%;
 }
 
 .instructionsText {

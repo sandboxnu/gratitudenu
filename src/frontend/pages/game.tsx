@@ -148,7 +148,11 @@ export default function Home(): ReactElement {
 
         <div className={styles.gameDisplay}>
           <GameTable pointsRemaining={pointsRemaining} />
-          <div className={styles.timer}>{timeLeft}</div>
+          <div
+            className={timeLeft <= 3 ? `${styles.turnRed}` : `${styles.timer}`}
+          >
+            {timeLeft}
+          </div>
         </div>
 
         <div className={styles.actionBar}>
