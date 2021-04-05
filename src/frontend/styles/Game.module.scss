@@ -209,3 +209,36 @@
 .instructionsText li {
   padding-bottom: 8px;
 }
+
+.gameOverModal {
+  position: relative;
+  width: 350px;
+  height: 230px;
+  font-size: 40px;
+  color: $dark-blue;
+  text-align: center;
+  top: 50%;
+  left: 50%;
+  right: auto;
+  bottom: auto;
+  margin-right: -50%;
+  transform: translate(-50%, -50%);
+  background: #f6f6f6;
+  box-shadow: 0 8px 8px rgba(0, 0, 0, 0.35);
+  overflow: auto;
+  border-radius: 8px;
+  padding: 70px 10px 0 10px;
+  font-weight: 600;
+  display: flex;
+  flex-direction: column;
+}
+
+.gameOverButton {
+  font-size: 24px;
+  color: $dark-blue;
+  text-align: center;
+  font-weight: 600;
+  max-width: 75%;
+  margin: auto;
+  border-radius: 5px;
+}

@@ -48,14 +48,13 @@ export default function WaitingRoom(): ReactElement {
           <div className={styles.gameInstructionsHeader}>Game Instructions</div>
           <ol className={styles.gameInstructionsList}>
             <li>
-              Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nibh sem
-              eget felis aliquet.
+              Select the amount of points you will take for each round (1-10)
+              using the slider or the input box.
             </li>
-            <li>Nulla proin diam quam sollicitudin ut ac consectetur.</li>
-            <li>Elit nunc, elementum mi eget nibh consequat, odio massa.</li>
+            <li>Click the "Take" button to receive your points.</li>
             <li>
-              Sit amet risus tristique cursus ut dis id. Nisi ultrices id varius
-              sapien, nulla.
+              Points will be replenished by 10% at the end of every round.
+              Continue taking points until the game is over.
             </li>
           </ol>
         </div>
