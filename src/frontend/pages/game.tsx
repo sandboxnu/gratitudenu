@@ -110,8 +110,7 @@ export default function Home(): ReactElement {
     return () => clearInterval(interval);
   }, [timeLeft]);
 
-  // if time left <= 3 && take is not complete -> notify that time is running out (notification)
-
+  // make this not show up twice
   if (timeLeft <= 3 && !takeComplete) {
     toast.notify('Time is Running Out!', {
       duration: 3000,
