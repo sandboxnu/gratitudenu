@@ -15,6 +15,8 @@ import Colors from '../constants/colorConstants';
 import { API, API_URL } from '../api-client';
 import { useRouter } from 'next/dist/client/router';
 import { useEventSource } from '../hooks/useEventSource';
+import toast from 'toasted-notes';
+import 'toasted-notes/src/styles.css';
 
 /**
  * TODO: Account for varying number of players in this view
@@ -55,6 +57,10 @@ export default function Home(): ReactElement {
     if (message.endMessage) {
       setGameOverModalIsOpen(true);
     } else if (message.newRound !== undefined) {
+      toast.notify('New Round Beginning!', {
+        duration: 2000,
+        position: 'bottom-left',
+      });
       setPointsRemaining(message.newRound.pointsRemaining);
       setRoundNumber(message.newRound.roundNumber);
       setTimeLeft(gameConstants.INIT_TIME_LEFT);
@@ -64,6 +70,10 @@ export default function Home(): ReactElement {
 
   const pId = Number.parseInt(playerId as string);
   const handleTake = async () => {
+    toast.notify('You took ' + takeVal + 'points!', {
+      duration: 2000,
+      position: 'bottom-left',
+    });
     if (!takeComplete) {
       setTakeComplete(true);
       setPlayerPoints(playerPoints + takeVal);
@@ -99,6 +109,15 @@ export default function Home(): ReactElement {
 
     return () => clearInterval(interval);
   }, [timeLeft]);
+
+  // if time left <= 3 && take is not complete -> notify that time is running out (notification)
+
+  if (timeLeft <= 3 && !takeComplete) {
+    toast.notify('Time is Running Out!', {
+      duration: 3000,
+      position: 'bottom-left',
+    });
+  }
 
   if (timeLeft === 0 && !takeComplete) {
     handleTake();

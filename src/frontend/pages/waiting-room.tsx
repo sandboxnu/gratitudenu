@@ -6,6 +6,8 @@ import { useEventSource } from '../hooks/useEventSource';
 import { useSetting } from '../hooks/useSetting';
 import styles from '../styles/WaitingRoom.module.scss';
 import { PLAYERS } from './admin';
+import toast from 'toasted-notes';
+import 'toasted-notes/src/styles.css';
 
 export default function WaitingRoom(): ReactElement {
   const router = useRouter();
@@ -22,6 +24,10 @@ export default function WaitingRoom(): ReactElement {
     } else if (message.timeout) {
       router.push(`/thank-you`);
     } else if (message.gameId) {
+      toast.notify('All Players Have Joined, Starting New Game!', {
+        duration: 2000,
+        position: 'bottom-left',
+      });
       router.push(`/game?gameId=${message.gameId.gameId}&playerId=${playerId}`);
     }
   });
