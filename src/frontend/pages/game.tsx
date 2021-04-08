@@ -53,13 +53,16 @@ export default function Home(): ReactElement {
   );
 
   const gameUrl = `${API_URL}/game/sse?playerId=${playerId}&gameId=${gameId}`;
+
+  const toastLocation = 'bottom-left';
+
   useEventSource(gameUrl, (message) => {
     if (message.endMessage) {
       setGameOverModalIsOpen(true);
     } else if (message.newRound !== undefined) {
       toast.notify('New Round Beginning!', {
         duration: 2000,
-        position: 'bottom-left',
+        position: toastLocation,
       });
       setPointsRemaining(message.newRound.pointsRemaining);
       setRoundNumber(message.newRound.roundNumber);
@@ -72,7 +75,7 @@ export default function Home(): ReactElement {
   const handleTake = async () => {
     toast.notify('You took ' + takeVal + 'points!', {
       duration: 2000,
-      position: 'bottom-left',
+      position: toastLocation,
     });
     if (!takeComplete) {
       setTakeComplete(true);
@@ -111,10 +114,10 @@ export default function Home(): ReactElement {
   }, [timeLeft]);
 
   // make this not show up twice
-  if (timeLeft <= 3 && !takeComplete) {
+  if (timeLeft == 3 && !takeComplete) {
     toast.notify('Time is Running Out!', {
       duration: 3000,
-      position: 'bottom-left',
+      position: toastLocation,
     });
   }
 

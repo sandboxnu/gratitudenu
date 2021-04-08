@@ -24,10 +24,6 @@ export default function WaitingRoom(): ReactElement {
     } else if (message.timeout) {
       router.push(`/thank-you`);
     } else if (message.gameId) {
-      toast.notify('All Players Have Joined, Starting New Game!', {
-        duration: 2000,
-        position: 'bottom-left',
-      });
       router.push(`/game?gameId=${message.gameId.gameId}&playerId=${playerId}`);
     }
   });
