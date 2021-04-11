@@ -53,8 +53,7 @@ export default function Home(): ReactElement {
   );
 
   const gameUrl = `${API_URL}/game/sse?playerId=${playerId}&gameId=${gameId}`;
-
-  const toastLocation = 'bottom-left';
+  const toastLocation = 'bottom';
 
   useEventSource(gameUrl, (message) => {
     if (message.endMessage) {
@@ -90,20 +89,6 @@ export default function Home(): ReactElement {
     }
   };
 
-  const inputOnChange = (eventVal: string) => {
-    const intVal = parseInt(eventVal);
-
-    if (intVal < 0) {
-      alert('Input cannot be negative');
-      setTakeVal(0);
-    } else if (intVal > 10) {
-      alert('Input cannot be greater than 10');
-      setTakeVal(takeVal);
-    } else {
-      setTakeVal(intVal);
-    }
-  };
-
   useEffect(() => {
     const interval = setInterval(
       () => setTimeLeft((timeLeft) => (timeLeft === 0 ? 0 : timeLeft - 1)),
@@ -113,8 +98,8 @@ export default function Home(): ReactElement {
     return () => clearInterval(interval);
   }, [timeLeft]);
 
-  // make this not show up twice
-  if (timeLeft == 3 && !takeComplete) {
+  // Only display toast with exactly 3 seconds left
+  if (timeLeft === 3 && !takeComplete) {
     toast.notify('Time is Running Out!', {
       duration: 3000,
       position: toastLocation,

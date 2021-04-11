@@ -6,8 +6,6 @@ import { useEventSource } from '../hooks/useEventSource';
 import { useSetting } from '../hooks/useSetting';
 import styles from '../styles/WaitingRoom.module.scss';
 import { PLAYERS } from './admin';
-import toast from 'toasted-notes';
-import 'toasted-notes/src/styles.css';
 
 export default function WaitingRoom(): ReactElement {
   const router = useRouter();
