@@ -1,9 +1,17 @@
-import { BadRequestException, Body, Controller, Post } from '@nestjs/common';
+import { Body, Controller, Post } from '@nestjs/common';
 import { Game } from 'src/entities/game.entity';
 import * as Papa from 'papaparse';
 import { AdminService } from 'src/admin/admin.service';
 
-const BASE_COLUMNS = ['game', 'emotion', 'userId'];
+const BASE_COLUMNS = [
+  'game',
+  'emotion',
+  'userId',
+  'gameId',
+  'emotionId',
+  'totalRounds',
+  'totalPointsTaken',
+];
 @Controller('export')
 export class ExportController {
   constructor(private adminService: AdminService) {}
@@ -53,12 +61,20 @@ export class ExportController {
       emotion: `Emotion: ${game.players[0].emotionId}`,
     });
     game.players.forEach((player) => {
-      const playerData = { userId: player.userId };
+      const playerData = {
+        userId: player.userId,
+        gameId: game.id,
+        emotionId: player.emotionId,
+        totalRounds: player.grabs.length,
+      };
+      let totalPoints = 0;
 
       player.grabs.forEach((grab) => {
         playerData[`round${grab.round.roundNumber}Take`] = grab.howMany;
         playerData[`round${grab.round.roundNumber}Time`] = grab.timeTaken;
+        totalPoints += grab.howMany;
       });
+      playerData['totalPointsTaken'] = totalPoints;
 
       data.push(playerData);
     });
