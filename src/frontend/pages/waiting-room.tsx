@@ -38,7 +38,7 @@ export default function WaitingRoom(): ReactElement {
       <div className={styles.headerSection}>
         <div className={styles.header}>You are in the waiting room </div>
         <Timer
-          time={900}
+          time={180}
           formatTime={formatTimeIntoMinutes}
           customClass={styles.timer}
         />
