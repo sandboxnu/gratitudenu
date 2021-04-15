@@ -1,11 +1,15 @@
 @import 'constants';
 
+.pageContainer {
+  margin-top: 4rem;
+}
+
 .export {
   display: flex;
   justify-content: center;
   align-items: center;
   flex-direction: column;
-  padding-top: 30px;
+  padding-top: 35px;
 }
 
 .formInput {
@@ -18,13 +22,15 @@
 .form {
   display: flex;
   justify-content: space-between;
-  padding-bottom: 20px;
+  padding-bottom: 10px;
 
   & input {
     /* white */
     height: 59px;
     width: 300px;
     margin: 4px 0 16px;
+    font-size: 18px;
+    padding-left: 12px;
     background: #ffffff;
     border: 2px solid rgba(0, 42, 82, 0.5);
     box-sizing: border-box;
@@ -40,7 +46,11 @@
 
 .saveButton {
   height: 59px;
-  margin: 4px 0 16px;
+  margin: 5px 0 0 30px;
+}
+
+.exportButton {
+  margin-top: 2rem;
 }
 
 .error {
