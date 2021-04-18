@@ -81,7 +81,7 @@ export class ExportController {
   }
 
   private generateColumns(maxRounds: number): string[] {
-    const columns = BASE_COLUMNS;
+    const columns = BASE_COLUMNS.slice();
 
     for (let i = 1; i <= maxRounds; i++) {
       columns.push(`round${i}Take`, `round${i}Time`);
