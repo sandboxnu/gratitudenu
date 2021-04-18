@@ -41,7 +41,7 @@ function AdminPage({ csvData, password }: AdminPageProps): ReactElement {
   return (
     <div className={styles.export}>
       <div className={styles.formInput}>
-        Max Rounds:
+        Max rounds:
         <div className={styles.form}>
           <input
             placeholder="Enter Max Rounds"
@@ -74,7 +74,7 @@ function AdminPage({ csvData, password }: AdminPageProps): ReactElement {
           </button>
         </div>
       </div>
-      <button className="primaryButton">
+      <button className={`primaryButton ${styles.exportButton}`}>
         <CSVLink data={csvData} filename="game-data.csv">
           Export Study Data
         </CSVLink>
@@ -111,11 +111,12 @@ export default function Admin(): ReactElement {
       {dataReturnedWithoutError ? (
         <AdminPage csvData={data} password={password} />
       ) : (
-        <div>
+        <div className={styles.pageContainer}>
           <div className={styles.formInput}>
             Password
             <div className={styles.form}>
               <input
+                type="password"
                 placeholder="Enter Password"
                 value={password}
                 onChange={onPasswordChange}
