@@ -15,7 +15,6 @@ import Colors from '../constants/colorConstants';
 import { API, API_URL } from '../api-client';
 import { useRouter } from 'next/dist/client/router';
 import { useEventSource } from '../hooks/useEventSource';
-import 'toasted-notes/src/styles.css';
 
 /**
  * TODO: Account for varying number of players in this view
