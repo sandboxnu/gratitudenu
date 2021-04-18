@@ -1,8 +1,16 @@
 import { ReactElement } from 'react';
 import styles from '../styles/GameInstructions.module.scss';
 import Image from 'next/image';
+import { useRouter } from 'next/router';
 
 export default function GameInstructions(): ReactElement {
+  const router = useRouter();
+
+  const { playerId } = router.query;
+  const onContinue = async () => {
+    await router.push(`/practice-game?playerId=${playerId}`);
+  };
+
   return (
     <div className={styles.gameInstructionsContainer}>
       <div className={styles.instructionsHeader}>
@@ -57,7 +65,8 @@ export default function GameInstructions(): ReactElement {
         />
       </div>
       <div className={styles.gameInstruction}>
-        Whatever is left in the common pool will be replenished by 10%. This new
+        At the end of the round, the common points pool will be replenished by
+        10% of the amount of points taken collectively that round. This new
         total will be the common pool for the next round, and each player will
         again decide how many points to take.
       </div>
@@ -68,7 +77,7 @@ export default function GameInstructions(): ReactElement {
         <Image
           src="/pointsReplenished.svg"
           alt="points replenished"
-          width={620}
+          width={800}
           height={300}
         />
       </div>
@@ -84,7 +93,9 @@ export default function GameInstructions(): ReactElement {
         for a practice round.
       </div>
       <div className={styles.buttonContainer}>
-        <button className="primaryButton">Continue</button>
+        <button onClick={onContinue} className="primaryButton">
+          Continue
+        </button>
       </div>
     </div>
   );

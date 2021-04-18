@@ -16,8 +16,7 @@ export default function Login(): ReactElement {
       return;
     }
     const playerId = await API.player.create({ userId: uId, emotionId: eId });
-    router.push(`/practice-game?playerId=${playerId}`);
-    // Will change to game-instructions in separate PR
+    await router.push(`/game-instructions?playerId=${playerId}`);
   };
 
   const updateUserId = (event) => {

@@ -5,7 +5,7 @@ import { GameService } from 'src/game/game.service';
 import { Client } from 'src/sse/sse.service';
 
 type WaitingRoomClientMetadata = { playerId: number; emotionId: number };
-const FIFTEEN_MINUTES = 900000;
+const WAITING_ROOM_TIME = 180000;
 const TIMEOUT_EVENT = { timeout: true };
 /**
  * Handle sending Waiting Room sse events
@@ -32,7 +32,7 @@ export class WaitingRoomSSEService {
       return;
     }
     // Start Timer to remove player
-    setTimeout(() => this.clientTimerFunction(metadata), FIFTEEN_MINUTES);
+    setTimeout(() => this.clientTimerFunction(metadata), WAITING_ROOM_TIME);
     // Add Client to emotion room
     this.clients[metadata.emotionId].push({ res, metadata });
     await this.updateEmotionRoomWithNumberOfPlayers(

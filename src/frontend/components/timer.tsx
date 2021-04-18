@@ -33,9 +33,6 @@ export default function Timer({
       setTimeLeft(time);
     }
   }
-  return (
-    <div className={`${styles.timer} ${customClass}`}>
-      {formatTime(timeLeft)}
-    </div>
-  );
+
+  return <div className={styles.timer}>{formatTime(timeLeft)}</div>;
 }
