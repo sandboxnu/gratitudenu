@@ -59,7 +59,7 @@ export default function PracticeGame(): ReactElement {
     }
 
     setRoundNumber(roundNumber + 1);
-    setGameOverModalIsOpen(roundNumber >= 3);
+    setGameOverModalIsOpen(roundNumber >= 2);
     setTimeLeft(gameConstants.INIT_TIME_LEFT);
     setTakeComplete(false);
   }
