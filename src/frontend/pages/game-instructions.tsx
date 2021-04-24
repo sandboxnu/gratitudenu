@@ -92,6 +92,13 @@ export default function GameInstructions(): ReactElement {
         When you feel that you have understood the instructions, please continue
         for a practice round.
       </div>
+      <div className={styles.gameInstruction}>
+        <i>
+          PLEASE NOTE: There is no timer during the practice round, you will
+          have to press the "Take" button to move to the next round. During the
+          actual game, there will be a 10 second timer for each round.
+        </i>
+      </div>
       <div className={styles.buttonContainer}>
         <button onClick={onContinue} className="primaryButton">
           Continue

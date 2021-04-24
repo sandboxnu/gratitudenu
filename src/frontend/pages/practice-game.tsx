@@ -1,9 +1,8 @@
-import React, { ReactElement, useEffect, useState } from 'react';
+import React, { ReactElement, useState } from 'react';
 import gameConstants from '../constants/gameConstants';
 import { useRouter } from 'next/dist/client/router';
 import styles from '../styles/Game.module.scss';
 import Head from 'next/head';
-import GameModal from '../components/gameModal';
 import Image from 'next/image';
 import Modal from 'react-modal';
 import Colors from '../constants/colorConstants';
@@ -22,34 +21,14 @@ export default function PracticeGame(): ReactElement {
   const [roundNumber, setRoundNumber] = useState<number>(1);
   const router = useRouter();
   const { playerId } = router.query;
-  const [timeLeft, setTimeLeft] = useState<number>(
-    gameConstants.INIT_TIME_LEFT,
-  );
-  const [takeComplete, setTakeComplete] = useState<boolean>(false);
   const [gameOverModalIsOpen, setGameOverModalIsOpen] = useState<boolean>(
     false,
   );
 
   const handleTake = () => {
-    if (!takeComplete) {
-      setTakeComplete(true);
-      setPlayerPoints(playerPoints + takeVal);
-    }
-  };
-
-  useEffect(() => {
-    const interval = setInterval(
-      () => setTimeLeft((timeLeft) => (timeLeft === 0 ? 0 : timeLeft - 1)),
-      1000,
-    );
-
-    return () => clearInterval(interval);
-  }, [timeLeft]);
-
-  if (timeLeft === 0) {
-    if (!takeComplete) {
-      handleTake();
-    }
+    setPlayerPoints(playerPoints + takeVal);
+    setRoundNumber(roundNumber + 1);
+    setGameOverModalIsOpen(roundNumber >= 2);
 
     // Take random number of points from pot
     if (!gameOverModalIsOpen) {
@@ -57,12 +36,7 @@ export default function PracticeGame(): ReactElement {
         pointsRemaining - (takeVal + 3 * Math.floor(Math.random() * 9)),
       );
     }
-
-    setRoundNumber(roundNumber + 1);
-    setGameOverModalIsOpen(roundNumber >= 2);
-    setTimeLeft(gameConstants.INIT_TIME_LEFT);
-    setTakeComplete(false);
-  }
+  };
 
   const handleContinueClick = () => {
     router.push(`/waiting-room?playerId=${playerId}`);
@@ -71,7 +45,7 @@ export default function PracticeGame(): ReactElement {
   return (
     <div className={styles.container}>
       <Head>
-        <title>RDG NU | Game Page</title>
+        <title>RDG NU | Practice Game</title>
         <link rel="icon" href="/favicon.ico" />
       </Head>
 
@@ -89,12 +63,8 @@ export default function PracticeGame(): ReactElement {
             Click to Continue
           </button>
         </Modal>
-        <GameModal
-          isOpen={takeComplete && !gameOverModalIsOpen}
-          text="Wait for other players..."
-        />
         <div className={styles.infoSection}>
-          <p className={styles.infoSectionTitle}>Game</p>
+          <p className={styles.infoSectionTitle}>Practice Rounds</p>
           <Image
             src={'/help-icon.svg'}
             alt={'Help icon'}
@@ -123,11 +93,7 @@ export default function PracticeGame(): ReactElement {
 
         <div className={styles.gameDisplay}>
           <GameTable pointsRemaining={pointsRemaining} />
-          <div
-            className={timeLeft <= 3 ? `${styles.turnRed}` : `${styles.timer}`}
-          >
-            {timeLeft}
-          </div>
+          <div className={styles.fakeTimer}>Timer Will Be Here</div>
         </div>
 
         <div className={styles.actionBar}>
@@ -173,11 +139,7 @@ export default function PracticeGame(): ReactElement {
             </span>
           </div>
           <div className={styles.actionBarRight}>
-            <button
-              className={styles.actionBarTake}
-              onClick={handleTake}
-              disabled={takeComplete}
-            >
+            <button className={styles.actionBarTake} onClick={handleTake}>
               Take
             </button>
           </div>
