@@ -1,7 +1,8 @@
 import { useRouter } from 'next/router';
-import { ReactElement, useState } from 'react';
+import React, { ReactElement, useState } from 'react';
 import { API } from '../api-client';
 import styles from '../styles/Home.module.scss';
+import Head from 'next/head';
 
 export default function Login(): ReactElement {
   const [userId, setUserId] = useState('');
@@ -28,6 +29,11 @@ export default function Login(): ReactElement {
   };
   return (
     <div className={styles.container}>
+      <Head>
+        <title>RDG NU | Sign-In Page</title>
+        <link rel="icon" href="/favicon.ico" />
+      </Head>
+
       <div className={styles.title}>Decision Making Game</div>
       <div>
         <div className={styles.formInputs}>
