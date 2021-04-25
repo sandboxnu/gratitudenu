@@ -25,8 +25,6 @@ export class AppController {
   @Delete('db')
   async tearDownDb(@Body('password') password: string): Promise<boolean> {
     if (process.env.DELETE_PASSWORD !== password) {
-      console.log(password);
-      console.log(process.env.DELETE_PASSWORD);
       throw new BadRequestException('Password is not correct');
     }
 
