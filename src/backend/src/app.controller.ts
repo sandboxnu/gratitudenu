@@ -10,6 +10,7 @@ import { Game } from './entities/game.entity';
 import { Grab } from './entities/grab.entity';
 import { Player } from './entities/player.entity';
 import { Round } from './entities/round.entity';
+import { Setting } from './entities/setting.entity';
 
 @Controller()
 export class AppController {
@@ -24,12 +25,15 @@ export class AppController {
   @Delete('db')
   async tearDownDb(@Body('password') password: string): Promise<boolean> {
     if (process.env.DELETE_PASSWORD !== password) {
+      console.log(password);
+      console.log(process.env.DELETE_PASSWORD);
       throw new BadRequestException('Password is not correct');
     }
-    await Game.delete({});
+
     await Grab.delete({});
-    await Player.delete({});
     await Round.delete({});
+    await Player.delete({});
+    await Game.delete({});
 
     return true;
   }
