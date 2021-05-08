@@ -1,5 +1,5 @@
 import { useRouter } from 'next/dist/client/router';
-import { ReactElement, useState } from 'react';
+import { ReactElement, useEffect, useMemo, useState } from 'react';
 import { API_URL } from '../api-client';
 import Timer from '../components/timer';
 import { useEventSource } from '../hooks/useEventSource';
@@ -33,6 +33,9 @@ export default function WaitingRoom(): ReactElement {
     const seconds = timer % 60;
     return `${minutes}:${seconds < 10 ? `0${seconds}` : seconds}`;
   };
+  if (!waitingRoomTimer) {
+    return <div></div>; // this doesn't actually render, but meh
+  }
 
   return (
     <div className={styles.waitingRoom}>
