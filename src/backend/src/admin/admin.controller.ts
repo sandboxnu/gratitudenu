@@ -34,6 +34,13 @@ export class AdminController {
     if (!setting) {
       throw new BadRequestException('This Setting does not exist');
     }
+
+    if (settingName === 'ROUND_TIMER' && (value < 0 || value > 25)) {
+      throw new BadRequestException(
+        'Round timer must be within range 0 - 25 seconds',
+      );
+    }
+
     setting.value = value;
     await setting.save();
 
