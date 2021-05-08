@@ -25,19 +25,27 @@ function AdminPage({ csvData, password }: AdminPageProps): ReactElement {
   const [waitingRoomTimer, setWaitingRoomTimer] = useState(180);
 
   useEffect(() => {
-    setMaxRounds(settingRounds);
+    if (settingRounds) {
+      setMaxRounds(settingRounds);
+    }
   }, [settingRounds]);
 
   useEffect(() => {
-    setPlayers(settingPlayers);
+    if (settingPlayers) {
+      setPlayers(settingPlayers);
+    }
   }, [settingPlayers]);
 
   useEffect(() => {
-    setRoundTimer(settingRoundTimer);
+    if (settingRoundTimer) {
+      setRoundTimer(settingRoundTimer);
+    }
   }, [settingRoundTimer]);
 
   useEffect(() => {
-    setWaitingRoomTimer(settingWaitingRoomTimer);
+    if (settingWaitingRoomTimer) {
+      setWaitingRoomTimer(settingWaitingRoomTimer / 1000);
+    }
   }, [settingWaitingRoomTimer]);
 
   const onRoundChange = (event) => {
@@ -49,11 +57,11 @@ function AdminPage({ csvData, password }: AdminPageProps): ReactElement {
 
   const onRoundTimerChange = (event) => {
     if (event.target.value > 0 && event.target.value < 25) {
-      setMaxRounds(event.target.value);
+      setRoundTimer(event.target.value);
     }
   };
   const onWaitingRoomTimerChange = (event) => {
-    setPlayers(event.target.value);
+    setWaitingRoomTimer(event.target.value);
   };
 
   const saveSetting = (setting: string, value: number) => {
