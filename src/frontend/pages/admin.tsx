@@ -56,7 +56,7 @@ function AdminPage({ csvData, password }: AdminPageProps): ReactElement {
   };
 
   const onRoundTimerChange = (event) => {
-    if (event.target.value > 0 && event.target.value < 25) {
+    if (event.target.value < 25) {
       setRoundTimer(event.target.value);
     }
   };
