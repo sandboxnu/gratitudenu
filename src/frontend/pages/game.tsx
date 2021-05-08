@@ -43,11 +43,17 @@ export default function Home(): ReactElement {
   const [roundNumber, setRoundNumber] = useState<number>(1);
   const router = useRouter();
   const { gameId, playerId } = router.query;
+
   const [timeLeft, setTimeLeft] = useState<number>(TIMER_SECONDS);
+
   const [takeComplete, setTakeComplete] = useState<boolean>(false);
   const [gameOverModalIsOpen, setGameOverModalIsOpen] = useState<boolean>(
     false,
   );
+
+  useEffect(() => {
+    setTimeLeft(TIMER_SECONDS); // happens quickly
+  }, [TIMER_SECONDS]);
 
   const gameUrl = `${API_URL}/game/sse?playerId=${playerId}&gameId=${gameId}`;
 
