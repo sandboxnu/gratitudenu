@@ -1,5 +1,5 @@
 import { useRouter } from 'next/dist/client/router';
-import { ReactElement, useEffect, useMemo, useState } from 'react';
+import { ReactElement, useState } from 'react';
 import { API_URL } from '../api-client';
 import Timer from '../components/timer';
 import { useEventSource } from '../hooks/useEventSource';
