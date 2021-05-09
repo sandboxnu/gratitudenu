@@ -10,6 +10,7 @@ import { PLAYERS } from './admin';
 export default function WaitingRoom(): ReactElement {
   const router = useRouter();
   const playersPerGame = useSetting(PLAYERS);
+  const waitingRoomTimer = useSetting('WAITING_ROOM_TIMER');
 
   const { playerId } = router.query;
   const [players, setPlayers] = useState(1); // assume it is just us to begin with
@@ -22,7 +23,12 @@ export default function WaitingRoom(): ReactElement {
     } else if (message.timeout) {
       router.push(`/thank-you`);
     } else if (message.gameId) {
-      router.push(`/game?gameId=${message.gameId.gameId}&playerId=${playerId}`);
+      console.log('gets here');
+      setTimeout(() => {
+        router.push(
+          `/game?gameId=${message.gameId.gameId}&playerId=${playerId}`,
+        );
+      }, 3000);
     }
   });
 
@@ -32,13 +38,16 @@ export default function WaitingRoom(): ReactElement {
     const seconds = timer % 60;
     return `${minutes}:${seconds < 10 ? `0${seconds}` : seconds}`;
   };
+  if (!waitingRoomTimer) {
+    return <div></div>; // this doesn't actually render, but meh
+  }
 
   return (
     <div className={styles.waitingRoom}>
       <div className={styles.headerSection}>
         <div className={styles.header}>You are in the waiting room </div>
         <Timer
-          time={180}
+          time={waitingRoomTimer / 1000} //Backend time is milliseconds
           formatTime={formatTimeIntoMinutes}
           customClass={styles.timer}
         />

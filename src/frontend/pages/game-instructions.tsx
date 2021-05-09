@@ -2,9 +2,12 @@ import { ReactElement } from 'react';
 import styles from '../styles/GameInstructions.module.scss';
 import Image from 'next/image';
 import { useRouter } from 'next/router';
+import { useSetting } from '../hooks/useSetting';
 
 export default function GameInstructions(): ReactElement {
   const router = useRouter();
+
+  const roundLengthTimer = useSetting('ROUND_TIMER');
 
   const { playerId } = router.query;
   const onContinue = async () => {
@@ -31,7 +34,7 @@ export default function GameInstructions(): ReactElement {
         for yourself from the common pool. These points will not go to the other
         players. Whatever (if any) points you do not take will be left in the
         common pool. To make sure everyone is playing at a similar pace, you
-        will have up to 10 seconds to make your decision.
+        will have up to {roundLengthTimer} seconds to make your decision.
       </div>
       <div className={styles.gameExampleText}>
         Example: Player green makes decision.
@@ -96,7 +99,8 @@ export default function GameInstructions(): ReactElement {
         <i>
           PLEASE NOTE: There is no timer during the practice round, you will
           have to press the "Take" button to move to the next round. During the
-          actual game, there will be a 10 second timer for each round.
+          actual game, there will be a {roundLengthTimer} second timer for each
+          round.
         </i>
       </div>
       <div className={styles.buttonContainer}>

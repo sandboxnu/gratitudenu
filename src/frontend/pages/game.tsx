@@ -15,6 +15,7 @@ import Colors from '../constants/colorConstants';
 import { API, API_URL } from '../api-client';
 import { useRouter } from 'next/dist/client/router';
 import { useEventSource } from '../hooks/useEventSource';
+import { useSetting } from '../hooks/useSetting';
 
 /**
  * TODO: Account for varying number of players in this view
@@ -34,7 +35,7 @@ export default function Home(): ReactElement {
     gameConstants.INIT_TOTAL_COINS,
   );
   const [takeVal, setTakeVal] = useState<number>(gameConstants.MIN_TAKE_VAL);
-  const TIMER_SECONDS = 10;
+  const TIMER_SECONDS = useSetting('ROUND_TIMER');
   const [modalIsOpen, setModalIsOpen] = useState<boolean>(false);
   const [playerPoints, setPlayerPoints] = useState<number>(
     gameConstants.INIT_PLAYER_COINS,
@@ -42,13 +43,17 @@ export default function Home(): ReactElement {
   const [roundNumber, setRoundNumber] = useState<number>(1);
   const router = useRouter();
   const { gameId, playerId } = router.query;
-  const [timeLeft, setTimeLeft] = useState<number>(
-    gameConstants.INIT_TIME_LEFT,
-  );
+
+  const [timeLeft, setTimeLeft] = useState<number>(TIMER_SECONDS);
+
   const [takeComplete, setTakeComplete] = useState<boolean>(false);
   const [gameOverModalIsOpen, setGameOverModalIsOpen] = useState<boolean>(
     false,
   );
+
+  useEffect(() => {
+    setTimeLeft(TIMER_SECONDS); // happens quickly
+  }, [TIMER_SECONDS]);
 
   const gameUrl = `${API_URL}/game/sse?playerId=${playerId}&gameId=${gameId}`;
 
@@ -58,7 +63,7 @@ export default function Home(): ReactElement {
     } else if (message.newRound !== undefined) {
       setPointsRemaining(message.newRound.pointsRemaining);
       setRoundNumber(message.newRound.roundNumber);
-      setTimeLeft(gameConstants.INIT_TIME_LEFT);
+      setTimeLeft(TIMER_SECONDS);
       setTakeComplete(false);
     }
   });
