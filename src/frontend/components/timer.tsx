@@ -17,7 +17,6 @@ export default function Timer({
   onTimerOver = () => '',
 }: TimerProps): ReactElement {
   const [timeLeft, setTimeLeft] = useState<number>(time);
-
   useEffect(() => {
     const interval = setInterval(
       () => setTimeLeft((timeLeft) => (timeLeft === 0 ? 0 : timeLeft - 1)),

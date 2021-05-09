@@ -23,6 +23,8 @@ export class WaitingRoomSSEService {
     res: Response,
     metadata: WaitingRoomClientMetadata,
   ): Promise<void> {
+    const waitingRoomTimer =
+      (await Setting.findOne('WAITING_ROOM_TIMER')).value || WAITING_ROOM_TIME;
     if (!(metadata.emotionId in this.clients)) {
       this.clients[metadata.emotionId] = [];
     }
@@ -32,7 +34,7 @@ export class WaitingRoomSSEService {
       return;
     }
     // Start Timer to remove player
-    setTimeout(() => this.clientTimerFunction(metadata), WAITING_ROOM_TIME);
+    setTimeout(() => this.clientTimerFunction(metadata), waitingRoomTimer);
     // Add Client to emotion room
     this.clients[metadata.emotionId].push({ res, metadata });
     await this.updateEmotionRoomWithNumberOfPlayers(
